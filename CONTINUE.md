@@ -1,5 +1,8 @@
 # Wouri CONTINUE.md (session handoff)
 
+## Infrastructure
+- **Supabase dev project: `wouri-dev`** created 2026-07-22, ref **`iledioojfggozfzebafs`**, org TA-TECH (ztmoyoyidphoifjduktn), region **eu-central-1 (Frankfurt)**. Env (ref, DB password, URL, anon + service keys) saved to `wouri/.env.local` (gitignored, never committed). URL: https://iledioojfggozfzebafs.supabase.co. To drive it via MCP, add a `supabase-wouri` MCP server for this ref (or use the Management API with the fleet token). This clears one of the two Sprint 0 blockers; the other is the green light to copy the Bazah substrate.
+
 ## Domain
 **wouri.co** registered on Namecheap 2026-07-22 (active through 2027-07-22, domain privacy on). This is the home of the public verification page, the most-viewed Wouri surface (a document held by a non-customer resolves its QR here). Plan the verification route now: a public `wouri.co/v/{verification_code}` (or `verify.wouri.co`) that resolves through a SECURITY DEFINER function and renders the Verifiable Credential, plus per-tenant `verification_subdomain` on organizations for a tenant-branded verify page. The verification page gets the same design investment as the dashboard.
 
