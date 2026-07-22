@@ -17,7 +17,7 @@ export default async function Home() {
 
   const { data: orgs } = await supabase.from('organizations').select('id, slug, legal_name, status');
   const org = orgs?.[0];
-  if (!org) redirect('/signup');
+  if (!org) redirect('/onboarding');
 
   const { data: catalog } = await supabase
     .from('capability_catalog')

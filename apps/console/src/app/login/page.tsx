@@ -23,12 +23,13 @@ async function magicLink(formData: FormData) {
   redirect('/login?magic=1');
 }
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ e?: string; magic?: string }> }) {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ e?: string; magic?: string; confirm?: string }> }) {
   const sp = await searchParams;
   return (
     <main className="wrap">
       <h1 className="brand">{t('app_name')}</h1>
       <p className="tag">{t('tagline')}</p>
+      {sp.confirm ? <p className="muted">{t('confirm_email')}</p> : null}
       {sp.magic ? <p className="muted">{t('magic_sent')}</p> : null}
       <form action={login}>
         <label htmlFor="email">{t('email')}</label>
