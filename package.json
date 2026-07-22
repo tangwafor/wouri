@@ -12,8 +12,10 @@
     "verify:apppath": "node scripts/verify-app-path.mjs",
     "verify:chat": "node scripts/verify-chat-onboarding.mjs",
     "selftest:spine": "node scripts/spine-selftest.mjs",
+    "selftest:documents": "node scripts/document-selftest.mjs",
+    "proof:init": "node scripts/init-proof-keys.mjs",
     "test": "npm run canonicals && npm run selftest:infer",
-    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine",
+    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine && npm run selftest:documents",
     "check": "npm run canonicals"
   },
   "devDependencies": {
