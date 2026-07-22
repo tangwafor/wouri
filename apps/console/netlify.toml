@@ -1,0 +1,7 @@
+# Wouri console on Netlify. The Next adapter plugin handles SSR functions and the
+# publish directory; we only declare the build. No em-dashes.
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

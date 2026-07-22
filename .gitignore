@@ -10,3 +10,7 @@ dist/
 packages/*/node_modules/
 apps/*/node_modules/
 *.tsbuildinfo
+
+# Netlify build artifacts
+.netlify/
+apps/console/deno.lock
