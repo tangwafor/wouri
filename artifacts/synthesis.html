@@ -1,0 +1,282 @@
+<title>Wouri: Research Synthesis and Enhanced Build Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --paper:#f6f4ee; --surface:#fffefa; --surface-2:#efece3;
+    --ink:#15130e; --ink-2:#443f34; --ink-3:#7c7566;
+    --rule:#e0dccf; --rule-2:#cfc9b8;
+    --anchor:#0d4f47; --anchor-2:#0a635a; --on-anchor:#f6f4ee;
+    --alert:#a11f1c; --alert-bg:#f6e6e2;
+    --ok:#1f6f4a; --ok-bg:#e5f0e6; --warn:#8a5a11; --warn-bg:#f5ecd7;
+    --gap:#a11f1c; --gap-bg:#f6e6e2;
+    --mono-bg:#eceadf; --mono-ink:#204a44;
+    --shadow:0 1px 2px rgba(21,19,14,.05),0 8px 26px rgba(21,19,14,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0e1412; --surface:#151d1a; --surface-2:#1b2521;
+      --ink:#eae6db; --ink-2:#aeb4a9; --ink-3:#727a71;
+      --rule:#26302b; --rule-2:#334039;
+      --anchor:#5fb3a6; --anchor-2:#7cc7ba; --on-anchor:#0e1412;
+      --alert:#e88a80; --alert-bg:#2a1613;
+      --ok:#6cc494; --ok-bg:#142418; --warn:#e0b56b; --warn-bg:#241c0f;
+      --gap:#e88a80; --gap-bg:#2a1613;
+      --mono-bg:#1a2420; --mono-ink:#9fd3c8;
+      --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"]{ --paper:#f6f4ee; --surface:#fffefa; --surface-2:#efece3; --ink:#15130e; --ink-2:#443f34; --ink-3:#7c7566; --rule:#e0dccf; --rule-2:#cfc9b8; --anchor:#0d4f47; --anchor-2:#0a635a; --on-anchor:#f6f4ee; --alert:#a11f1c; --alert-bg:#f6e6e2; --ok:#1f6f4a; --ok-bg:#e5f0e6; --warn:#8a5a11; --warn-bg:#f5ecd7; --gap:#a11f1c; --gap-bg:#f6e6e2; --mono-bg:#eceadf; --mono-ink:#204a44; --shadow:0 1px 2px rgba(21,19,14,.05),0 8px 26px rgba(21,19,14,.06); }
+  :root[data-theme="dark"]{ --paper:#0e1412; --surface:#151d1a; --surface-2:#1b2521; --ink:#eae6db; --ink-2:#aeb4a9; --ink-3:#727a71; --rule:#26302b; --rule-2:#334039; --anchor:#5fb3a6; --anchor-2:#7cc7ba; --on-anchor:#0e1412; --alert:#e88a80; --alert-bg:#2a1613; --ok:#6cc494; --ok-bg:#142418; --warn:#e0b56b; --warn-bg:#241c0f; --gap:#e88a80; --gap-bg:#2a1613; --mono-bg:#1a2420; --mono-ink:#9fd3c8; --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4); }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.62;letter-spacing:-.003em;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;}
+  .mono{font-family:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;}
+  .wrap{max-width:860px;margin:0 auto;padding:clamp(22px,5vw,60px) clamp(18px,5vw,44px) 96px;}
+
+  /* Masthead like an engraved certificate */
+  .mast{border-top:3px solid var(--anchor);border-bottom:1px solid var(--rule);padding:22px 0 26px;margin-bottom:10px;}
+  .kicker{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-3);}
+  .wm{font-size:2.2rem;font-weight:600;letter-spacing:-.01em;margin:.35em 0 .1em;color:var(--anchor);}
+  h1.title{font-size:clamp(1.5rem,3.6vw,2.1rem);font-weight:600;letter-spacing:-.015em;line-height:1.1;margin:.1em 0 .5em;text-wrap:balance;}
+  .thesis{font-size:1.08rem;color:var(--ink-2);max-width:64ch;margin:0;}
+  .thesis b{color:var(--ink);}
+
+  section{margin-top:52px;}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--anchor-2);font-weight:700;margin-bottom:16px;}
+  .eyebrow .n{font-family:"Iowan Old Style",Georgia,serif;font-size:.95rem;color:var(--ink-3);}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--rule);}
+  h2.h{font-size:1.6rem;font-weight:600;letter-spacing:-.015em;margin:.1em 0 .55em;text-wrap:balance;}
+  h3{font-size:1.06rem;margin:1.4em 0 .3em;font-weight:650;}
+  p{margin:.6em 0;max-width:70ch;} .lead{font-size:1.04rem;}
+  a{color:var(--anchor-2);text-underline-offset:2px;}
+  strong{color:var(--ink);}
+
+  .rule{height:1px;background:var(--rule);border:0;margin:0;}
+  .callout{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--anchor);border-radius:8px;padding:18px 22px;box-shadow:var(--shadow);margin:14px 0;}
+  .callout.alert{border-left-color:var(--alert);}
+  .callout p:first-child{margin-top:0;}.callout p:last-child{margin-bottom:0;}
+
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+  .pill.ok{background:var(--ok-bg);color:var(--ok);}
+  .pill.gap{background:var(--gap-bg);color:var(--gap);}
+  .pill.fix{background:var(--warn-bg);color:var(--warn);}
+
+  code,.tok{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.85em;background:var(--mono-bg);color:var(--mono-ink);padding:1px 6px;border-radius:4px;white-space:nowrap;}
+
+  /* Cards */
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:20px 22px;box-shadow:var(--shadow);margin:14px 0;}
+  .card h3{margin-top:0;}
+  .card .row{display:grid;grid-template-columns:74px 1fr;gap:10px 14px;align-items:start;padding:7px 0;border-top:1px solid var(--rule);}
+  .card .row:first-of-type{border-top:0;}
+  .card .row .lab{padding-top:2px;}
+  .card .row p{margin:0;font-size:.94rem;color:var(--ink-2);}
+
+  .wow{background:linear-gradient(180deg,var(--surface),var(--surface));border:1px solid var(--rule-2);border-radius:12px;padding:22px 24px;box-shadow:var(--shadow);margin:16px 0;position:relative;overflow:hidden;}
+  .wow::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--anchor);}
+  .wow .tag{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:var(--anchor-2);font-weight:700;}
+  .wow h3{margin:.2em 0 .35em;font-size:1.18rem;}
+
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow);margin:14px 0;}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;background:var(--surface);min-width:560px;}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  thead th{background:var(--surface-2);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:700;}
+  tbody tr:last-child td{border-bottom:0;}
+  td.mono{font-size:.82rem;}
+
+  ol.dec{list-style:none;counter-reset:d;padding:0;margin:14px 0;display:flex;flex-direction:column;gap:12px;}
+  ol.dec li{counter-increment:d;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:16px 20px 16px 20px;box-shadow:var(--shadow);}
+  ol.dec li .q{font-weight:650;display:flex;gap:10px;align-items:baseline;}
+  ol.dec li .q::before{content:counter(d);font-family:"Iowan Old Style",Georgia,serif;color:var(--anchor);font-size:1.1rem;min-width:1.1em;}
+  ol.dec li p{margin:.4em 0 0 calc(1.1em + 10px);font-size:.94rem;color:var(--ink-2);}
+  .verdict{font-weight:700;color:var(--anchor-2);}
+
+  ul.tight{margin:.4em 0;padding-left:1.15em;} ul.tight li{margin:.28em 0;color:var(--ink-2);font-size:.95rem;}
+  footer{margin-top:60px;padding-top:22px;border-top:2px solid var(--anchor);font-size:.85rem;color:var(--ink-3);}
+  ::selection{background:var(--anchor);color:var(--on-anchor);}
+  a:focus-visible{outline:2px solid var(--anchor);outline-offset:2px;border-radius:3px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <div class="kicker"><span>Research Synthesis and Enhanced Build Plan</span><span>Draft 0.2 &middot; 22 July 2026 &middot; No em-dashes</span></div>
+    <div class="wm serif">Wouri</div>
+    <h1 class="title serif">Seven research tracks, one reframe, and the leap the evidence points at.</h1>
+    <p class="thesis">The plan builds an excellent registry. The evidence says build the <b>trust and credit layer for African export</b>: a consignment a foreigner can believe and a bank can fund, provably, without anyone having to trust Wouri at all.</p>
+  </header>
+
+  <section>
+    <div class="eyebrow"><span class="n">01</span>Executive summary</div>
+    <p class="lead">Seven specialists verified the plan against current sources across EUDR, Cameroon export systems, trade documents and digital standards, CITES and the competitive field, the data architecture, settlement, and the tenant network question. The base is right and rare: the three-layer volatility split, the append-only event spine, the effective-dated registry, field-level document bindings, and anchoring from day one are all correct calls that most products in this space get wrong.</p>
+    <p>The evidence pushes hardest in four places, and each one is fixable inside the architecture the plan already chose:</p>
+    <ul class="tight">
+      <li><strong>EUDR has moved twice.</strong> The registry-as-source-of-truth design is exactly why that does not hurt, but the seeded dates and several obligations are outdated and incomplete.</li>
+      <li><strong>Wouri feeds government systems, it does not replace them.</strong> CAMCIS, e-GUCE, SIGIF 2 and the ONCC laboratory each own an authoritative artifact the plan currently ignores.</li>
+      <li><strong>Legal transferability and third-party verifiability are unsolved.</strong> A QR that resolves to Wouri's own server is still "trust us." The 2025 standards let you replace that with proof.</li>
+      <li><strong>"To settlement" is a slogan without a settlement layer.</strong> Payment turns on a document set, and a Cameroonian exporter is not settled until proceeds are repatriated.</li>
+    </ul>
+    <p>Out of that comes the reframe below, three differentiating features no competitor offers, the live money-and-weather cockpit you asked for, and a tenant network that compounds value without a single byte crossing tenant isolation.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">02</span>The reframe: proof, not trust</div>
+    <h2 class="h serif">Wouri sells proof, not trust.</h2>
+    <p>The plan's own thesis is asking a German auditor to believe a Cameroonian exporter. A compliance analyst in Hamburg, a bank's documentary-credit desk, a customs officer at Douala: none of them want to trust a young Cameroonian company's database. Three findings collided, and together they mean you no longer have to ask them to.</p>
+    <ul class="tight">
+      <li><strong>W3C Verifiable Credentials 2.0 became a formal standard in 2025</strong>, and UN/CEFACT's Verifiable Trade Documents spec wraps trade documents in exactly that envelope. A document can carry its own cryptographic proof of issuer and integrity.</li>
+      <li><strong>Certificate Transparency's model</strong> (per-stream hash chains folded into periodically signed, published Merkle checkpoints) is the known-good way to make an append-only record verifiable by a third party who does not trust the operator.</li>
+      <li><strong>Cameroon's FLEGT licence is dead</strong> (the EU terminated the VPA in June 2025) and SIGIF 2 is not EU-recognized, so there is a live trust vacuum at the border that cocoa is about to hit too, under EUDR, in December 2026.</li>
+    </ul>
+    <div class="callout"><p>The move is from <strong>believe our stamp</strong> to <strong>here is math</strong>. That single shift is the whole brand promise, and it is what turns "Wouri Verified" from a logo into a fact.</p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">03</span>The three wow features</div>
+
+    <div class="wow">
+      <span class="tag">Wow 1</span>
+      <h3 class="serif">The self-verifiable consignment</h3>
+      <p>Every document, and the consignment as a whole, is issued as a Verifiable Credential signed against a publicly anchored Merkle checkpoint. A German auditor scans the QR and their own device confirms, offline and without ever contacting Wouri, that the document was issued by this exporter, is unaltered, and matches a checkpoint anchored to an independent timestamping authority. Bind the signer with a GLEIF vLEI and they also know the human who signed was authorised. No competitor in this space issues independently-verifiable credentials.</p>
+    </div>
+
+    <div class="wow">
+      <span class="tag">Wow 2</span>
+      <h3 class="serif">The financeable consignment, and reputation as collateral</h3>
+      <p>The biggest exporter pain is the cash gap: pay farmers on day one, get paid three to four months later. Wouri already holds the exact artifacts a pre-export lender demands, the offtake, warehouse receipts, quality reports and verified documents. Add the verifiable track record and an exporter's history of clean, on-time-repatriated consignments becomes cryptographically provable reputation collateral. Wouri never lends and never touches the money; it becomes the origination file that makes a smallholder-sourced African exporter bankable.</p>
+    </div>
+
+    <div class="wow">
+      <span class="tag">Wow 3</span>
+      <h3 class="serif">The continuously-verified consignment</h3>
+      <p>Because the plan version-pins the satellite dataset and stores the plot polygon, Wouri can re-screen a consignment that already shipped. When a new forest-loss dataset drops, it re-runs the intersection and can proactively tell a buyer the plot behind the cocoa they bought in March is still clean, or flag the rare case where it is not. Compliance stops being a filed PDF and becomes a living guarantee that keeps proving itself.</p>
+    </div>
+
+    <p style="margin-top:18px;">The category that ties these together, and that no single tool serves today, is the <strong>dual-rail lot</strong>: one consignment carrying both an EUDR rail (polygon, version-pinned risk screen, DDS) and a CITES rail (appendix, annotation, permit, quota decrement). That is exactly the Cameroon exporter shipping cocoa and Doussie together. It is Wouri's category to own.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">04</span>The live cockpit: money and weather, in real time</div>
+    <p>Your two additions, all-currency real-time exchange and weather hotspots, are not widgets. They answer two of the four questions the plan says every screen must serve: did we make money, and is my shipment on track.</p>
+    <h3>Real-time exchange, recorded honestly</h3>
+    <p>A registry of record does not want a number that moves; it wants the exact rate that applied when money was fixed. So Wouri does both. The append-only <code>fx_rates</code> ledger freezes the rate at every economically-relevant event with its source and timestamp, which is what makes the margin and the repatriation auditable. A live feed pulls every currency pair a tenant touches, on an interval and on demand at fixing. And because cocoa is priced as a differential to ICE terminal futures while the exporter reports in XAF, "real-time exchange" is two feeds, a currency feed and a terminal-price feed tied to a specific exchange, month and currency, so a differential is computable rather than decorative. One decision: live ICE data is licensed, while ONCC publishes daily cocoa reference prices for free, so start free and upgrade later.</p>
+    <h3>Weather hotspots, on the spine</h3>
+    <p>Weather attaches to <code>locations</code>, <code>origin_units</code> and the shipping route, free and keyless. As a Layer 3 projection it becomes a risk map against registry-defined thresholds, and it earns its place three ways: rain over a drying yard is an early cocoa-moisture warning, a storm on the Douala or Kribi window becomes a ranked blocker on the readiness board, and flood or drought over a plot adds context to the EUDR degradation picture, captured with provenance like everything else.</p>
+    <div class="callout"><p>Together they produce one cockpit line the plan does not have today: <strong>this consignment is worth X at this minute, your margin at today's rate is Y, your repatriation clock has 96 days left, and a storm is sitting on your shipping window.</strong> Same brand voice throughout: never reassure without evidence, now including the money and the sky.</p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">05</span>The section-11 decisions, answered from evidence</div>
+    <ol class="dec">
+      <li><div class="q">Beachhead commodity</div><p><span class="verdict">Cocoa first, timber second and repositioned.</span> The CEMAC log-export ban (full stop 2028, phasing from 2025, 91 species restricted as of April 2026, 60 to 75% duty) makes a timber beachhead built on log-export paperwork a legally-disappearing base. Cocoa has a cleaner export path, the largest addressable base, and the same EUDR deadline. Keep timber as the differentiated second, because the dual-rail CITES-plus-EUDR lot is the moat, but move its value from log paperwork to processed-wood legality, traceability and EUDR.</p></li>
+      <li><div class="q">Is the friend real, and when do you see him</div><p><span class="verdict">Still yours, but the rule holds either way.</span> Whatever the commodity, do not generate the handoff bundle until you have seen one real consignment file. It is the highest-value input to the document engine, and building it blind guarantees the rework you are trying to avoid.</p></li>
+      <li><div class="q">Expo confirmed</div><p><span class="verdict">Yes.</span> The fourteen-day offline requirement, Bluetooth peripherals, and legitimate forest-canopy GPS fixes rule out a PWA on iOS. The architecture review found no reason to reverse this.</p></li>
+      <li><div class="q">Aza's name across products</div><p><span class="verdict">Keep it, your call.</span> Low evidence weight, but the network research adds one caution: in a compliance product the assistant must never assert a compliance status, so keep Aza's abstinence rule absolute regardless of the name.</p></li>
+      <li><div class="q">Registry seeding</div><p><span class="verdict">This is the moat and the network good, budget real hours.</span> The tenant research is unambiguous: the effective-dated, cited regulatory registry is the common good that compounds across every tenant and the one part software cannot do for you. It is rank-one leverage, not overhead.</p></li>
+      <li><div class="q">New private repo, copied substrate, no shared package</div><p><span class="verdict">Confirm.</span> Consistent with the fleet standard and with ADR-0006. One developer, two products, different deadlines: a shared dependency means a Wouri release can break Bazah at the worst time.</p></li>
+      <li><div class="q">Does Bazah pause</div><p><span class="verdict">Your call, but shared standards get more valuable if it does not.</span> Two products by one person only stay maintainable built the same way, which raises the value of the TaTech standards conformance already in the plan.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">06</span>Gap analysis by domain</div>
+    <p>Each card: what the plan already covers, where the evidence found gaps, and the concrete fix. Full citations are on file per track.</p>
+
+    <div class="card">
+      <h3>EUDR <span class="pill gap">dates stale</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Effective-dated compliance packs and requirements with certainty flags, PostGIS plot polygons with versioning, version-pinned risk assessment.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>Application dates are now 30 Dec 2026 (medium and large) and 30 Jun 2027 (micro and small). <code>point_only</code> geometry is invalid over 4 ha, which is almost all timber. The TRACES DDS reference number and its Operator-plus-one pass-through are unmodeled. Cameroon is standard risk, so full due diligence always applies and simplification never does. Article 9 legality (legal-production proof) is missing; the plan only checks forest loss. No lot-level segregation gate for the no-mixing rule.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Add a <code>dds</code> entity (submission id, reference and verification numbers, operator role, inbound reference), an effective-dated <code>country_risk</code> registry that drives the obligation set, a <code>legality_evidence</code> entity, a computed area with a size gate on geometry, and a lot spine that fails a lot if any contributing plot is unknown or non-compliant. Re-seed the dates.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Cameroon export systems <span class="pill gap">unnamed</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Registry-driven document types, duties, levies and permits is exactly right for a domain where rules move by finance law and arrete. Offline field capture fits the timber chain.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>The plan names no government system, yet CAMCIS owns the customs declaration (SYDONIA is retired), e-GUCE owns the coverage circuit and packing certificate, SIGIF 2 auto-generates the legal timber waybills, and the ONCC laboratory is the only body that can issue a cocoa grade certificate. Missing document and levy rows: ECTN, VGM, the specification bulletin, the tri-party loading report, the CITES permit, the packing certificate, forestry exit tax and cocoa levies, and the new AfCFTA origin certificate. No port or destination scoping.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Model each government endpoint as a registry-driven <code>integration_connectors</code> row (CAMCIS, e-GUCE e-BUSINESS and SIAT XML, SIGIF 2, ONCC, EU TRACES), and adopt the rule that for any artifact a government system legally issues, Wouri stores the authoritative external reference, never a self-minted substitute. Seed the missing docs with port and destination scoping.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Documents and digital standards <span class="pill gap">FLEGT dead</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Field-level bindings with unbound-blocks-issuance, versioning, signatures, scan log, anchoring from day one, and rendering in the receiving authority's language. Genuinely ahead of the field.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>There is no FLEGT licence for Cameroon; a hard FLEGT gate would make every timber consignment un-issuable. The certificate of origin is the EUR.1-CMR variant under the interim EPA, not GSP Form A or REX. The 26-char code is a single-issuer closed loop. RFC 3161 alone has a long-term-validation weakness. Hard-boolean dependencies are brittle. Missing: EUDR DDS, CITES permit, cocoa CoA and pre-shipment inspection, VGM as first-class, and ICS2 attributes.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Remove the FLEGT gate, replace with EUDR plus CITES (species-conditional). Emit each document as a W3C VC 2.0 credential behind the QR and bind the signer with a vLEI. Hand negotiable bills of lading to a DCSA-interoperable platform via PINT and store the reference. Add LTV re-stamping and a second anchor. Make dependencies conditional. Store the ePhyto reference rather than re-issuing it. Name fields to the ICC DSI KTDDE glossary.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>CITES and the competitive field <span class="pill ok">moat here</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Effective-dated species rows and a quota ledger that can never go negative are genuine differentiators; no EUDR competitor models a CITES quota at all, and most hardcode species lists that misclassify a lot shipped across a listing date.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>The plan keys on appendix but not the CITES annotation (#17 vs #15 vs #7), which decides which product forms are regulated. Species need African-population scope. No permit object with the six-month expiry and quota decrement. Table-stakes not yet explicit: built-in polygon screening against JRC GFC2020 (version-pinned) plus Global Forest Watch, the 31 Dec 2020 cutoff, and re-screen alerts.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Model the annotation and population scope, add a CITES <code>permits</code> object linked to the quota ledger, and enforce as a database constraint that any CITES-listed species is forbidden from mass-balance or credit origin claims. Seed the CoP19 African listings; note the CoP20 delisting attempts failed in Dec 2025.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Data architecture <span class="pill ok">sound base</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Three-layer split, client-minted UUID idempotency, occurred-at versus created-at, typed EAV with a declaration table, pack-version pinning, trust-tier over hard-block. All correct.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>A single global hash chain forks under offline concurrency and a client-computed chain proves little alone. EAV reporting will be slow without a projection. Loose valid-from and valid-to invites overlap. The single RLS gate raises the stakes on the auth.uid re-evaluation trap and column-level writes. Missing: registry audit, explicit compensating-event corrections, idempotent reproducible document issuance, and deterministic projection rebuild.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Scope the hash chain per lot or device stream, add a server counter-signed chain and periodic signed Merkle checkpoints. Add a JSONB quality projection with GIN and partial expression indexes. Use <code>tstzrange</code> with a <code>btree_gist</code> exclusion constraint. Wrap RLS predicates in <code>(select auth.uid())</code>, add column grants on integrity fields, authorize from a membership table, and make the sync cursor tombstone-aware. Add registry audit, compensating events, content-hash-idempotent issuance, and projection checkpoints and snapshots.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Trade finance and settlement <span class="pill gap">"to settlement" incomplete</span></h3>
+      <div class="row"><div class="lab"><span class="pill ok">Covered</span></div><p>Contracts with price mode and payment mode, cost entries and pools, a margin projection, and a currency and FX registry with null-not-one.</p></div>
+      <div class="row"><div class="lab"><span class="pill gap">Gaps</span></div><p>Payment turns on a document set that fails first presentation 60 to 70 percent of the time, and there is no discrepancy layer. No settlement instrument or state machine. The BEAC 150-day foreign-exchange repatriation obligation, the true definition of settled for a CEMAC exporter, is absent. The working-capital gap is unmodeled. Incoterm risk-transfer versus who-pays, and the insurance certificate, are not first-class. The differential price has no terminal reference.</p></div>
+      <div class="row"><div class="lab"><span class="pill fix">Fix</span></div><p>Add a discrepancy-tracked presentation layer over the existing document registry, a <code>settlement_instrument</code> and a state machine that ends at repatriated, a BEAC domiciliation and 150-day countdown in the spine (do not hardcode the 35 percent rate, which is extractive-only), and light working-capital records (<code>warehouse_receipt</code>, reuse of payment requests, a cash timeline). Add insurance and Incoterm split, and pin the differential to a terminal reference.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">07</span>How tenants benefit from each other, without breaking isolation</div>
+    <p>The governing lesson is expensive and clear. TradeLens spent over one hundred million dollars, tracked billions of events, and shut down in 2022 because competitors would not feed a platform a rival owned. The moat is not hoarded data, which AI commoditizes; it is the audit trail third parties agree to rely on, plus a neutral common good. So every cross-tenant benefit in Wouri resolves to exactly one of three paths, never a fourth: a platform-owned common good, an explicit opt-in consent, or an anonymized aggregate.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Mechanism</th><th>Construct</th><th>Path</th><th>Guardrail</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Regulatory rules registry</strong></td><td>Platform-owned effective-dated reference tables</td><td>Common good</td><td>Zero tenant data; one verified rule helps every tenant. Rank-1.</td></tr>
+          <tr><td><strong>Wouri Verified mark</strong></td><td>Two-sided credential; verifier role separate from the exporter</td><td>Common good + spine</td><td>The verified tenant never audits itself; credential verifiable off-platform.</td></tr>
+          <tr><td><strong>Anonymized benchmarking</strong></td><td>Layer 3 projection: quality, price differential, cost, discrepancy rates as percentile bands</td><td>Anonymized</td><td>Emit only at cohort size 50-plus, suppress small cells, add noise. Never row-level.</td></tr>
+          <tr><td><strong>Aggregated financing</strong></td><td><code>financing_consents</code>: exporter authorizes lender to read a specific record for a window</td><td>Opt-in</td><td>Wouri provides the verified record; never lends, never matches.</td></tr>
+          <tr><td><strong>Shared plot reuse</strong></td><td>Canonical plot geometry plus a cross-tenant yield-cap ledger</td><td>Common good + opt-in + spine</td><td>Holder consent per link; the yield cap blocks EUDR declaration-in-excess laundering; exporters see only capacity remaining.</td></tr>
+          <tr><td><strong>Counterparty registry</strong></td><td>Identity skeleton plus reciprocal factual attestations (verified or disputed events, not scores)</td><td>Common good + opt-in</td><td>Reciprocity gate, right of reply, PSI so overlap is learned without disclosing the book.</td></tr>
+          <tr><td><strong>Group consolidation</strong></td><td><code>organization_groups</code> tenant-of-tenants with a shared group certificate</td><td>Opt-in</td><td>Explicit membership only. FSC group-certification precedent.</td></tr>
+          <tr><td><strong>Consolidated DDS</strong></td><td>A multi-operator shared compliance submission, recorded not brokered</td><td>Opt-in</td><td>Record the compliance artifact only; no cargo matching, no freight booking.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Two loops compound. The <strong>verification network</strong>: the most-viewed Wouri artifact is a document held by a non-customer, and every offline verification teaches a foreign gatekeeper to look for the mark, which raises its value to the next exporter. The <strong>registry common good</strong>: every tenant draws on a cited, effective-dated rule set no competitor has seeded. Neutrality is existential; if a tenant suspects a rival controls the registry, contribution stops and the good collapses.</p>
+    <div class="callout alert"><p><strong>Positioning tripwires.</strong> Freight pooling turns Wouri into a broker; keep only the compliance-record slice. Counterparty reputation as subjective scores turns it into a rating agency; keep it to factual events with right of reply. Financing origination or matching turns it into a marketplace; provide the record the lender relies on and stop there.</p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">08</span>Consolidated schema deltas</div>
+    <p>Everything above is additive to the plan's spine. New objects, grouped by driver.</p>
+    <ul class="tight">
+      <li><strong>EUDR:</strong> <code>dds</code>, <code>country_risk</code> (registry), <code>legality_evidence</code>, area-gated geometry, lot segregation gate.</li>
+      <li><strong>Verification:</strong> credential issuance ledger (VC 2.0), signed Merkle <code>anchor_digests</code> checkpoints (per-stream chain), vLEI signer binding.</li>
+      <li><strong>CITES:</strong> <code>permits</code> (six-month expiry) linked to <code>quota_ledger</code>; species annotation and population scope; identity-preserved constraint on listed species.</li>
+      <li><strong>Settlement:</strong> <code>settlement_instrument</code>, <code>presentation</code> and <code>discrepancy</code>, settlement state machine to <code>repatriated</code>, <code>domiciliation</code> and BEAC 150-day clock.</li>
+      <li><strong>Finance:</strong> <code>warehouse_receipt</code>, <code>financing_consents</code>, cash-timeline projection.</li>
+      <li><strong>Documents:</strong> <code>insurance_certificate</code>, Incoterm split flags, conditional <code>document_dependencies</code>, KTDDE field naming.</li>
+      <li><strong>Integration:</strong> <code>integration_connectors</code> registry (CAMCIS, e-GUCE, SIGIF 2, ONCC, TRACES) storing authoritative external references.</li>
+      <li><strong>Cockpit:</strong> live <code>fx_rates</code> feed plus <code>terminal_price</code> reference; <code>weather_risk_rules</code> registry and a weather projection feeding the readiness board.</li>
+      <li><strong>Network:</strong> plot commons plus <code>yield_cap_ledger</code>, shared-party identity plus reciprocal attestations, anonymized benchmark projections.</li>
+      <li><strong>Architecture:</strong> JSONB quality projection with GIN, <code>tstzrange</code> plus <code>btree_gist</code> exclusion, registry audit, compensating-event corrections, reproducible issuance, projection checkpoints.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">09</span>Recommended next step</div>
+    <p>Fold the three wow features, the live cockpit, and every fix above into the section-10 Claude Code handoff bundle, as first-class components with their own seven-file specs and blocking regression suites. The self-verifiable consignment, the financeable consignment, and the dual-rail lot become named components; the EUDR, CITES, settlement, and integration deltas become registry seeds and migrations; the tenant-network mechanisms enter in leverage order, starting with the registry common good and the verification mark.</p>
+    <div class="callout"><p>One rule carries over from the plan and the evidence both: do not generate the bundle until you have seen one real consignment file. Everything else is ready to compile.</p></div>
+  </section>
+
+  <footer>
+    <p class="serif" style="font-size:1rem;color:var(--anchor);">Wouri</p>
+    <p>Draft for agreement. Nothing here is built. Synthesis of seven research tracks, each cited to 2024 through 2026 sources held on file. Fast-moving items (EUDR dates, the Cameroon FLEGT termination, CITES listings, BEAC enforcement) should be re-checked at build time.</p>
+  </footer>
+
+</div>

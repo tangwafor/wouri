@@ -1,0 +1,148 @@
+<title>Wouri: Investor and Customer Pitches</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{--paper:#f6f4ee;--surface:#fffefa;--surface-2:#efece3;--ink:#15130e;--ink-2:#443f34;--ink-3:#7c7566;--rule:#e0dccf;--rule-2:#cfc9b8;--anchor:#0d4f47;--anchor-2:#0a635a;--on-anchor:#f6f4ee;--alert:#a11f1c;--alert-bg:#f6e6e2;--ok:#1f6f4a;--ok-bg:#e5f0e6;--mono-bg:#eceadf;--mono-ink:#204a44;--shadow:0 1px 2px rgba(21,19,14,.05),0 8px 24px rgba(21,19,14,.06);}
+  @media (prefers-color-scheme:dark){:root{--paper:#0e1412;--surface:#151d1a;--surface-2:#1b2521;--ink:#eae6db;--ink-2:#aeb4a9;--ink-3:#727a71;--rule:#26302b;--rule-2:#334039;--anchor:#5fb3a6;--anchor-2:#7cc7ba;--on-anchor:#0e1412;--alert:#e88a80;--alert-bg:#2a1613;--ok:#6cc494;--ok-bg:#142418;--mono-bg:#1a2420;--mono-ink:#9fd3c8;--shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.4);}}
+  :root[data-theme="light"]{--paper:#f6f4ee;--surface:#fffefa;--surface-2:#efece3;--ink:#15130e;--ink-2:#443f34;--ink-3:#7c7566;--rule:#e0dccf;--rule-2:#cfc9b8;--anchor:#0d4f47;--anchor-2:#0a635a;--on-anchor:#f6f4ee;--alert:#a11f1c;--alert-bg:#f6e6e2;--ok:#1f6f4a;--ok-bg:#e5f0e6;--mono-bg:#eceadf;--mono-ink:#204a44;--shadow:0 1px 2px rgba(21,19,14,.05),0 8px 24px rgba(21,19,14,.06);}
+  :root[data-theme="dark"]{--paper:#0e1412;--surface:#151d1a;--surface-2:#1b2521;--ink:#eae6db;--ink-2:#aeb4a9;--ink-3:#727a71;--rule:#26302b;--rule-2:#334039;--anchor:#5fb3a6;--anchor-2:#7cc7ba;--on-anchor:#0e1412;--alert:#e88a80;--alert-bg:#2a1613;--ok:#6cc494;--ok-bg:#142418;--mono-bg:#1a2420;--mono-ink:#9fd3c8;--shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.4);}
+  *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.62;letter-spacing:-.003em;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;}
+  .wrap{max-width:880px;margin:0 auto;padding:clamp(22px,5vw,56px) clamp(18px,5vw,42px) 96px;}
+  .mast{border-top:3px solid var(--anchor);border-bottom:1px solid var(--rule);padding:22px 0 22px;margin-bottom:8px;}
+  .kicker{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-3);}
+  .wm{font-size:2rem;font-weight:600;color:var(--anchor);margin:.3em 0 .05em;}
+  .sub{color:var(--ink-2);font-size:1.05rem;margin:0;}
+  nav.jump{position:sticky;top:0;z-index:5;display:flex;gap:8px;padding:12px 0;background:var(--paper);border-bottom:1px solid var(--rule);margin-bottom:8px;}
+  nav.jump a{font-size:.82rem;font-weight:650;text-decoration:none;color:var(--ink-2);border:1px solid var(--rule-2);border-radius:100px;padding:5px 14px;}
+  nav.jump a:hover{border-color:var(--anchor);color:var(--anchor-2);}
+  section{margin-top:40px;scroll-margin-top:64px;}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--anchor-2);font-weight:700;margin-bottom:14px;}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--rule);}
+  h2.h{font-size:1.55rem;font-weight:600;letter-spacing:-.015em;margin:.1em 0 .5em;text-wrap:balance;}
+  h3{font-size:1.05rem;margin:1.3em 0 .3em;font-weight:650;}
+  p{margin:.6em 0;max-width:70ch;} a{color:var(--anchor-2);}
+  .narr{font-size:1.05rem;color:var(--ink-2);background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--anchor);border-radius:8px;padding:18px 22px;box-shadow:var(--shadow);}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0;}
+  .stat{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow);}
+  .stat .n{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--anchor);font-variant-numeric:tabular-nums;line-height:1.05;}
+  .stat .k{font-size:.8rem;color:var(--ink-3);margin-top:5px;}
+  .slides{display:flex;flex-direction:column;gap:11px;counter-reset:s;}
+  .slide{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:15px 19px;box-shadow:var(--shadow);}
+  .slide h4{margin:0 0 5px;font-size:1rem;display:flex;gap:10px;align-items:baseline;}
+  .slide h4::before{counter-increment:s;content:counter(s);font-family:"Iowan Old Style",Georgia,serif;color:var(--anchor);font-size:1rem;min-width:1.3em;}
+  .slide ul{margin:.2em 0 0;padding-left:1.3em;} .slide li{font-size:.9rem;color:var(--ink-2);margin:.22em 0;}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow);margin:14px 0;}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;background:var(--surface);min-width:620px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  thead th{background:var(--surface-2);font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:700;}
+  td.win{color:var(--anchor-2);font-weight:700;} tbody tr:last-child td{border-bottom:0;}
+  .lines{display:flex;flex-direction:column;gap:10px;margin:14px 0;}
+  .line{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--anchor);border-radius:8px;padding:13px 18px;font-size:1.02rem;color:var(--ink);box-shadow:var(--shadow);}
+  .line b{color:var(--anchor-2);}
+  .benefit{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:15px 19px;box-shadow:var(--shadow);margin:11px 0;}
+  .benefit h4{margin:0 0 4px;font-size:1.02rem;}
+  .benefit p{margin:0;font-size:.94rem;color:var(--ink-2);}
+  .fr{background:var(--surface-2);border:1px solid var(--rule);border-radius:10px;padding:16px 20px;margin:12px 0;}
+  .fr .lab{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);font-weight:700;}
+  .hook{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 18px;box-shadow:var(--shadow);margin:10px 0;}
+  .hook .num{font-family:"Iowan Old Style",Georgia,serif;font-size:1.5rem;color:var(--anchor);line-height:1;}
+  .hook h4{margin:0 0 3px;font-size:1rem;} .hook p{margin:0;font-size:.92rem;color:var(--ink-2);}
+  .note{font-size:.86rem;color:var(--ink-3);background:var(--alert-bg);border:1px solid var(--rule);border-radius:8px;padding:13px 17px;margin-top:16px;}
+  footer{margin-top:52px;padding-top:20px;border-top:2px solid var(--anchor);font-size:.85rem;color:var(--ink-3);}
+  ::selection{background:var(--anchor);color:var(--on-anchor);}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker"><span>Investor and Customer Pitches</span><span>Draft 0.1 &middot; 22 July 2026 &middot; No em-dashes</span></div>
+    <div class="wm serif">Wouri</div>
+    <p class="sub">The trust and credit layer for African commodity export.</p>
+  </header>
+
+  <nav class="jump"><a href="#investor">Investor</a><a href="#customer">Customer</a><a href="#customer-fr">Version francaise</a></nav>
+
+  <section id="investor">
+    <div class="eyebrow">For investors</div>
+    <h2 class="h serif">Why now, why this, why us</h2>
+    <p class="narr">On 30 December 2026 the EU Deforestation Regulation starts applying to every medium and large operator, and on 30 June 2027 to every micro and small one, so that no cocoa bean or plank of wood enters the EU without a filed, geolocated Due Diligence Statement and its reference number. No reference number means the container is held at the EU border. For Cameroon, the fourth largest cocoa exporter on earth and a Congo Basin timber source, this is an existential, dated deadline. Everyone chasing it is building the same thing, a polygon and a PDF. Wouri builds the missing thing: one file per consignment, from purchase order to settlement, that carries an EUDR rail and a CITES rail at once, issues every document as a tamper-evident credential anyone can verify offline without trusting us, and quietly accumulates exactly the artifacts a pre-export lender needs. We are a registry of record, like a land registry or a classification society. The wedge is a deadline; the moat is that we turn compliance paperwork into a verifiable, bankable asset.</p>
+
+    <h3>The numbers that matter</h3>
+    <div class="stats">
+      <div class="stat"><div class="n">30 Dec 2026</div><div class="k">EUDR applies; no DDS number, cargo held at the EU border</div></div>
+      <div class="stat"><div class="n">4% of turnover</div><div class="k">minimum EUDR fine, plus goods and revenue confiscation</div></div>
+      <div class="stat"><div class="n">$1.28B</div><div class="k">Cameroon cocoa bean exports, 2024 (OEC)</div></div>
+      <div class="stat"><div class="n">192k t</div><div class="k">Cameroon cocoa exported, 2024/25 season (ONCC)</div></div>
+      <div class="stat"><div class="n">$102.6B</div><div class="k">Africa trade-finance gap by 2027 (AfDB)</div></div>
+      <div class="stat"><div class="n">2028</div><div class="k">CEMAC log-export ban; timber pivots to processed + compliance</div></div>
+    </div>
+
+    <h3>The deck, eleven slides</h3>
+    <div class="slides">
+      <div class="slide"><h4>Problem</h4><ul><li>African commodity export runs on a shoebox of disconnected PDFs; nothing ties to the physical lot and no third party can verify a claim without phoning the exporter.</li><li>Cameroon has roughly 600,000 cocoa smallholders feeding its leading non-oil export, with no machine-readable paper trail.</li><li>The same exporter often ships cocoa and protected-species timber, each under a different regulator, with zero shared system of record.</li></ul></div>
+      <div class="slide"><h4>Why now</h4><ul><li>EUDR applies 30 Dec 2026 (large and medium), 30 Jun 2027 (micro and small).</li><li>Every EU-bound shipment needs a DDS reference number at customs, or the goods are not released.</li><li>Penalty at least 4% of EU-wide turnover, plus confiscation and market bans; criminal liability up to 10 years under Directive 2024/1203.</li><li>Over 50,000 EU businesses are already bound, plus their non-EU suppliers.</li></ul></div>
+      <div class="slide"><h4>Solution: the consignment file</h4><ul><li>One file per consignment, purchase order to settlement, that produces every document, proves every claim, and is verifiable by anyone holding the paper, offline, without trusting Wouri.</li><li>A system of record, not a marketplace. Never takes title, holds money, or lends.</li></ul></div>
+      <div class="slide"><h4>The wow: dual-rail lot + proof not trust</h4><ul><li>One consignment carries an EUDR rail (polygons, version-pinned deforestation screen, DDS) and a CITES rail (appendix, annotation, permit, a quota ledger that can never go negative).</li><li>Each document is a W3C Verifiable Credential (a standard since 15 May 2025) anchored to a public checkpoint, verified cryptographically and offline.</li><li>No competitor serves both rails on one lot.</li></ul></div>
+      <div class="slide"><h4>Product</h4><ul><li>Ingest the offtake, polygons, warehouse receipt, grades and permits, all bound to one lot ID.</li><li>Screen the EUDR and CITES checks; the quota ledger is enforced non-negative.</li><li>Issue every artifact as an offline-verifiable credential.</li><li>Settle and hand off: the file is both the export dossier and the lender origination file.</li></ul></div>
+      <div class="slide"><h4>Market</h4><ul><li>TAM: supply-chain traceability about $6.7B in 2025, with $350M+ incremental EUDR spend 2025 to 2027; the credit adjacency far larger at a $102.6B African trade-finance gap by 2027.</li><li>SAM: African cocoa and timber exporters facing EUDR plus CITES.</li><li>SOM beachhead: Cameroon cocoa, 192k tonnes and $1.28B in 2024, concentrated among a few dozen licensed exporters, plus timber.</li></ul></div>
+      <div class="slide"><h4>Business model</h4><ul><li>Core SaaS: per-consignment issuance fee plus per-seat subscription, priced against a 4%-of-turnover downside.</li><li>Verification take (later): banks, buyers and insurers pay to rely on and pull verified credentials.</li><li>Credit origination (later, capital-light): a fee when a verified file originates pre-export finance. Never lends, never holds money.</li></ul></div>
+      <div class="slide"><h4>Moat and network effects</h4><ul><li>The dual-rail lot no EUDR-only or timber-only tool offers.</li><li>Proof not trust: the classification-society economic moat, value from third-party reliance.</li><li>The effective-dated regulatory registry as a platform-owned common good; one verified rule helps every tenant, no redeploy.</li><li>A reputation flywheel: every settled file thickens the credit record.</li></ul></div>
+      <div class="slide"><h4>Competition: Wouri owns the intersection</h4>
+        <div class="tbl-wrap" style="margin-top:8px;"><table><thead><tr><th>Capability</th><th>EUDR tools</th><th>Timber traceability</th><th>Trade-finance</th><th>Wouri</th></tr></thead><tbody>
+          <tr><td>Plot polygons + DDS</td><td>Yes</td><td>No</td><td>No</td><td class="win">Yes</td></tr>
+          <tr><td>CITES appendix + non-negative quota</td><td>No</td><td>Partial</td><td>No</td><td class="win">Yes</td></tr>
+          <tr><td>Offline-verifiable credentials</td><td>No</td><td>No</td><td>No</td><td class="win">Yes</td></tr>
+          <tr><td>Effective-dated registry, no redeploy</td><td>No</td><td>No</td><td>No</td><td class="win">Yes</td></tr>
+          <tr><td>Credit-ready origination file</td><td>No</td><td>No</td><td>Partial</td><td class="win">Yes</td></tr>
+        </tbody></table></div>
+        <ul><li>Incumbents (Koltiva, Sourcemap, Meridia, TIMFLOW) are well capitalized, which proves the category, and each occupies one column.</li></ul>
+      </div>
+      <div class="slide"><h4>Go-to-market</h4><ul><li>Beachhead: Cameroon cocoa, a concentrated set of exporters with one shared, dated trigger.</li><li>Expand within the tenant: the same exporter's timber lots activate the CITES rail with no new sales motion.</li><li>The diaspora angle shortens trust and distribution (the Netherlands takes the bulk of the beans).</li><li>Then widen: CEMAC timber before 2028, then Ghana and Cote d'Ivoire cocoa, then coffee and rubber.</li></ul></div>
+      <div class="slide"><h4>Team, traction, the ask</h4><ul><li>Solo technical founder operating an AI build fleet that already ships production multi-tenant, RLS-hardened, regulated SaaS across a dozen live apps.</li><li>Traction plan: sign 1 to 3 cocoa exporters as design partners before the deadline, file real DDS numbers, issue the first bank-relied credentials, activate the timber rail, originate the first finance file.</li><li>The ask: a seed round to harden the dual-rail engine and the credential issuer, and convert design partners into paid consignment volume before the deadline forces the market to choose a vendor.</li></ul></div>
+    </div>
+
+    <h3>Three lines an investor remembers</h3>
+    <div class="lines">
+      <div class="line"><b>1.</b> EUDR turned a shoebox of PDFs into a hard border check with a date on it, and Cameroon's exporters must buy tooling before 30 December 2026 or their cargo does not move.</div>
+      <div class="line"><b>2.</b> Everyone else ships a polygon and a PDF; Wouri ships one file that carries EUDR and CITES at once and can be verified offline without trusting us, because value comes from third parties relying on the stamp.</div>
+      <div class="line"><b>3.</b> We never lend and never hold money; we just hold the one file a lender needs, which is how a compliance cost becomes reputation collateral and a smallholder-sourcing exporter becomes bankable.</div>
+    </div>
+    <p class="note"><strong>Founder honesty notes.</strong> The "few dozen exporters, top four dominate" figure rests on an older dataset; refresh from a current ONCC roster before a live pitch. The XAF 140.4B timber figure is total forestry-product revenue (about $230M), not EU-bound only; the EU-bound regional figure is a separate ~$600M. Cite the Pericopsis quota as illustrative of how quotas work, not as today's exact number. Full sources are on file.</p>
+  </section>
+
+  <section id="customer">
+    <div class="eyebrow">For exporters</div>
+    <h2 class="h serif">One file per shipment, from the purchase order to the money coming home.</h2>
+    <p>You run cocoa and timber to Europe. Right now that means one folder for e-GUCE, another for CAMCIS, SIGIF 2 for the logs, the ONCC lab for the cocoa grade, the port, the shippers council, and a bank that bounces your letter of credit two times out of three over a weight that does not match. Wouri puts one shipment in one file, builds every document from the same numbers, and shows you what is stopping the container today. Nobody touches your money.</p>
+
+    <div class="benefit"><h4>Your documents stop contradicting each other.</h4><p>Enter the weight and the lot once. Wouri writes the invoice, the packing list, the certificate of origin and the customs declaration from that one figure. A packing list that says 18,240 kg can no longer meet an invoice that says 18,420 kg. Letters of credit fail first presentation 60 to 70 percent of the time on mismatches this small. Wouri catches it before your bank sees the file.</p></div>
+    <div class="benefit"><h4>Your EUDR file is built, not improvised.</h4><p>From 30 December 2026, cocoa and timber entering the EU need a Due Diligence Statement with the GPS polygon of every plot and proof the land was not cleared after 31 December 2020. No reference number, the container is held. Wouri maps the plot once, checks it against the satellite record, assembles the Statement, and keeps the reference number on the shipment. You walk in with the number in hand.</p></div>
+    <div class="benefit"><h4>For timber, both rails in one place.</h4><p>Doussie, Acajou and Padouk have needed a CITES export permit since 2023, and the log export ban keeps tightening toward 2028. Wouri runs the EUDR file and the CITES permit and quota side by side on the same shipment, so one is not forgotten at the quay.</p></div>
+    <div class="benefit"><h4>A document a buyer in Hamburg can verify without calling you.</h4><p>Every document carries a code. Your buyer or their bank scans it and sees it is genuine, even with no internet on their side. They believe the paper because they can check the paper.</p></div>
+    <div class="benefit"><h4>You see the blocker every morning, ranked, with the clock on it.</h4><p>Open Wouri and see each shipment, what is holding it, who owns that step, and how many days are left. See what the cargo is worth right now at today's rate, your margin, and your 150-day clock to bring the money home. You pay the farmer cash on day one and the buyer pays you 90 to 135 days later. Wouri makes that gap something you watch, not something that surprises you.</p></div>
+    <div class="benefit"><h4>You become bankable on your own record.</h4><p>Pre-export lenders ask for the offtake contract, the warehouse receipt, the quality reports and documents they can trust. Wouri holds all of it, verified, so a clean track record is something you can show a financier. Wouri never holds or moves your funds.</p></div>
+    <div class="benefit"><h4>It works where you actually work.</h4><p>The plantation and the log yard have no signal. Wouri runs offline on a cheap phone, in French, and syncs when you get back to the road.</p></div>
+    <p><strong>Close.</strong> The EUDR date is fixed and it is close. The exporters who file a clean Due Diligence Statement, with a reference number, on documents that agree with each other, keep shipping in 2027. Wouri is how you become one of them. Book a 30-minute demo and bring your last rejected shipment; we will run it through Wouri and show you where it would have been caught.</p>
+
+    <h3>Elevator version, about 20 seconds</h3>
+    <p class="narr">Wouri is one file for every export shipment, from the purchase order to the money coming home. It builds your invoice, packing list and customs papers from the same numbers, so the weights never contradict and your bank stops bouncing the letter of credit. It assembles your EUDR Due Diligence Statement with the plot GPS and keeps the reference number, so your container is not held at the EU border on 30 December 2026. For timber it runs the CITES permit on the same shipment. And it works offline, in French, on a cheap phone in the forest. Wouri never touches your money. Bring me your last rejected shipment and I will show you where Wouri would have caught it.</p>
+
+    <h3>Three demo hooks</h3>
+    <div class="hook"><div class="num serif">1</div><div><h4>The weight that never reaches the bank.</h4><p>Type 18,240 kg on the packing list, start the invoice and fat-finger 18,420. Before you can save, Wouri flags the 180 kg gap and points at both documents. The manager has personally eaten a bounced letter of credit over exactly this.</p></div></div>
+    <div class="hook"><div class="num serif">2</div><div><h4>Scan the document, offline, and watch it verify.</h4><p>Print a certificate, put the laptop in airplane mode to play the Hamburg buyer, and scan the code with a phone. It confirms genuine with no connection. Their buyer will trust the paper without a call back to Douala.</p></div></div>
+    <div class="hook"><div class="num serif">3</div><div><h4>The morning blocker board with the storm on the window.</h4><p>Three shipments, ranked, each with its blocker, owner and days left. On the cocoa container the EUDR reference is still missing and the vessel cut-off is in four days, flagged red. The screen they open every morning at 7am.</p></div></div>
+  </section>
+
+  <section id="customer-fr">
+    <div class="eyebrow">Version francaise</div>
+    <h2 class="h serif">Un seul dossier par expedition, du bon de commande jusqu'a l'argent qui rentre.</h2>
+    <div class="fr"><div class="lab">Argumentaire court, environ 20 secondes</div>
+      <p>Wouri, c'est un seul dossier pour chaque expedition, du bon de commande jusqu'au rapatriement de vos fonds. Il redige votre facture, votre liste de colisage et vos documents de douane a partir des memes chiffres, donc les poids ne se contredisent plus et votre banque cesse de rejeter le credit documentaire. Il assemble votre declaration de diligence raisonnee EUDR avec les coordonnees GPS de la parcelle et conserve le numero de reference, pour que votre conteneur ne soit pas bloque a la frontiere europeenne le 30 decembre 2026. Pour le bois, il gere le permis CITES sur la meme expedition. Et il fonctionne hors ligne, en francais, sur un telephone simple, en pleine foret. Wouri ne touche jamais a votre argent. Apportez-moi votre derniere expedition rejetee, et je vous montre ou Wouri l'aurait rattrapee.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p class="serif" style="font-size:1rem;color:var(--anchor);">Wouri</p>
+    <p>Drafts for agreement. Investor market claims are cited to 2024 through 2026 sources held on file; fast-moving figures (EUDR dates, penalties, quotas, export tonnage) should be refreshed at pitch time. No em-dashes; no blanket reassurances.</p>
+  </footer>
+</div>

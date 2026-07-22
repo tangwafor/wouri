@@ -1,0 +1,269 @@
+<title>Wouri: Delivery Plan and Sprint Kanban</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --paper:#f6f4ee;--surface:#fffefa;--surface-2:#efece3;
+    --ink:#15130e;--ink-2:#443f34;--ink-3:#7c7566;
+    --rule:#e0dccf;--rule-2:#cfc9b8;
+    --anchor:#0d4f47;--anchor-2:#0a635a;--on-anchor:#f6f4ee;
+    --alert:#a11f1c;--alert-bg:#f6e6e2;
+    --build:#0a635a;--build-bg:#e2efe c;
+    --e2e:#1f5fa1;--e2e-bg:#e5edf6;
+    --self:#7a5cb0;--self-bg:#efe9f6;
+    --uat:#8a5a11;--uat-bg:#f5ecd7;
+    --pitch:#a11f5c;--pitch-bg:#f6e6ee;
+    --mono-bg:#eceadf;--mono-ink:#204a44;
+    --shadow:0 1px 2px rgba(21,19,14,.05),0 8px 24px rgba(21,19,14,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0e1412;--surface:#151d1a;--surface-2:#1b2521;
+      --ink:#eae6db;--ink-2:#aeb4a9;--ink-3:#727a71;
+      --rule:#26302b;--rule-2:#334039;
+      --anchor:#5fb3a6;--anchor-2:#7cc7ba;--on-anchor:#0e1412;
+      --alert:#e88a80;--alert-bg:#2a1613;
+      --build:#6cc494;--build-bg:#142418;
+      --e2e:#7db0e6;--e2e-bg:#132030;
+      --self:#b79ce0;--self-bg:#1e1830;
+      --uat:#e0b56b;--uat-bg:#241c0f;
+      --pitch:#e488b4;--pitch-bg:#2a141f;
+      --mono-bg:#1a2420;--mono-ink:#9fd3c8;
+      --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"]{--paper:#f6f4ee;--surface:#fffefa;--surface-2:#efece3;--ink:#15130e;--ink-2:#443f34;--ink-3:#7c7566;--rule:#e0dccf;--rule-2:#cfc9b8;--anchor:#0d4f47;--anchor-2:#0a635a;--on-anchor:#f6f4ee;--alert:#a11f1c;--build:#0a635a;--build-bg:#e2efec;--e2e:#1f5fa1;--e2e-bg:#e5edf6;--self:#7a5cb0;--self-bg:#efe9f6;--uat:#8a5a11;--uat-bg:#f5ecd7;--pitch:#a11f5c;--pitch-bg:#f6e6ee;--mono-bg:#eceadf;--mono-ink:#204a44;--shadow:0 1px 2px rgba(21,19,14,.05),0 8px 24px rgba(21,19,14,.06);}
+  :root[data-theme="dark"]{--paper:#0e1412;--surface:#151d1a;--surface-2:#1b2521;--ink:#eae6db;--ink-2:#aeb4a9;--ink-3:#727a71;--rule:#26302b;--rule-2:#334039;--anchor:#5fb3a6;--anchor-2:#7cc7ba;--on-anchor:#0e1412;--alert:#e88a80;--build:#6cc494;--build-bg:#142418;--e2e:#7db0e6;--e2e-bg:#132030;--self:#b79ce0;--self-bg:#1e1830;--uat:#e0b56b;--uat-bg:#241c0f;--pitch:#e488b4;--pitch-bg:#2a141f;--mono-bg:#1a2420;--mono-ink:#9fd3c8;--shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.4);}
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;letter-spacing:-.003em;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}
+  .wrap{max-width:1040px;margin:0 auto;padding:clamp(22px,5vw,56px) clamp(16px,4vw,40px) 96px;}
+
+  .mast{border-top:3px solid var(--anchor);border-bottom:1px solid var(--rule);padding:22px 0 24px;margin-bottom:26px;}
+  .kicker{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--ink-3);}
+  .wm{font-size:2rem;font-weight:600;color:var(--anchor);margin:.3em 0 .1em;}
+  h1.title{font-size:clamp(1.4rem,3.2vw,2rem);font-weight:600;letter-spacing:-.015em;line-height:1.12;margin:.1em 0 .5em;text-wrap:balance;}
+  .thesis{font-size:1.05rem;color:var(--ink-2);max-width:70ch;margin:0;}
+  .thesis b{color:var(--ink);}
+
+  section{margin-top:46px;}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--anchor-2);font-weight:700;margin-bottom:16px;}
+  .eyebrow .n{font-family:"Iowan Old Style",Georgia,serif;font-size:.95rem;color:var(--ink-3);}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--rule);}
+  h2.h{font-size:1.5rem;font-weight:600;letter-spacing:-.015em;margin:.1em 0 .5em;}
+  p{margin:.55em 0;max-width:74ch;}
+
+  /* The four gates legend */
+  .gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0;}
+  .gate{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow);border-left:3px solid var(--gc);}
+  .gate.build{--gc:var(--build);} .gate.e2e{--gc:var(--e2e);} .gate.self{--gc:var(--self);} .gate.uat{--gc:var(--uat);}
+  .gate h3{margin:0 0 3px;font-size:.95rem;display:flex;align-items:center;gap:8px;}
+  .gate h3 .dot{width:9px;height:9px;border-radius:50%;background:var(--gc);}
+  .gate p{margin:0;font-size:.86rem;color:var(--ink-2);}
+  .gate .tool{font-family:ui-monospace,Menlo,monospace;font-size:.76rem;color:var(--gc);margin-top:5px;display:block;}
+
+  .callout{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--anchor);border-radius:8px;padding:16px 20px;box-shadow:var(--shadow);margin:14px 0;}
+  .callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+  code,.tok{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.84em;background:var(--mono-bg);color:var(--mono-ink);padding:1px 6px;border-radius:4px;white-space:nowrap;}
+
+  /* Sprint board */
+  .board{display:flex;flex-direction:column;gap:18px;}
+  .sprint{background:var(--surface);border:1px solid var(--rule-2);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+  .sprint > .head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:15px 20px;background:var(--surface-2);border-bottom:1px solid var(--rule);}
+  .sprint .sid{font-family:"Iowan Old Style",Georgia,serif;font-weight:600;font-size:1.05rem;color:var(--anchor);}
+  .sprint .stitle{font-weight:650;font-size:1.05rem;}
+  .sprint .swk{margin-left:auto;font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);}
+  .sprint .phase{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--on-anchor);background:var(--anchor);padding:2px 8px;border-radius:4px;font-weight:700;}
+  .sprint .body{padding:16px 20px 20px;}
+  .ship{font-size:.95rem;color:var(--ink-2);margin:0 0 14px;}
+  .ship b{color:var(--ink);}
+  .lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+  .lane{border:1px solid var(--rule);border-radius:8px;padding:12px 14px;background:var(--paper);}
+  .lane .lh{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:7px;}
+  .lane .lh .d{width:8px;height:8px;border-radius:50%;}
+  .lane.e2e .lh{color:var(--e2e);} .lane.e2e .d{background:var(--e2e);} .lane.e2e{background:var(--e2e-bg);}
+  .lane.self .lh{color:var(--self);} .lane.self .d{background:var(--self);} .lane.self{background:var(--self-bg);}
+  .lane.uat .lh{color:var(--uat);} .lane.uat .d{background:var(--uat);} .lane.uat{background:var(--uat-bg);}
+  .lane.pitch .lh{color:var(--pitch);} .lane.pitch .d{background:var(--pitch);} .lane.pitch{background:var(--pitch-bg);}
+  .lane ul{margin:0;padding-left:1.05em;} .lane li{font-size:.85rem;color:var(--ink-2);margin:.2em 0;}
+  .lane p{margin:0;font-size:.85rem;color:var(--ink-2);}
+  ul.deliv{margin:.2em 0 0;padding-left:1.15em;} ul.deliv li{font-size:.92rem;color:var(--ink-2);margin:.24em 0;}
+  ul.deliv li b{color:var(--ink);}
+  .wowtag{display:inline-block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--on-anchor);background:var(--anchor-2);padding:1px 6px;border-radius:4px;margin-left:4px;vertical-align:middle;}
+  .milestone{margin-top:14px;padding:11px 15px;border:1px dashed var(--alert);border-radius:8px;background:var(--alert-bg);font-size:.9rem;color:var(--ink);}
+  .milestone b{color:var(--alert);}
+
+  .backlog{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;}
+  .bcard{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:15px 17px;box-shadow:var(--shadow);}
+  .bcard h3{margin:0 0 5px;font-size:.98rem;}
+  .bcard p{margin:0;font-size:.87rem;color:var(--ink-2);}
+
+  footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--anchor);font-size:.85rem;color:var(--ink-3);}
+  ::selection{background:var(--anchor);color:var(--on-anchor);}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="kicker"><span>Delivery Plan and Sprint Kanban</span><span>Draft 0.1 &middot; 22 July 2026 &middot; No em-dashes</span></div>
+    <div class="wm serif">Wouri</div>
+    <h1 class="title serif">Six sprints, start to finish. Every one ends on four green gates.</h1>
+    <p class="thesis">Roughly 28 weeks across six phases. Nothing moves to the next sprint until the build is green, the end-to-end sweep is green, the machine self-test is green, and a Fabrice UAT run is green. The investor and customer pitches grow one slice per sprint, so the story is always current and always demonstrable.</p>
+  </header>
+
+  <section>
+    <div class="eyebrow"><span class="n">01</span>The definition of done, every sprint</div>
+    <p>These four gates are not a phase at the end. They are the exit condition of every sprint, and three of the four are living artifacts that grow with the product rather than one-off tasks. The Fabrice UAT reuses the Human Test Suite already standing (dev-backed staging, seeded role bench, realtime triage feed), so "a test for Fabrice as we go" needs no new infrastructure.</p>
+    <div class="gates">
+      <div class="gate build"><h3><span class="dot"></span>1. Build green</h3><p>Typecheck, migrations apply clean, no regulatory literal in code, no policy-less table, no unbound document field, no em-dash.</p><span class="tool">check-canonicals.mjs + tsc</span></div>
+      <div class="gate e2e"><h3><span class="dot"></span>2. End-to-end sweep</h3><p>The whole app walked as each role at phone size, screenshotted, asserting real behaviour. Fails on any console error or any 5xx. Tenant B must see none of tenant A.</p><span class="tool">ui-qa-sweep.mjs + jest-expo</span></div>
+      <div class="gate self"><h3><span class="dot"></span>3. Machine self-test</h3><p>Core flows in rollback subtransactions plus RLS probes run as anon and as a wrong-tenant JWT. Grows one flow set per sprint. A red here blocks the merge.</p><span class="tool">wouri-selftest (in-DB)</span></div>
+      <div class="gate uat"><h3><span class="dot"></span>4. Fabrice UAT</h3><p>A human tester walks the new sprint on dev-backed staging, following a per-sprint catalog, submitting pass or fail into a realtime feed the build agent watches and fixes.</p><span class="tool">tester portal + qa_live_triage</span></div>
+    </div>
+    <div class="callout"><p>A fifth, softer gate rides along: the <strong>pitch touchpoint</strong>. Each sprint firms one part of the investor deck and one line of the customer one-pager, so a demo is possible from Sprint 3 and the raise story is complete by Sprint 5.</p></div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">02</span>The sprint board</div>
+    <div class="board">
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 0</span><span class="stitle">Foundation</span><span class="phase">Phase 0 Base</span><span class="swk">Weeks 1 to 3</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> a repo that boots, logs a user in, isolates a tenant, and speaks French and English.</p>
+          <ul class="deliv">
+            <li><b>Repo + rails:</b> CLAUDE.md, CANONICALS with the ADR log, CI, Supabase, the Wouri design tokens (institutional, serif for documents).</li>
+            <li><b>Lifted substrate</b> from Bazah: event spine, units, geo, money, fx, identity and organizations.</li>
+            <li><b>Identity + tenancy:</b> orgs, memberships, roles, RLS deny-by-default, <code>organization_groups</code> from the start.</li>
+            <li><b>Regulatory registry skeleton</b> (platform-owned) with effective-dating via <code>tstzrange</code> + <code>btree_gist</code> exclusion. <span class="wowtag">network good</span></li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>Login as each role</li><li>Anon sees 0 rows on every table</li><li>Tenant B sees nothing of tenant A</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test seed</div><p>The harness itself: rollback subtransactions, anon + wrong-tenant RLS probes, a green baseline to grow.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>Staging + role bench seeded. Case: sign in as each role, confirm you see only your own org.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>Deck skeleton, the one-line thesis, the customer headline in French and English.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 1</span><span class="stitle">The spine</span><span class="phase">Phase 1 Spine</span><span class="swk">Weeks 4 to 7</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> the 22-table levelled base, append-only and tamper-evident, seeded with cocoa.</p>
+          <ul class="deliv">
+            <li><b>The spine:</b> parties, locations, origin units with versions and evidence, lots, <code>lot_events</code> (client-minted UUID, append-only, per-stream hash chain with a server counter-signed checkpoint), lineage, transformations, consignments, contracts, cost entries, tasks. <span class="wowtag">architecture fix</span></li>
+            <li><b>Dual-rail foundations:</b> the <code>origin_claim</code> enum and the constraint that a CITES-listed species can never be mass-balance. <span class="wowtag">moat</span></li>
+            <li><b>Registry v1</b> seeded with one commodity (cocoa); registry audit, compensating-event corrections.</li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>Attack each table as anon + tenant B</li><li>lot_events rejects UPDATE and DELETE</li><li>The hash chain verifies against the checkpoint</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test grows</div><p>Add spine create-and-read flows, the append-only proof, and a second-tenant isolation probe.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>Create an origin unit, record a lot event, see it in the timeline; confirm you cannot edit history.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>Problem and Why-Now slides firmed with the cited cocoa and EUDR numbers.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 2</span><span class="stitle">The document engine and proof</span><span class="phase">Phase 2 Documents</span><span class="swk">Weeks 8 to 12</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> a document anyone can verify offline, and an unbound field that cannot be issued.</p>
+          <ul class="deliv">
+            <li><b>Engine:</b> template + field bindings (unbound blocks issuance), conditional dependency graph, versioning, cross-document consistency, idempotent reproducible issuance by content hash.</li>
+            <li><b>Proof not trust:</b> each document issued as a W3C Verifiable Credential, anchored to a signed Merkle checkpoint, signer bound by vLEI, verifiable offline. The verification page. <span class="wowtag">Wow 1</span></li>
+            <li><b>Cameroon document set</b> seeded: EUR.1-CMR, phyto reference, VGM, quality certificate. No FLEGT gate.</li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>A mismatched weight is caught across documents</li><li>An unbound field blocks issuance</li><li>Scan a QR and verify offline; a revoked doc reads revoked</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test grows</div><p>Add generation, binding resolution, and credential-signature verification.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>Generate a full set, verify a document offline, break a weight and watch it get caught before the bank would.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>The proof-not-trust slide; customer demo hook: offline verification.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 3</span><span class="stitle">The pipeline, the money, the cockpit</span><span class="phase">Phase 3 Consignment</span><span class="swk">Weeks 13 to 17</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> the morning blocker board, the settlement spine, and the live money-and-weather cockpit.</p>
+          <ul class="deliv">
+            <li><b>Pipeline:</b> the consignment state machine, allocation, the readiness board (blockers ranked with owner and age), deadlines, cost ledger, margin.</li>
+            <li><b>Settlement:</b> settlement instrument, a discrepancy-tracked presentation layer over the document registry, a state machine that ends at <b>repatriated</b>, the BEAC 150-day clock and domiciliation. <span class="wowtag">settlement fix</span></li>
+            <li><b>Live cockpit:</b> real-time FX feed + terminal price reference + weather hotspots on the readiness board. <span class="wowtag">your ask</span></li>
+            <li><b>Financeable consignment:</b> warehouse receipt, financing consents, the cash timeline. Records, never lending. <span class="wowtag">Wow 2</span></li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>Blockers rank; a discrepancy blocks "paid"</li><li>The BEAC clock counts down</li><li>Cockpit shows worth, margin, clock; weather flags a window</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test grows</div><p>Settlement, repatriation, and margin flows with the FX rate frozen at each event.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>The morning board with a storm on the window; catch an LC discrepancy; read the 150-day clock.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>Full deck ready for first investor conversations; customer one-pager ready.</p></div>
+          </div>
+          <div class="milestone"><b>Milestone:</b> first demo to a real exporter at the end of this sprint. This is the earliest point the product tells a true, useful story end to end.</div>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 4</span><span class="stitle">The field app</span><span class="phase">Phase 4 Field</span><span class="swk">Weeks 18 to 23</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> a native app that captures a felling in a plantation with no signal and never loses it.</p>
+          <ul class="deliv">
+            <li><b>Expo app + offline queue</b> lifted from Bazah: purchase capture, intake, grading, photos, signatures, Bluetooth peripherals (printer, scale, moisture meter).</li>
+            <li><b>Origin-unit polygon capture</b> walked in the field; anti-spoof returns a trust tier, never a hard block; the server decides on the spheroid.</li>
+            <li><b>Image profiles from the registry</b> (a seal close-up is not a stump photo); media on a separate resumable queue; original hashed before processing.</li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>jest-expo render tests on every field screen</li><li>A 14-day offline write is never lost</li><li>Offline replay is idempotent; media never blocks a row</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test grows</div><p>Offline replay idempotency and the hash chain across out-of-order arrival.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>In airplane mode, capture a felling plus a photo plus a signature, sync later, see it in the console.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>The field-capture demo video becomes a customer-acquisition asset.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sprint">
+        <div class="head"><span class="sid serif">Sprint 5</span><span class="stitle">EUDR and CITES, the dual rail complete</span><span class="phase">Phase 5 Compliance</span><span class="swk">Weeks 24 to 28</span></div>
+        <div class="body">
+          <p class="ship"><b>Ships:</b> a cocoa-and-Doussie consignment that clears both rails, with a verified file a Hamburg desk believes.</p>
+          <ul class="deliv">
+            <li><b>EUDR pack:</b> DDS assembly and TRACES reference capture, plot risk against JRC GFC2020 (version-pinned) + Global Forest Watch, legality evidence (Article 9), the country-risk registry (Cameroon standard), traceability completeness.</li>
+            <li><b>CITES rail:</b> permits with the six-month expiry and quota decrement, annotation and population scope, the identity-preserved constraint enforced. <span class="wowtag">moat</span></li>
+            <li><b>Continuous verification:</b> re-screen a shipped consignment on a new dataset and alert the buyer. <span class="wowtag">Wow 3</span></li>
+            <li><b>Integration connectors</b> (CAMCIS, e-GUCE, SIGIF 2, ONCC, TRACES) storing authoritative external references.</li>
+          </ul>
+          <div class="lanes">
+            <div class="lane e2e"><div class="lh"><span class="d"></span>E2E sweep</div><ul><li>A point-only geometry over 4 ha is rejected</li><li>A DDS assembles with a reference number</li><li>A quota cannot go negative; a re-screen alert fires</li></ul></div>
+            <div class="lane self"><div class="lh"><span class="d"></span>Self-test grows</div><p>The full compliance chain, both rails, with the segregation and quota constraints.</p></div>
+            <div class="lane uat"><div class="lh"><span class="d"></span>Fabrice UAT</div><p>The whole product in one run: cocoa plus Doussie, both rails, DDS plus CITES permit, verified docs, settlement, repatriation. Tenant B sees none of it.</p></div>
+            <div class="lane pitch"><div class="lh"><span class="d"></span>Pitch</div><p>The complete story with a shipped dual-rail consignment as proof. Investor round; first paying customers.</p></div>
+          </div>
+          <div class="milestone"><b>Milestone:</b> the one-run proof. The end-to-end sweep walks the entire product as every role and proves both compliance rails, the money, and tenant isolation in a single pass. That run is the demo, the QA artifact, and the pitch, all at once.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">03</span>Post-launch backlog: the network turns on</div>
+    <p>The tenant network mechanisms enter in leverage order after the core ships, each on one of three isolation-safe paths (platform-owned common good, opt-in consent, or anonymized aggregate). The registry common good is already live from Sprint 0; the verification mark from Sprint 2. The rest follow.</p>
+    <div class="backlog">
+      <div class="bcard"><h3>Anonymized benchmarking</h3><p>Quality, price differential, cost and discrepancy rates as percentile bands, emitted only at a cohort of 50 or more with noise. Never row-level.</p></div>
+      <div class="bcard"><h3>Aggregated financing</h3><p>Opt-in permissioned reads let a lender rely on the verified record. Wouri never lends and never matches.</p></div>
+      <div class="bcard"><h3>Shared plot commons</h3><p>A plot mapped once, reused with holder consent, governed by a cross-tenant yield-cap ledger that blocks EUDR declaration-in-excess laundering.</p></div>
+      <div class="bcard"><h3>Counterparty registry</h3><p>Reciprocal factual attestations with right of reply, matched by private set intersection so no one exposes their book.</p></div>
+      <div class="bcard"><h3>Group consolidation</h3><p>Diaspora holdings and cooperatives-of-cooperatives on <code>organization_groups</code>, one shared group certificate.</p></div>
+      <div class="bcard"><h3>Second origin, second commodity</h3><p>Timber deepened to processed wood; a second country added as pure registry inserts, proving the base was levelled.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow"><span class="n">04</span>The pitches, and where they live</div>
+    <p>The investor pitch and the customer pitch are companion documents, not slides buried in a sprint. Each grows on the pitch touchpoint above: the customer headline exists from Sprint 0, the demo hooks land as the features do (offline verify in Sprint 2, the cockpit in Sprint 3, field capture in Sprint 4), and the investor deck is complete and demonstrable by the first-exporter milestone in Sprint 3, with the dual-rail proof by Sprint 5. Both are being drafted now with real market numbers and will arrive alongside this board.</p>
+  </section>
+
+  <footer>
+    <p class="serif" style="font-size:1rem;color:var(--anchor);">Wouri</p>
+    <p>Draft for agreement. The sprint lengths track the six-phase sequence in the build plan (roughly 28 weeks). The one hard rule from the plan holds: do not generate the Claude Code handoff bundle, and do not start Sprint 1, until one real consignment file has been seen.</p>
+  </footer>
+</div>
