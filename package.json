@@ -8,6 +8,11 @@
     "canonicals": "node scripts/check-canonicals.mjs",
     "db:apply": "node scripts/apply-migrations.mjs",
     "db:selftest": "node scripts/wouri-selftest.mjs",
+    "selftest:infer": "node scripts/onboarding-infer-selftest.mjs",
+    "verify:apppath": "node scripts/verify-app-path.mjs",
+    "verify:chat": "node scripts/verify-chat-onboarding.mjs",
+    "test": "npm run canonicals && npm run selftest:infer",
+    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat",
     "check": "npm run canonicals"
   },
   "devDependencies": {

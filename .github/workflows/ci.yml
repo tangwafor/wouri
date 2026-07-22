@@ -1,0 +1,73 @@
+name: wouri-ci
+
+# The automated gate. Every push and PR runs the checks this Windows dev box
+# cannot: the em-dash canonical gate, Aza's inference contract, the console
+# typecheck, and the Next build (the cloud build-verification for the console).
+# The database self-tests run too, but only when the repo has Supabase secrets
+# set; without them they skip cleanly so a fork or a fresh clone stays green.
+# No em-dashes.
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Root deps
+        run: npm ci
+
+      - name: Canonical gate (no em-dashes)
+        run: npm run canonicals
+
+      - name: Aza inference contract
+        run: npm run selftest:infer
+
+      - name: Database self-tests (only if secrets are set)
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "No Supabase secrets set; skipping the DB and app-path self-tests."
+            exit 0
+          fi
+          npm run test:db
+
+  console:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Console deps
+        working-directory: apps/console
+        run: npm ci
+
+      - name: Console typecheck
+        working-directory: apps/console
+        run: npx tsc --noEmit
+
+      - name: Console build (cloud build-verification)
+        working-directory: apps/console
+        # Public placeholders: the anon key and url are shipped to the browser
+        # anyway, and the build does not connect. Real values come from the host
+        # env at deploy time.
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          NEXT_PUBLIC_SITE_URL: https://wouri.co
+        run: npm run build
