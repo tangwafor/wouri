@@ -30,8 +30,9 @@ const files = tracked();
 let hardFailures = 0;
 let warnings = 0;
 
-// Law: no em-dashes. Covers the em-dash and the en-dash used as a dash.
-const EM_DASH = /[—–]/;
+// Law: no em-dashes. Covers the em-dash (U+2014) and the en-dash (U+2013) used as
+// a dash. Built from escapes so this gate file contains no literal dash to self-flag.
+const EM_DASH = new RegExp('[\\u2014\\u2013]');
 for (const f of files) {
   if (!TEXT_EXT.test(f)) continue;
   let text;

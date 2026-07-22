@@ -1,0 +1,21 @@
+{
+  "name": "wouri",
+  "private": true,
+  "version": "0.0.0",
+  "description": "The trust and credit layer for African commodity export.",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "canonicals": "node scripts/check-canonicals.mjs",
+    "db:apply": "node scripts/apply-migrations.mjs",
+    "db:selftest": "node scripts/wouri-selftest.mjs",
+    "check": "npm run canonicals"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.1"
+  }
+}

@@ -1,0 +1,60 @@
+/* Wouri design tokens. Institutional, precise, quiet. A single deep anchor colour
+   plus black, white, and one alert red. Serif for documents, sans for the interface.
+   Light and dark for the app; documents are always light. No em-dashes. */
+
+:root {
+  /* Neutrals biased slightly toward the anchor */
+  --paper: #f6f4ee;
+  --surface: #fffefa;
+  --surface-2: #efece3;
+  --ink: #15130e;
+  --ink-2: #443f34;
+  --ink-3: #7c7566;
+  --rule: #e0dccf;
+  --rule-2: #cfc9b8;
+
+  /* The single deep anchor colour (the Wouri river, the forest) */
+  --anchor: #0d4f47;
+  --anchor-2: #0a635a;
+  --on-anchor: #f6f4ee;
+
+  /* One alert red, and the semantic set (kept separate from the accent) */
+  --alert: #a11f1c;
+  --ok: #1f6f4a;
+  --warn: #8a5a11;
+
+  /* Type */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* App dark theme. Documents never use this; a rendered document is always light. */
+@media (prefers-color-scheme: dark) {
+  :root:not(.document) {
+    --paper: #0e1412;
+    --surface: #151d1a;
+    --surface-2: #1b2521;
+    --ink: #eae6db;
+    --ink-2: #aeb4a9;
+    --ink-3: #727a71;
+    --rule: #26302b;
+    --rule-2: #334039;
+    --anchor: #5fb3a6;
+    --anchor-2: #7cc7ba;
+    --on-anchor: #0e1412;
+    --alert: #e88a80;
+    --ok: #6cc494;
+    --warn: #e0b56b;
+  }
+}
+
+/* A document surface is always light, even in a dark app. */
+.document {
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #111111;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--serif);
+}
