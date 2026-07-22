@@ -1,5 +1,8 @@
 # Wouri CONTINUE.md (session handoff)
 
+## Domain
+**wouri.co** registered on Namecheap 2026-07-22 (active through 2027-07-22, domain privacy on). This is the home of the public verification page, the most-viewed Wouri surface (a document held by a non-customer resolves its QR here). Plan the verification route now: a public `wouri.co/v/{verification_code}` (or `verify.wouri.co`) that resolves through a SECURITY DEFINER function and renders the Verifiable Credential, plus per-tenant `verification_subdomain` on organizations for a tenant-branded verify page. The verification page gets the same design investment as the dashboard.
+
 ## 2026-07-22 - Research and planning complete; nothing built
 Wouri is a new project: the trust and credit layer for African commodity export (Cameroon cocoa and timber first), a registry of record, not a marketplace. House style: no em-dashes.
 
