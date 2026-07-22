@@ -11,8 +11,9 @@
     "selftest:infer": "node scripts/onboarding-infer-selftest.mjs",
     "verify:apppath": "node scripts/verify-app-path.mjs",
     "verify:chat": "node scripts/verify-chat-onboarding.mjs",
+    "selftest:spine": "node scripts/spine-selftest.mjs",
     "test": "npm run canonicals && npm run selftest:infer",
-    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat",
+    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine",
     "check": "npm run canonicals"
   },
   "devDependencies": {
