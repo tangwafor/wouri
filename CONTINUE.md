@@ -6,6 +6,11 @@
 ## Domain
 **wouri.co** registered on Namecheap 2026-07-22 (active through 2027-07-22, domain privacy on). This is the home of the public verification page, the most-viewed Wouri surface (a document held by a non-customer resolves its QR here). Plan the verification route now: a public `wouri.co/v/{verification_code}` (or `verify.wouri.co`) that resolves through a SECURITY DEFINER function and renders the Verifiable Credential, plus per-tenant `verification_subdomain` on organizations for a tenant-branded verify page. The verification page gets the same design investment as the dashboard.
 
+## 2026-07-22 - Sprint 0 database foundation LIVE + verified on wouri-dev
+Migrations 0001-0007 applied to wouri-dev (identity, orgs, roles, memberships, event spine, capabilities, currencies/fx/units, the PulSe atomic create_organization RPC, RLS deny-by-default). `scripts/wouri-selftest.mjs` = **19/19 green** (RLS isolation with positive controls, atomic signup, tenant A cannot see B, capability gating, self-cleaning). `scripts/apply-migrations.mjs` is the idempotent runner (uses SUPABASE_DB_URL in .env.local). packages/offline lifted from Bazah (@wouri/offline, event queue only); packages/core (money/fx/units); brand/tokens.css. check-canonicals clean. Run: `node scripts/apply-migrations.mjs` then `node scripts/wouri-selftest.mjs`.
+- **Sprint 0 REMAINING (ungated, needs no consignment file):** scaffold apps/console (Next.js 15) + apps/field (Expo) UIs; the login + signup + capability picker + chat-onboarding screens; CI wiring; fr/en message catalogues; the e2e sweep (ui-qa-sweep) + Fabrice UAT gate. NOTE: local Next/Expo builds fail on this Windows machine (corepack/symlink/shell), so build-verify via Netlify cloud or a Linux box, like akongne.
+- Then, with ONE real consignment file: Sprint 1 (the spine) + Sprint 2 (the document engine).
+
 ## 2026-07-22 - Research and planning complete; nothing built
 Wouri is a new project: the trust and credit layer for African commodity export (Cameroon cocoa and timber first), a registry of record, not a marketplace. House style: no em-dashes.
 
