@@ -43,7 +43,7 @@ export default async function LotsPage() {
         <p className="muted">{tt('no_lots')}</p>
       ) : (
         (lots as unknown as Lot[]).map((l) => (
-          <div className="card" key={l.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+          <a className="card" key={l.id} href={`/lots/${l.id}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
             <div>
               <div style={{ fontWeight: 650 }}>
                 {l.code}
@@ -59,7 +59,7 @@ export default async function LotsPage() {
                 {tt('origin_gap_flag')}
               </span>
             ) : null}
-          </div>
+          </a>
         ))
       )}
     </main>

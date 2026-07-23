@@ -193,6 +193,11 @@ export const APP = {
     what_en: 'Physical custody is an append-only event stream. Each event is client-minted for offline capture, then sealed server-side into a per-lot hash chain and counter-signed onto a per-tenant chain, so history is tamper-evident and cannot be rewritten. Corrections are compensating events, never deletes.',
     what_fr: 'La custody physique est un flux d evenements en ajout seul. Chaque evenement est cree cote client pour la saisie hors ligne, puis scelle cote serveur dans une chaine de hachage par lot et contresigne sur une chaine par locataire, rendant l historique inviolable. Les corrections sont des evenements compensatoires, jamais des suppressions.',
   },
+  quality: {
+    label_en: 'Quality capture', label_fr: 'Saisie qualite',
+    what_en: 'Record measured quality values against the commodity declared attributes (moisture, bean count, and the rest), each checked against its range. Recording these lets the quality certificate issue with real numbers. The lot detail also shows the custody timeline and the tamper-evident chain status.',
+    what_fr: 'Enregistrez les valeurs qualite mesurees face aux attributs declares du produit (humidite, grainage, etc.), chacune verifiee par rapport a sa plage. Ces valeurs permettent au certificat de qualite d etre emis avec de vrais chiffres. Le detail du lot montre aussi l historique de custody et l etat de la chaine inviolable.',
+  },
   documents: {
     label_en: 'Document engine', label_fr: 'Moteur documentaire',
     what_en: 'The engine builds each export document from the spine. A required field that does not resolve blocks issuance; a declared weight that does not match the consignment blocks issuance. Issuance is idempotent by content hash, so the same inputs reproduce the same document.',
