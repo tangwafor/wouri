@@ -14,3 +14,9 @@ apps/*/node_modules/
 # Netlify build artifacts
 .netlify/
 apps/console/deno.lock
+
+# Playwright
+apps/console/playwright/.auth.json
+apps/console/playwright-report/
+apps/console/test-results/
+apps/console/.playwright/
