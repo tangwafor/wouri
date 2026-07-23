@@ -52,7 +52,11 @@ const REG_WORD = /\b(duty|tariff|levy|rate_bps|threshold|deadline|quota|repatria
 const NUM = /\b\d{2,}\b/; // 2+ digit literal; single digits are usually structural
 for (const f of files) {
   if (!CODE_EXT.test(f)) continue;
-  if (f.startsWith('scripts/') || f.includes('test')) continue; // gates and tests may carry expected values
+  // Gates and tests may carry expected values. The registry data layer IS where
+  // regulatory literals belong: SQL migrations (the seed registry) and the bundled
+  // KB data module are the registry, not branching application logic (ADR-0002).
+  if (f.startsWith('scripts/') || f.includes('test')) continue;
+  if (f.includes('supabase/migrations/') || f.endsWith('kb.mjs')) continue;
   let text;
   try { text = readFileSync(f, 'utf8'); } catch { continue; }
   text.split('\n').forEach((line, i) => {

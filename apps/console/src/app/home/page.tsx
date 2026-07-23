@@ -27,6 +27,7 @@ export default async function Home() {
     .from('organization_capabilities')
     .select('capability_key');
   const enabled = new Set((enabledRows ?? []).map((r) => r.capability_key));
+  const { data: isAdmin } = await supabase.rpc('is_platform_admin');
   const { locale, tt } = await getT();
 
   return (
@@ -50,6 +51,9 @@ export default async function Home() {
           locale={locale}
         />
       </div>
+      {isAdmin ? (
+        <p className="muted"><a href="/admin/kb">Aza knowledge base (platform admin)</a></p>
+      ) : null}
     </main>
   );
 }
