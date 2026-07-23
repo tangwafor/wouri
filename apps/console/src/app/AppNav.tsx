@@ -5,6 +5,7 @@ import { t, type Locale, type Key } from '@/lib/i18n';
 const ITEMS: { href: string; key: Key }[] = [
   { href: '/home', key: 'home' },
   { href: '/lots', key: 'lots' },
+  { href: '/consignments', key: 'consignments' },
   { href: '/board', key: 'board' },
 ];
 
