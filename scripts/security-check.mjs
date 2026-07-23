@@ -52,6 +52,22 @@ try {
   const unexpected = anonTables.filter((t) => !ANON_ALLOW.has(t));
   ok('anon reads only declared public-reference tables', unexpected.length === 0, 'unexpected: ' + unexpected.join(', '));
 
+  // Internal SECURITY DEFINER functions (no membership check, or trigger-only) must
+  // NOT be executable by anon or authenticated. A definer function keeps the default
+  // PUBLIC execute grant unless revoked, so this catches the forgotten-revoke leak.
+  const INTERNAL_FNS = [
+    'notify', 'resolve_document_core', 'document_staleness_core', 'document_is_stale',
+    'lot_events_seal', 'trg_notify_document', 'trg_notify_discrepancy', 'trg_notify_settlement', 'trg_notify_shipment',
+  ];
+  const exposed = (await c.query(`
+    select p.proname,
+      has_function_privilege('anon', p.oid, 'EXECUTE') as anon_exec,
+      has_function_privilege('authenticated', p.oid, 'EXECUTE') as auth_exec
+    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.proname = any($1)`, [INTERNAL_FNS])).rows
+    .filter((r) => r.anon_exec || r.auth_exec).map((r) => r.proname);
+  ok('internal definer functions are not client-executable', exposed.length === 0, exposed.join(', '));
+
   const defViews = (await c.query(`
     select c.relname, c.reloptions from pg_class c join pg_namespace n on n.oid=c.relnamespace
     where n.nspname='public' and c.relkind='v'
