@@ -70,6 +70,37 @@ tsc + next build all green. NEXT candidates (roadmap, not blocking): field-app
 boundary polygon, real CITES/protected-area data import, EUDR risk-assessment
 record + TRACES filing, GUCE single-window, Merkle checkpoints, human signatures.
 
+## 2026-07-23 - Second review pass: remaining gaps closed (migrations 0038-0042)
+Everything the architecture review named, plus the standards/testing gate. All on
+wouri-dev, HEAD f9b7a52, each with its own self-test, all green.
+- **0038 Merkle anchoring** (ADR-0004/0008): anchor_documents publishes a signed
+  checkpoint (Ed25519 root, same server key); document_inclusion_proof rebuilds the
+  proof from the append-only set (no leaves stored), anon-callable. JS verifier
+  `apps/console/src/lib/proof/merkle.mjs` mirrors the SQL. anchor-selftest 8/8.
+- **0039 human signatures**: producer thumbprint / driver / supervisor, with role,
+  method, timestamp, GPS, hash of the capture (never raw biometrics); a lot signature
+  is sealed into the lot chain. signatures-selftest 9/9. NOTE for user: this is a
+  CONSENT MARK, not biometric identity matching (answered mid-session); real 1:1
+  fingerprint match = separate hardware+privacy project.
+- **0040 EUDR Article 10 risk record**: origin_unit_risk per plot (dataset+version,
+  deforestation_free, cutoff, legality, level); auto_checks for missing/high risk.
+  risk-selftest 5/5.
+- **0041 image_profiles** (ADR-0021): registry + record_media_asset REQUIRES the
+  original hash (hash-before-processing). media-selftest 6/6.
+- **0042** registry_freshness -> security_invoker (clean security-check rule).
+- **Standards gate**: `TATECH_STANDARDS.md` conformance table; `scripts/
+  security-check.mjs` (RLS + deny-all secrets + anon-allowlist + no definer views,
+  6/6); `scripts/stress-test.mjs` (quota lock + chain integrity under concurrency,
+  4/4); `scripts/ui-qa-sweep.mjs` = Playwright render sweep over public + operator
+  pages, 2/2 (needs `npx playwright install chromium`). All wired in package.json:
+  `npm run gates`, `npm run gate:ui`, extended `test:db`.
+- New KB APP entries: anchoring, human_signatures, eudr_risk, media (+ earlier
+  provenance/geometry/quota/mass_balance/groups). Gates: canonicals + rls + security
+  + stress all green; tsc + next build clean; kb-coverage 16/16.
+- REMAINING (roadmap, not gaps in the code): field-app boundary polygon, real
+  dataset/quota/protected-area imports, TRACES DDS filing + GUCE integration, EORI,
+  biometric matching, a real consignment file (ADR-0030), prod project, full RBAC.
+
 ## 2026-07-23 - The whole operator chain is in the UI (source to settlement), proven live
 The console is now a full operator app, walked end-to-end on staging:
 - **Owner dashboard (/home):** KPI cards (consignments, lots, documents, blockers), a "needs attention" panel (ranked readiness blockers, critical first), the repatriation clock (nearest due / overdue), recent consignments, quick actions. "Owner sees all he needs." Capabilities moved to a secondary "Your activities" card.
