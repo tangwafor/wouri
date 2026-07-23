@@ -27,6 +27,11 @@ try {
     join information_schema.role_table_grants g
       on g.table_schema = 'public' and g.table_name = c.relname and g.grantee in ('anon','authenticated')
     where n.nspname = 'public' and c.relkind = 'r' and not c.relrowsecurity
+      -- Tables owned by an installed extension (e.g. PostGIS spatial_ref_sys) are the
+      -- extension's reference data, not our app data.
+      and not exists (
+        select 1 from pg_depend dep
+        where dep.classid = 'pg_class'::regclass and dep.objid = c.oid and dep.deptype = 'e')
     order by 1`)).rows.map((r) => r.relname);
 
   if (leaky.length) {
