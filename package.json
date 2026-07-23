@@ -15,10 +15,11 @@
     "selftest:documents": "node scripts/document-selftest.mjs",
     "selftest:kb": "node scripts/kb-coverage-selftest.mjs",
     "selftest:kbadmin": "node scripts/kb-admin-selftest.mjs",
+    "selftest:settlement": "node scripts/settlement-selftest.mjs",
     "kb:seed": "node scripts/seed-aza-kb.mjs",
     "proof:init": "node scripts/init-proof-keys.mjs",
     "test": "npm run canonicals && npm run selftest:infer",
-    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine && npm run selftest:documents && npm run selftest:kb && npm run selftest:kbadmin",
+    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine && npm run selftest:documents && npm run selftest:kb && npm run selftest:kbadmin && npm run selftest:settlement",
     "check": "npm run canonicals"
   },
   "devDependencies": {
