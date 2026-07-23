@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import { getT } from '@/lib/locale';
+import { loadKb } from '@/lib/aza/kb-source';
 import { CapabilityPicker } from './CapabilityPicker';
 
 async function signout() {
@@ -28,6 +29,7 @@ export default async function Home() {
     .select('capability_key');
   const enabled = new Set((enabledRows ?? []).map((r) => r.capability_key));
   const { data: isAdmin } = await supabase.rpc('is_platform_admin');
+  const { body: descriptions } = await loadKb(supabase);
   const { locale, tt } = await getT();
 
   return (
@@ -49,6 +51,7 @@ export default async function Home() {
           catalog={catalog ?? []}
           initiallyEnabled={Array.from(enabled)}
           locale={locale}
+          descriptions={descriptions}
         />
       </div>
       {isAdmin ? (

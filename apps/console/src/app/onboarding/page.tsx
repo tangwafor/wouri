@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import { getT } from '@/lib/locale';
+import { loadKb } from '@/lib/aza/kb-source';
 import { OnboardingChat } from './OnboardingChat';
 
 // The chat door to tenant creation. Authed user, no org yet: describe the
@@ -19,12 +20,13 @@ export default async function OnboardingPage() {
     .select('capability_key, label_fr, label_en')
     .order('category');
   const { locale, tt } = await getT();
+  const { docs: docsMap } = await loadKb(supabase);
 
   return (
     <main className="wrap-wide">
       <h1 className="brand">{tt('app_name')}</h1>
       <p className="tag">{tt('onboarding_hint')}</p>
-      <OnboardingChat catalog={catalog ?? []} locale={locale} />
+      <OnboardingChat catalog={catalog ?? []} locale={locale} docsMap={docsMap} />
     </main>
   );
 }

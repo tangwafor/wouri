@@ -12,6 +12,7 @@ export const REGULATIONS: Record<string, { title_en: string; title_fr: string; w
 export const CAPABILITIES: Record<string, { label_en: string; what_en: string }>;
 export const APP: Record<string, { label_en: string; label_fr: string; what_en: string; what_fr: string }>;
 export function commodityInfo(key: string): (typeof COMMODITIES)[string] | null;
+export function docLabel(key: string): string;
 export function documentsFor(commodityKey: string): { key: string; label: string }[];
 export function explain(capabilityKey: string): string;
 export function coveredKeys(): string[];

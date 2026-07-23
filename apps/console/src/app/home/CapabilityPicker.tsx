@@ -27,8 +27,11 @@ type Cap = {
 // organization_capabilities under the user session; RLS gates it. A prerequisite
 // is auto-enabled so the chat and click paths enforce the same dependency graph.
 export function CapabilityPicker({
-  orgId, catalog, initiallyEnabled, locale,
-}: { orgId: string; catalog: Cap[]; initiallyEnabled: string[]; locale: Locale }) {
+  orgId, catalog, initiallyEnabled, locale, descriptions,
+}: {
+  orgId: string; catalog: Cap[]; initiallyEnabled: string[]; locale: Locale;
+  descriptions: Record<string, { en: string; fr: string }>;
+}) {
   const [enabled, setEnabled] = useState<Set<string>>(new Set(initiallyEnabled));
   const [busy, setBusy] = useState<string | null>(null);
   const supabase = supabaseBrowser();
@@ -56,7 +59,9 @@ export function CapabilityPicker({
 
   const row = (cap: Cap) => {
     const on = enabled.has(cap.capability_key);
-    const desc = (locale === 'en' ? cap.description_en : cap.description_fr) ?? '';
+    const live = descriptions[cap.capability_key];
+    const desc = (live ? (locale === 'en' ? live.en : live.fr) : null)
+      ?? (locale === 'en' ? cap.description_en : cap.description_fr) ?? '';
     return (
       <div className="cap" key={cap.capability_key}>
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>

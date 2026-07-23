@@ -22,6 +22,13 @@ try {
   ok(`every capability has a KB explanation (${caps.length} caps)`, missing.length === 0);
   if (missing.length) console.error('    missing KB for:', missing.map((m) => m.capability_key).join(', '));
 
+  // The DB read path (aza_kb) covers every capability too, so live tooltips
+  // always have content (the bundled copy is the fallback, not the only source).
+  const kbKeys = new Set((await c.query('select key from aza_kb')).rows.map((r) => r.key));
+  const dbMissing = caps.filter((r) => !kbKeys.has(r.capability_key) && !kbKeys.has('cap.' + r.capability_key));
+  ok('every capability has a live aza_kb entry', dbMissing.length === 0);
+  if (dbMissing.length) console.error('    missing aza_kb for:', dbMissing.map((m) => m.capability_key).join(', '));
+
   // Every commodity in the DB has a KB profile with quality + documents.
   const commodities = (await c.query('select key from commodities order by key')).rows.map((r) => r.key);
   for (const key of commodities) {

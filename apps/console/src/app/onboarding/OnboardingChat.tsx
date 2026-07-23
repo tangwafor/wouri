@@ -13,7 +13,9 @@ type Cap = { capability_key: string; label_fr: string; label_en: string };
 // no round trip. Submitting provisions the org and those capabilities in one
 // atomic step. The click path (CapabilityPicker on /home) provisions the same
 // graph; this is the conversational door to it.
-export function OnboardingChat({ catalog, locale }: { catalog: Cap[]; locale: Locale }) {
+export function OnboardingChat({ catalog, locale, docsMap }: {
+  catalog: Cap[]; locale: Locale; docsMap: Record<string, { key: string; label: string }[]>;
+}) {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [busy, setBusy] = useState(false);
@@ -36,12 +38,12 @@ export function OnboardingChat({ catalog, locale }: { catalog: Cap[]; locale: Lo
     const seen = new Set<string>(); const out: { key: string; label: string }[] = [];
     for (const k of detected) {
       if (!k.startsWith('commodity.')) continue;
-      try {
-        for (const d of documentsFor(k)) { if (!seen.has(d.key)) { seen.add(d.key); out.push(d); } }
-      } catch { /* KB miss is non-fatal */ }
+      // Prefer the live KB documents for this commodity; fall back to the bundled.
+      const list = docsMap[k] ?? (() => { try { return documentsFor(k); } catch { return []; } })();
+      for (const d of list) { if (!seen.has(d.key)) { seen.add(d.key); out.push(d); } }
     }
     return out;
-  }, [detected]);
+  }, [detected, docsMap]);
 
   async function provision(useDescription: boolean) {
     setBusy(true); setErr(null);

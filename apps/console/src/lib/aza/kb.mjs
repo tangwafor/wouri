@@ -258,9 +258,10 @@ const DOC_LABELS = {
 export function commodityInfo(key) {
   return COMMODITIES[key] || COMMODITIES[key?.replace(/^commodity\./, '')] || null;
 }
+export function docLabel(key) { return DOC_LABELS[key] || key; }
 export function documentsFor(commodityKey) {
   const c = commodityInfo(commodityKey);
-  return (c?.documents || []).map((d) => ({ key: d, label: DOC_LABELS[d] || d }));
+  return (c?.documents || []).map((d) => ({ key: d, label: docLabel(d) }));
 }
 export function explain(capabilityKey) {
   const c = commodityInfo(capabilityKey);
