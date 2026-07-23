@@ -36,7 +36,7 @@ const shell = (heading, body, cta) => `
 
 const payload = {
   site_url: SITE,
-  uri_allow_list: `${SITE},http://localhost:3400,https://wouri.co,https://*.wouri.co`,
+  uri_allow_list: `${SITE},http://localhost:3400,https://wouri.co,https://*.wouri.co,https://wouri-console-staging.netlify.app,https://wouri-console-staging.netlify.app/**`,
   mailer_subjects_confirmation: 'Confirm your Wouri email',
   mailer_templates_confirmation_content: shell('Confirm your email',
     'Confirm your email to activate your Wouri account.', 'Confirm email'),
