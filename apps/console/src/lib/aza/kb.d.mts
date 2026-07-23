@@ -10,6 +10,7 @@ export const COMMODITIES: Record<string, {
 export const RAILS: Record<string, { label_en: string; label_fr: string; what_en: string; what_fr: string; applies_from?: string; review_by?: string; sources: string[] }>;
 export const REGULATIONS: Record<string, { title_en: string; title_fr: string; what_en: string; applies_from?: string; review_by?: string; sources: string[] }>;
 export const CAPABILITIES: Record<string, { label_en: string; what_en: string }>;
+export const APP: Record<string, { label_en: string; label_fr: string; what_en: string; what_fr: string }>;
 export function commodityInfo(key: string): (typeof COMMODITIES)[string] | null;
 export function documentsFor(commodityKey: string): { key: string; label: string }[];
 export function explain(capabilityKey: string): string;

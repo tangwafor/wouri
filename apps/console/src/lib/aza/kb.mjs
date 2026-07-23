@@ -165,6 +165,86 @@ export const CAPABILITIES = {
   'commodity.other': { label_en: 'Other commodity', what_en: 'An export commodity not yet profiled. Aza treats it generically until a profile is added.' },
 };
 
+// Everything about the app itself, so Aza can explain the product offline. Add a
+// new entry here whenever a feature ships (the "fill the KB as we go" rule).
+export const APP = {
+  what_is: {
+    label_en: 'What Wouri is', label_fr: 'Ce qu est Wouri',
+    what_en: 'Wouri is the registry of record for African commodity export, the trust and credit layer. Like a land registry or a classification society, its value is that third parties rely on it. Wouri never takes title, holds money, or lends.',
+    what_fr: 'Wouri est le registre de reference de l export de matieres premieres africaines, la couche de confiance et de credit. Comme un cadastre ou une societe de classification, sa valeur tient au fait que des tiers s y fient. Wouri ne prend jamais titre, ne detient pas d argent et ne prete pas.',
+  },
+  onboarding: {
+    label_en: 'Onboarding (chat or click)', label_fr: 'Demarrage (chat ou clic)',
+    what_en: 'A tenant creates a workspace two ways that produce the same result: describe the business and Aza sets it up, or pick capabilities by hand. Aza runs locally with no external API, so onboarding always works.',
+    what_fr: 'Un locataire cree un espace de deux facons au meme resultat: decrire son activite et Aza la configure, ou choisir soi-meme. Aza fonctionne en local sans API externe, donc le demarrage marche toujours.',
+  },
+  capabilities: {
+    label_en: 'Capabilities', label_fr: 'Capacites',
+    what_en: 'Each tenant picks capabilities: what they export, compliance rails (EUDR, CITES), field capture, settlement, financing, groups. Capabilities are data, so the menu grows with no code change. Dependencies auto-enable (CITES needs timber; financing needs settlement).',
+    what_fr: 'Chaque locataire choisit ses capacites: ce qu il exporte, les filieres de conformite (EUDR, CITES), la capture terrain, le reglement, le financement, les groupes. Les capacites sont des donnees; le menu grandit sans code. Les dependances s activent seules (CITES exige le bois; le financement exige le reglement).',
+  },
+  custody: {
+    label_en: 'Custody spine (tamper-evident)', label_fr: 'Chaine de custody (inviolable)',
+    what_en: 'Physical custody is an append-only event stream. Each event is client-minted for offline capture, then sealed server-side into a per-lot hash chain and counter-signed onto a per-tenant chain, so history is tamper-evident and cannot be rewritten. Corrections are compensating events, never deletes.',
+    what_fr: 'La custody physique est un flux d evenements en ajout seul. Chaque evenement est cree cote client pour la saisie hors ligne, puis scelle cote serveur dans une chaine de hachage par lot et contresigne sur une chaine par locataire, rendant l historique inviolable. Les corrections sont des evenements compensatoires, jamais des suppressions.',
+  },
+  documents: {
+    label_en: 'Document engine', label_fr: 'Moteur documentaire',
+    what_en: 'The engine builds each export document from the spine. A required field that does not resolve blocks issuance; a declared weight that does not match the consignment blocks issuance. Issuance is idempotent by content hash, so the same inputs reproduce the same document.',
+    what_fr: 'Le moteur construit chaque document a partir de la colonne vertebrale. Un champ requis non resolu bloque l emission; un poids declare qui ne correspond pas a l expedition bloque l emission. L emission est idempotente par hachage: memes entrees, meme document.',
+  },
+  verification: {
+    label_en: 'Proof and verification', label_fr: 'Preuve et verification',
+    what_en: 'Every issued document is a W3C Verifiable Credential signed with Ed25519. Anyone verifies it offline at wouri.co/v/{code} with the public key alone, no account, without contacting Wouri. A tampered or revoked document reads as such.',
+    what_fr: 'Chaque document emis est une preuve verifiable W3C signee en Ed25519. N importe qui la verifie hors ligne sur wouri.co/v/{code} avec la seule cle publique, sans compte, sans contacter Wouri. Un document altere ou revoque apparait comme tel.',
+  },
+  settlement: {
+    label_en: 'Settlement and the BEAC clock', label_fr: 'Reglement et horloge BEAC',
+    what_en: 'Settlement tracks the documentary flow to payment, flags discrepancies, and runs the BEAC 150-day repatriation clock. In Wouri, settled means repatriated, not merely paid.',
+    what_fr: 'Le reglement suit le flux documentaire jusqu au paiement, signale les ecarts et fait tourner l horloge de rapatriement BEAC de 150 jours. Chez Wouri, regle veut dire rapatrie, pas seulement paye.',
+  },
+  financing: {
+    label_en: 'Financing (records, never lends)', label_fr: 'Financement (enregistre, ne prete pas)',
+    what_en: 'Financing records warehouse receipts and a cash timeline so a consignment can back credit. Wouri records financing; it never lends.',
+    what_fr: 'Le financement enregistre les recepisses d entrepot et un calendrier de tresorerie pour qu une expedition adosse un credit. Wouri enregistre le financement; il ne prete jamais.',
+  },
+  field: {
+    label_en: 'Field capture (offline)', label_fr: 'Capture terrain (hors ligne)',
+    what_en: 'The field app captures plots, photos, GPS, and signatures offline and syncs later. Media never blocks a record.',
+    what_fr: 'L application terrain capture parcelles, photos, GPS et signatures hors ligne et synchronise plus tard. Les medias ne bloquent jamais un enregistrement.',
+  },
+  roles: {
+    label_en: 'Roles', label_fr: 'Roles',
+    what_en: 'Access is role-based per organization: owner, admin, export manager, documentation officer, field agent, finance, viewer. Each role sees only its surface.',
+    what_fr: 'L acces est base sur les roles par organisation: proprietaire, administrateur, responsable export, agent documentaire, agent de terrain, finance, lecteur. Chaque role ne voit que sa surface.',
+  },
+  languages: {
+    label_en: 'Languages', label_fr: 'Langues',
+    what_en: 'The console is bilingual, French by default (Cameroon first) and English, switchable per user. Documents can be produced in the language the destination needs.',
+    what_fr: 'La console est bilingue, francais par defaut (Cameroun d abord) et anglais, commutable par utilisateur. Les documents peuvent etre produits dans la langue attendue a destination.',
+  },
+  security: {
+    label_en: 'Security and isolation', label_fr: 'Securite et isolation',
+    what_en: 'Row-level security is the single isolation gate: a tenant sees only its own data, an anonymous visitor sees nothing. Every table denies by default.',
+    what_fr: 'La securite au niveau des lignes est l unique barriere: un locataire ne voit que ses donnees, un visiteur anonyme ne voit rien. Chaque table refuse par defaut.',
+  },
+  resilience: {
+    label_en: 'Resilience (Aza never blocks)', label_fr: 'Resilience (Aza ne bloque jamais)',
+    what_en: 'Aza never blocks a tenant. Its inference and knowledge base are local, so there is no external API to fail. If Aza is unavailable a tenant still creates a workspace by clicking, and the knowledge base still answers from the bundled copy.',
+    what_fr: 'Aza ne bloque jamais un locataire. Son inference et sa base de connaissances sont locales, donc aucune API externe ne peut echouer. Si Aza est indisponible, un locataire cree quand meme un espace en cliquant, et la base repond depuis la copie embarquee.',
+  },
+  stays_current: {
+    label_en: 'How it stays current', label_fr: 'Comment cela reste a jour',
+    what_en: 'Regulatory and quality data is effective-dated: an update is a new row and old documents stay reproducible. Every change is logged. Fast-moving facts carry a review-by date; FX and market rates are real-time.',
+    what_fr: 'Les donnees reglementaires et qualite sont datees: une mise a jour est une nouvelle ligne et les anciens documents restent reproductibles. Chaque changement est journalise. Les faits mouvants ont une date de revision; les taux de change et de marche sont en temps reel.',
+  },
+  dual_rail: {
+    label_en: 'The dual-rail moat', label_fr: 'Le double rail, l avantage',
+    what_en: 'The dual-rail consignment, EUDR and CITES on one lot, is the category no competitor serves. A CITES-listed lot is identity-preserved and can never be mass-balanced.',
+    what_fr: 'L expedition a double rail, EUDR et CITES sur un meme lot, est la categorie qu aucun concurrent ne sert. Un lot CITES est a identite preservee et ne peut jamais etre en bilan massique.',
+  },
+};
+
 const DOC_LABELS = {
   commercial_invoice: 'Commercial invoice', packing_list: 'Packing list',
   certificate_of_origin_eur1: 'EUR.1 certificate of origin', bill_of_lading: 'Bill of lading',

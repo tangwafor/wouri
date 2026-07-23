@@ -5,7 +5,7 @@
 // Run: node scripts/seed-aza-kb.mjs
 import { config } from 'dotenv';
 import pg from 'pg';
-import { COMMODITIES, RAILS, REGULATIONS, CAPABILITIES } from '../apps/console/src/lib/aza/kb.mjs';
+import { COMMODITIES, RAILS, REGULATIONS, CAPABILITIES, APP } from '../apps/console/src/lib/aza/kb.mjs';
 
 config({ path: '.env.local' });
 const c = new pg.Client({ connectionString: process.env.SUPABASE_DB_URL });
@@ -28,6 +28,10 @@ for (const [k, v] of Object.entries(REGULATIONS)) rows.push({
 });
 for (const [k, v] of Object.entries(CAPABILITIES)) rows.push({
   key: 'cap.' + k, kind: 'capability', label_en: v.label_en, label_fr: null, body_en: v.what_en, body_fr: null,
+  data: {}, source: null, review_by: null,
+});
+for (const [k, v] of Object.entries(APP)) rows.push({
+  key: 'app.' + k, kind: 'app', label_en: v.label_en, label_fr: v.label_fr, body_en: v.what_en, body_fr: v.what_fr,
   data: {}, source: null, review_by: null,
 });
 

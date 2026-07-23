@@ -8,9 +8,9 @@ type Entry = {
   review_by: string | null; updated_at: string | null;
 };
 
-const KIND_ORDER = ['commodity', 'rail', 'regulation', 'capability'];
+const KIND_ORDER = ['app', 'commodity', 'rail', 'regulation', 'capability'];
 const KIND_LABEL: Record<string, string> = {
-  commodity: 'Commodities', rail: 'Compliance rails', regulation: 'Regulations', capability: 'Capabilities',
+  app: 'The app', commodity: 'Commodities', rail: 'Compliance rails', regulation: 'Regulations', capability: 'Capabilities',
 };
 
 function Row({ entry, isAdmin }: { entry: Entry; isAdmin: boolean }) {
