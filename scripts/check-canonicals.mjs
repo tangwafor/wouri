@@ -23,7 +23,10 @@ const TEXT_EXT = /\.(ts|tsx|js|jsx|mjs|cjs|sql|md|json|html|css)$/;
 
 function tracked() {
   try {
-    return execSync('git ls-files', { encoding: 'utf8' }).split('\n').filter(Boolean);
+    // Tracked files AND new files not yet committed (but respecting .gitignore), so
+    // a brand-new file cannot bypass the gate on the very commit that introduces it.
+    const out = execSync('git ls-files --cached --others --exclude-standard', { encoding: 'utf8' });
+    return [...new Set(out.split('\n').filter(Boolean))];
   } catch {
     console.error('check-canonicals: not a git repo or git unavailable.');
     process.exit(2);
