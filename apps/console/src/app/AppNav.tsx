@@ -6,6 +6,7 @@ const ITEMS: { href: string; key: Key }[] = [
   { href: '/home', key: 'home' },
   { href: '/lots', key: 'lots' },
   { href: '/consignments', key: 'consignments' },
+  { href: '/cockpit', key: 'cockpit' },
   { href: '/board', key: 'board' },
 ];
 

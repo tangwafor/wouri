@@ -243,6 +243,11 @@ export const APP = {
     what_en: 'Regulatory and quality data is effective-dated: an update is a new row and old documents stay reproducible. Every change is logged. Fast-moving facts carry a review-by date; FX and market rates are real-time.',
     what_fr: 'Les donnees reglementaires et qualite sont datees: une mise a jour est une nouvelle ligne et les anciens documents restent reproductibles. Chaque changement est journalise. Les faits mouvants ont une date de revision; les taux de change et de marche sont en temps reel.',
   },
+  cockpit: {
+    label_en: 'Live cockpit', label_fr: 'Cockpit en direct',
+    what_en: 'Real-time exchange rates (XAF against EUR, USD, GBP, CNY, with the fixed EUR peg) and weather at the export hotspots (Douala port, the cocoa, coffee, and timber zones), with a wet-weather flag that warns when drying or transport is at risk. Fetched live and cached, so it survives an outage: last-known values with a staleness note, never blank. The data sources are free and keyless.',
+    what_fr: 'Taux de change en temps reel (XAF face a EUR, USD, GBP, CNY, avec la parite fixe EUR) et meteo des zones cles d export (port de Douala, zones cacao, cafe, bois), avec une alerte humidite quand le sechage ou le transport est menace. Recupere en direct et mis en cache, donc resiste a une panne: dernieres valeurs connues avec mention de fraicheur, jamais vide. Les sources sont gratuites et sans cle.',
+  },
   dashboard: {
     label_en: 'Owner dashboard', label_fr: 'Tableau de bord',
     what_en: 'The owner home: at a glance, the counts (consignments, lots, documents), what needs attention (the ranked blockers), and the repatriation clock (nearest due or overdue). Everything the owner needs without hunting, with quick actions to create a lot or a consignment.',
