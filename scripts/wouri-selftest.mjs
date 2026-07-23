@@ -102,8 +102,8 @@ try {
        (await c.query('select has_capability($1,$2) b', [orgA, 'commodity.cocoa'])).rows[0].b === true);
     ok('has_capability is false for a capability not enabled',
        (await c.query('select has_capability($1,$2) b', [orgA, 'rail.cites'])).rows[0].b === false);
-    ok('the capability catalog is inherited (9 rows readable)',
-       await count('select count(*)::int n from capability_catalog') === 9);
+    ok('the capability catalog is inherited (14 rows readable)',
+       await count('select count(*)::int n from capability_catalog') === 14);
     ok('reference currencies are inherited', await count('select count(*)::int n from currencies') >= 5);
   });
 

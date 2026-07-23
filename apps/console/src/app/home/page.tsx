@@ -21,7 +21,7 @@ export default async function Home() {
 
   const { data: catalog } = await supabase
     .from('capability_catalog')
-    .select('capability_key, label_fr, label_en, category, requires_capability_key')
+    .select('capability_key, label_fr, label_en, category, requires_capability_key, description_fr, description_en')
     .order('category');
   const { data: enabledRows } = await supabase
     .from('organization_capabilities')

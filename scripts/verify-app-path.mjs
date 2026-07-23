@@ -77,7 +77,7 @@ try {
     const { data: cap } = await a.rpc('has_capability', { p_org: orgId, p_cap: 'commodity.cocoa' });
     ok('has_capability reflects it through the client', cap === true);
     const { data: cat } = await a.from('capability_catalog').select('capability_key');
-    ok('A inherits the platform capability catalog (9 rows)', cat?.length === 9);
+    ok('A inherits the platform capability catalog (14 rows)', cat?.length === 14);
   }
 
   // User B signs in, creates its own, and cannot see A's.

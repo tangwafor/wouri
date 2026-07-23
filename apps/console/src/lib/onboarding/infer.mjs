@@ -12,9 +12,12 @@ export const REQUIRES = {
   financing: 'settlement',
 };
 
-// Any commodity pulls in the EUDR rail: EUDR applies to both cocoa and timber
-// (default_for_vertical {cocoa,timber} in the seed).
-const COMMODITY_KEYS = ['commodity.cocoa', 'commodity.timber', 'commodity.other'];
+// An EUDR-regulated commodity pulls in the EUDR rail even if EUDR is never named.
+// EUDR (Reg 2023/1115) covers cocoa, coffee, oil palm, rubber, and wood; cotton,
+// banana, and "other" are outside it, so they do NOT auto-add the rail.
+const EUDR_COMMODITY_KEYS = [
+  'commodity.cocoa', 'commodity.timber', 'commodity.coffee', 'commodity.palm_oil', 'commodity.rubber',
+];
 
 // Ordered so the most specific signal wins the phrasing. Each entry: the
 // capability it votes for and the words (lowercased, French + English + the
@@ -22,6 +25,11 @@ const COMMODITY_KEYS = ['commodity.cocoa', 'commodity.timber', 'commodity.other'
 const SIGNALS = [
   { key: 'commodity.cocoa', words: ['cocoa', 'cacao', 'coco', 'feves', 'beans', 'ndumbe'] },
   { key: 'commodity.timber', words: ['timber', 'wood', 'bois', 'log', 'logs', 'lumber', 'sawn', 'sciage', 'grume', 'ayous', 'sapelli', 'okoume', 'iroko', 'bubinga'] },
+  { key: 'commodity.coffee', words: ['coffee', 'cafe', 'arabica', 'robusta'] },
+  { key: 'commodity.palm_oil', words: ['palm oil', 'oil palm', 'huile de palme', 'palme', 'palmier', 'cpo'] },
+  { key: 'commodity.rubber', words: ['rubber', 'caoutchouc', 'latex', 'hevea'] },
+  { key: 'commodity.cotton', words: ['cotton', 'coton'] },
+  { key: 'commodity.banana', words: ['banana', 'bananas', 'banane', 'plantain'] },
   { key: 'rail.cites', words: ['cites', 'species', 'espece', 'especes', 'protected', 'protege', 'endangered', 'quota', 'permit', 'permis', 'regulated', 'reglemente'] },
   { key: 'rail.eudr', words: ['eudr', 'deforestation', 'due diligence', 'diligence', 'dds', 'traceability', 'tracabilite', 'geolocation', 'geolocalisation', 'compliance', 'conformite'] },
   { key: 'field_capture', words: ['field', 'terrain', 'offline', 'hors ligne', 'photo', 'gps', 'farmer', 'planteur', 'agriculteur', 'capture', 'plot', 'plots', 'parcelle', 'parcelles', 'polygon', 'village'] },
@@ -64,8 +72,8 @@ export function inferCapabilities(description) {
     if (found) hits.set(sig.key, found);
   }
 
-  // Any commodity implies the EUDR rail even if EUDR was never named.
-  if (COMMODITY_KEYS.some((c) => hits.has(c)) && !hits.has('rail.eudr')) {
+  // An EUDR-regulated commodity implies the EUDR rail even if EUDR was never named.
+  if (EUDR_COMMODITY_KEYS.some((c) => hits.has(c)) && !hits.has('rail.eudr')) {
     hits.set('rail.eudr', 'commodity');
   }
 

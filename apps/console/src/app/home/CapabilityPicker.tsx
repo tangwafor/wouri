@@ -19,6 +19,8 @@ type Cap = {
   label_en: string;
   category: string;
   requires_capability_key: string | null;
+  description_fr: string | null;
+  description_en: string | null;
 };
 
 // The pick-and-choose capability picker (ADR-0028). Toggling writes
@@ -54,9 +56,22 @@ export function CapabilityPicker({
 
   const row = (cap: Cap) => {
     const on = enabled.has(cap.capability_key);
+    const desc = (locale === 'en' ? cap.description_en : cap.description_fr) ?? '';
     return (
       <div className="cap" key={cap.capability_key}>
-        <span>{locale === 'en' ? cap.label_en : cap.label_fr}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {locale === 'en' ? cap.label_en : cap.label_fr}
+          {desc ? (
+            <span
+              title={desc} aria-label={desc} role="img" tabIndex={0}
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: 15, height: 15, borderRadius: '50%', border: '1px solid var(--rule)',
+                color: 'var(--ink-3)', fontSize: '.62rem', fontWeight: 700, cursor: 'help',
+              }}
+            >i</span>
+          ) : null}
+        </span>
         <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {on ? <span className="pill on">{t('enabled', locale)}</span> : null}
           <button className="ghost" disabled={busy === cap.capability_key} onClick={() => toggle(cap)}>
