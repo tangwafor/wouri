@@ -63,6 +63,11 @@ const M = {
     doc_phyto: 'Certificat phytosanitaire (reference)',
     doc_vgm: 'Masse brute verifiee (VGM)',
     doc_quality_cert: 'Certificat de qualite',
+    cat_commodity: 'Ce que vous exportez',
+    cat_rail: 'Filieres de conformite',
+    cat_field: 'Terrain',
+    cat_money: 'Argent',
+    cat_structure: 'Structure',
   },
   en: {
     app_name: 'Wouri',
@@ -122,6 +127,11 @@ const M = {
     doc_phyto: 'Phytosanitary certificate (reference)',
     doc_vgm: 'Verified gross mass (VGM)',
     doc_quality_cert: 'Quality certificate',
+    cat_commodity: 'What you export',
+    cat_rail: 'Compliance rails',
+    cat_field: 'Field',
+    cat_money: 'Money',
+    cat_structure: 'Structure',
   },
 } as const;
 

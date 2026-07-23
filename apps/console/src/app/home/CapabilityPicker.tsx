@@ -1,7 +1,17 @@
 'use client';
 import { useState } from 'react';
 import { supabaseBrowser } from '@/lib/supabase/client';
-import { t, type Locale } from '@/lib/i18n';
+import { t, type Locale, type Key } from '@/lib/i18n';
+
+// Category order + header key, so the list reads as grouped sections (commodities
+// first) instead of a flat mix a reader cannot scan.
+const CATEGORY_ORDER: { key: string; label: Key }[] = [
+  { key: 'commodity', label: 'cat_commodity' },
+  { key: 'rail', label: 'cat_rail' },
+  { key: 'field', label: 'cat_field' },
+  { key: 'money', label: 'cat_money' },
+  { key: 'structure', label: 'cat_structure' },
+];
 
 type Cap = {
   capability_key: string;
@@ -42,20 +52,33 @@ export function CapabilityPicker({
     setBusy(null);
   }
 
+  const row = (cap: Cap) => {
+    const on = enabled.has(cap.capability_key);
+    return (
+      <div className="cap" key={cap.capability_key}>
+        <span>{locale === 'en' ? cap.label_en : cap.label_fr}</span>
+        <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          {on ? <span className="pill on">{t('enabled', locale)}</span> : null}
+          <button className="ghost" disabled={busy === cap.capability_key} onClick={() => toggle(cap)}>
+            {on ? t('disable', locale) : t('enable', locale)}
+          </button>
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div style={{ marginTop: 10 }}>
-      {catalog.map((cap) => {
-        const on = enabled.has(cap.capability_key);
+      {CATEGORY_ORDER.map(({ key, label }) => {
+        const items = catalog.filter((c) => c.category === key);
+        if (!items.length) return null;
         return (
-          <div className="cap" key={cap.capability_key}>
-            <span>{locale === 'en' ? cap.label_en : cap.label_fr}</span>
-            <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {on ? <span className="pill on">{t('enabled', locale)}</span> : null}
-              <button className="ghost" disabled={busy === cap.capability_key} onClick={() => toggle(cap)}>
-                {on ? t('disable', locale) : t('enable', locale)}
-              </button>
-            </span>
-          </div>
+          <section key={key} style={{ marginBottom: 14 }}>
+            <div style={{ fontSize: '.72rem', fontWeight: 700, letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 2 }}>
+              {t(label, locale)}
+            </div>
+            {items.map(row)}
+          </section>
         );
       })}
     </div>
