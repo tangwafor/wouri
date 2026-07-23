@@ -6,6 +6,7 @@ import { getT } from '@/lib/locale';
 import { AppNav } from '../../AppNav';
 import { Allocator } from './Allocator';
 import { SettlementPanel } from './SettlementPanel';
+import { DocumentsPanel } from './DocumentsPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,6 +37,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
     const { data: clk } = await supabase.from('settlement_clock').select('repatriation_due, days_remaining, overdue').eq('id', instrument.id).maybeSingle();
     clock = clk;
   }
+  const { data: documents } = await supabase.from('documents').select('template_key, verification_code, status').eq('consignment_id', id);
 
   const buyer = (con.parties as unknown as { name: string } | null)?.name;
   return (
@@ -46,6 +48,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
       <p className="tag">{buyer ?? '-'}{con.destination_country ? ` · ${con.destination_country}` : ''} · {con.status}</p>
 
       <Allocator orgId={org.id} consignmentId={id} allocated={allocated} available={available} locale={locale} />
+      <DocumentsPanel consignmentId={id} documents={documents ?? []} locale={locale} />
       <SettlementPanel orgId={org.id} consignmentId={id} instrument={instrument ?? null} clock={clock} locale={locale} />
     </main>
   );
