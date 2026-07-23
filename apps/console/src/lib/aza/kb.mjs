@@ -213,6 +213,11 @@ export const APP = {
     what_en: 'Every issued document is a W3C Verifiable Credential signed with Ed25519. Anyone verifies it offline at wouri.co/v/{code} with the public key alone, no account, without contacting Wouri. A tampered or revoked document reads as such.',
     what_fr: 'Chaque document emis est une preuve verifiable W3C signee en Ed25519. N importe qui la verifie hors ligne sur wouri.co/v/{code} avec la seule cle publique, sans compte, sans contacter Wouri. Un document altere ou revoque apparait comme tel.',
   },
+  shipments: {
+    label_en: 'Shipment tracking', label_fr: 'Suivi d expedition',
+    what_en: 'A consignment travels: booked, loaded, sailed, arrived, cleared. Wouri records the carrier, vessel, ports, and the ETD and ETA, advances the milestones in order (and mirrors the consignment status), and feeds the readiness board so a departure closing in or an arrival past its ETA surfaces as a blocker.',
+    what_fr: 'Une expedition voyage: reservee, chargee, appareillee, arrivee, dedouanee. Wouri enregistre le transporteur, le navire, les ports, l ETD et l ETA, fait avancer les etapes dans l ordre (et reflete le statut de l expedition), et alimente le tableau de preparation pour qu un depart imminent ou une arrivee en retard apparaisse comme un blocage.',
+  },
   settlement: {
     label_en: 'Settlement and the BEAC clock', label_fr: 'Reglement et horloge BEAC',
     what_en: 'Settlement tracks the documentary flow to payment, flags discrepancies, and runs the BEAC 150-day repatriation clock. In Wouri, settled means repatriated, not merely paid.',

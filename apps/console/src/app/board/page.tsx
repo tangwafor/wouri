@@ -18,6 +18,7 @@ const SEV_COLOR: Record<string, string> = { critical: 'var(--alert)', high: '#b4
 const KIND_KEY: Record<string, Key> = {
   repatriation_overdue: 'board_repatriation_overdue', repatriation_due_soon: 'board_repatriation_due_soon',
   discrepancy: 'board_discrepancy', task_overdue: 'board_task_overdue',
+  shipment_overdue: 'board_shipment_overdue', shipment_etd_soon: 'board_shipment_etd_soon', origin_gap: 'board_origin_gap',
 };
 
 export default async function BoardPage() {

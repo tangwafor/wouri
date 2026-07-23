@@ -7,6 +7,7 @@ import { AppNav } from '../../AppNav';
 import { Allocator } from './Allocator';
 import { SettlementPanel } from './SettlementPanel';
 import { DocumentsPanel } from './DocumentsPanel';
+import { ShipmentPanel } from './ShipmentPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
     clock = clk;
   }
   const { data: documents } = await supabase.from('documents').select('template_key, verification_code, status').eq('consignment_id', id);
+  const { data: shipment } = await supabase.from('shipments').select('id, carrier, vessel, port_loading, port_discharge, etd, eta, status').eq('consignment_id', id).maybeSingle();
 
   const buyer = (con.parties as unknown as { name: string } | null)?.name;
   return (
@@ -48,6 +50,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
       <p className="tag">{buyer ?? '-'}{con.destination_country ? ` · ${con.destination_country}` : ''} · {con.status}</p>
 
       <Allocator orgId={org.id} consignmentId={id} allocated={allocated} available={available} locale={locale} />
+      <ShipmentPanel orgId={org.id} consignmentId={id} shipment={shipment ?? null} locale={locale} />
       <DocumentsPanel consignmentId={id} documents={documents ?? []} locale={locale} />
       <SettlementPanel orgId={org.id} consignmentId={id} instrument={instrument ?? null} clock={clock} locale={locale} />
     </main>
