@@ -54,6 +54,11 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
   const docTypeKey = (data?.template ? ('doc_' + data.template) : null) as Key | null;
   const issued = data?.issued_at ? new Date(data.issued_at) : (data?.vc?.validFrom ? new Date(data.vc.validFrom) : null);
   const place = (subject.origin_country as string) === 'CM' || data?.found ? 'Cameroon' : '-';
+  const exporter = (subject.exporter as string) || 'Wouri';
+  const brandColor = (subject.exporter_brand_color as string) || 'var(--anchor)';
+  const tagline = (subject.exporter_tagline as string) || '';
+  const initials = exporter.split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'W';
+  const SKIP = new Set(['exporter', 'exporter_brand_color', 'exporter_tagline']);
 
   return (
     <main style={{ maxWidth: 660, margin: '0 auto', padding: '28px 16px 60px' }}>
@@ -72,12 +77,12 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
       ) : null}
 
       <div className="sheet" style={{ background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: 14, overflow: 'hidden', boxShadow: 'var(--shadow)' }}>
-        {/* Branded header: logo + registry line */}
+        {/* Exporter-branded header: the exporter owns the document */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '20px 26px', borderBottom: `2px solid ${color}` }}>
-          <Seal color={color} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--anchor)', lineHeight: 1 }}>Wouri</div>
-            <div style={{ fontFamily: 'var(--sans)', fontSize: '.74rem', color: 'var(--ink-3)' }}>Registry of record for African commodity export</div>
+          <div style={{ width: 52, height: 52, borderRadius: 13, background: brandColor, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--serif)', fontWeight: 700, fontSize: '1.35rem', flexShrink: 0 }}>{initials}</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 700, color: 'var(--ink)', lineHeight: 1.05 }}>{exporter}</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: '.74rem', color: 'var(--ink-3)' }}>{tagline || 'Cameroon export'}</div>
           </div>
           <span style={{ fontFamily: 'var(--sans)', fontWeight: 800, fontSize: '.72rem', letterSpacing: '.08em', color, border: `2px solid ${color}`, borderRadius: 100, padding: '6px 12px', whiteSpace: 'nowrap' }}>
             {MARK[verdict]}
@@ -97,7 +102,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
             {/* Fields */}
             <div style={{ padding: '6px 26px 8px', fontFamily: 'var(--sans)' }}>
               <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'minmax(130px, 42%) 1fr', rowGap: 9, columnGap: 16 }}>
-                {Object.entries(subject).map(([k, val]) => (
+                {Object.entries(subject).filter(([k]) => !SKIP.has(k)).map(([k, val]) => (
                   <div key={k} style={{ display: 'contents' }}>
                     <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{FIELDS[k] ?? k}</dt>
                     <dd style={{ margin: 0, fontVariantNumeric: 'tabular-nums' }}>{val === null || val === undefined ? '-' : String(val)}</dd>
@@ -107,8 +112,9 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
             </div>
 
             {/* Signature block: e-signed, timestamp, location, QR */}
-            <div style={{ display: 'flex', gap: 18, alignItems: 'center', padding: '16px 26px 22px', borderTop: '1px solid var(--rule)', marginTop: 8, flexWrap: 'wrap' }}>
-              <img src={qr} alt={tt('scan_to_verify')} width={92} height={92} style={{ borderRadius: 6 }} />
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '16px 26px 22px', borderTop: '1px solid var(--rule)', marginTop: 8, flexWrap: 'wrap' }}>
+              <Seal color={color} />
+              <img src={qr} alt={tt('scan_to_verify')} width={84} height={84} style={{ borderRadius: 6 }} />
               <div style={{ flex: 1, minWidth: 220, fontFamily: 'var(--sans)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 7, color, fontWeight: 700, fontSize: '.9rem' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6 9 17l-5-5" /></svg>

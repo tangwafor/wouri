@@ -203,6 +203,11 @@ export const APP = {
     what_en: 'The engine builds each export document from the spine. A required field that does not resolve blocks issuance; a declared weight that does not match the consignment blocks issuance. Issuance is idempotent by content hash, so the same inputs reproduce the same document.',
     what_fr: 'Le moteur construit chaque document a partir de la colonne vertebrale. Un champ requis non resolu bloque l emission; un poids declare qui ne correspond pas a l expedition bloque l emission. L emission est idempotente par hachage: memes entrees, meme document.',
   },
+  branding: {
+    label_en: 'Document branding', label_fr: 'Marque des documents',
+    what_en: 'The exporter owns the trade document; Wouri is the registry that signs and verifies it. Each certificate leads with the exporter identity (name, colour, tagline, a monogram) baked into the signed content, with the Wouri seal in the signature block. An owner sets the brand; only an org admin can.',
+    what_fr: 'L exportateur possede le document commercial; Wouri est le registre qui le signe et le verifie. Chaque certificat met en avant l identite de l exportateur (nom, couleur, slogan, monogramme) integree au contenu signe, avec le sceau Wouri dans le bloc de signature. Un proprietaire definit la marque; seul un administrateur le peut.',
+  },
   verification: {
     label_en: 'Proof and verification', label_fr: 'Preuve et verification',
     what_en: 'Every issued document is a W3C Verifiable Credential signed with Ed25519. Anyone verifies it offline at wouri.co/v/{code} with the public key alone, no account, without contacting Wouri. A tampered or revoked document reads as such.',

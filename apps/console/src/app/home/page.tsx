@@ -8,6 +8,7 @@ import { loadKb } from '@/lib/aza/kb-source';
 import { type Key } from '@/lib/i18n';
 import { AppNav } from '../AppNav';
 import { CapabilityPicker } from './CapabilityPicker';
+import { BrandSettings } from './BrandSettings';
 
 async function signout() {
   'use server';
@@ -27,7 +28,7 @@ export default async function Home() {
   const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
-  const { data: orgs } = await supabase.from('organizations').select('id, slug, legal_name, status');
+  const { data: orgs } = await supabase.from('organizations').select('id, slug, legal_name, status, brand');
   const org = orgs?.[0];
   if (!org) redirect('/onboarding');
 
@@ -138,6 +139,12 @@ export default async function Home() {
           ))}
         </div>
       ) : null}
+
+      {/* Document branding */}
+      <div className="card">
+        <div className="eyebrow">{tt('doc_branding')}</div>
+        <BrandSettings orgId={org.id} initial={(org.brand ?? {}) as { color?: string; tagline?: string }} locale={locale} />
+      </div>
 
       {/* Activities (secondary) */}
       <div className="card">
