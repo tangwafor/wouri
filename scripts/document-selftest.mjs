@@ -131,6 +131,17 @@ try {
     await a.from('contracts').update({ quantity_kg: 1000 }).eq('id', contract.id);
   }
 
+  // Positive control (regression guard for 0029): place of origin on a phyto
+  // certificate is where the goods were GROWN, never the destination. The org is
+  // registered in Cameroon (CM); the consignment is bound for DE. This test would
+  // have caught the original bug where place_of_origin was the destination.
+  {
+    const rP = (await a.rpc('resolve_document', { p_consignment: con.id, p_template: 'phyto' })).data;
+    ok('phyto place_of_origin is NOT the destination country', rP.content.place_of_origin !== con.destination_country && rP.content.place_of_origin !== 'DE');
+    ok('phyto place_of_origin is the exporter origin (CM)', typeof rP.content.place_of_origin === 'string' && /CM/.test(rP.content.place_of_origin));
+    ok('phyto requires place_of_origin (it is a bound, required field)', Array.isArray(rP.required) && rP.required.includes('place_of_origin'));
+  }
+
   // Revoked reads revoked.
   {
     await a.rpc('revoke_document', { p_id: idE, p_reason: 'superseded' });
