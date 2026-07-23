@@ -70,6 +70,34 @@ tsc + next build all green. NEXT candidates (roadmap, not blocking): field-app
 boundary polygon, real CITES/protected-area data import, EUDR risk-assessment
 record + TRACES filing, GUCE single-window, Merkle checkpoints, human signatures.
 
+## 2026-07-23 - Third review pass: staleness feature, critical-path e2e, conformance fix (0043-0044)
+A reviewer read the code (not filenames) and made two fair pushes; both actioned.
+- **Document staleness (0043)** was a genuinely MISSING feature (provenance existed,
+  the projection did not). resolve_document split into resolve_document_core
+  (unchecked, ungranted) + membership-gated wrapper; document_staleness (gated, UI) +
+  document_stale auto_check. Amend a source value -> document flagged stale with
+  field/was/now; revert or revoke clears it. staleness-selftest 9/9.
+- Building it EXPOSED a real leak in my own code: SECURITY DEFINER functions keep the
+  default PUBLIC execute grant, and `revoke from anon, authenticated` does NOT remove
+  it. So the unchecked resolvers AND notify() (writes notifications for any org) were
+  client-callable. **0043 + 0044 revoke PUBLIC** on them; security-check.mjs gained an
+  "internal definer functions not client-executable" assertion. (Class fix + guard.)
+- **Critical-path e2e (canonical CRITICAL_PATH_E2E)**: apps/console/playwright/
+  critical-path.spec.ts = ONE self-cleaning run (tag zze2e): create a consignment in
+  the browser -> verify page AUTHENTIC -> revoke -> REVOKED -> weight mismatch refused
+  -> amend -> stale -> tenant B sees none of A. Passes vs BOTH localhost AND the live
+  staging deploy (PLAYWRIGHT_BASE_URL). Runner `scripts/run-e2e.mjs` +
+  `scripts/e2e-cleanup.mjs --check` (proves clean). npm: gate:e2e.
+- **Conformance drift fixed**: I had invented Wouri rows into a file the drift gate
+  would flag. Now `docs/TATECH_STANDARDS.md` = the canonical verbatim (version stamp
+  2026-06-16.1) with an honest `## Conformance (Wouri)` section (mostly Partial/
+  Roadmap) below the heading; removed the invented root TATECH_STANDARDS.md.
+- STILL OPEN (not code): ADR-0030 real consignment file (now CHEAP since bindings are
+  rows and staleness/provenance exist - do it sooner); full biometric matching;
+  video walkthrough (#7); watch pages (#28); prod project + branded domain.
+- Migrations now 0001-0044. New: `npm run gate:e2e`, `selftest:staleness`. All gates
+  green; tsc + next build clean; critical path green vs live.
+
 ## 2026-07-23 - Second review pass: remaining gaps closed (migrations 0038-0042)
 Everything the architecture review named, plus the standards/testing gate. All on
 wouri-dev, HEAD f9b7a52, each with its own self-test, all green.
