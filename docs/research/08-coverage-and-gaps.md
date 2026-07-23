@@ -96,20 +96,47 @@ Sources: scirp.org and ICCO Cameroon cocoa value chain; ITC West Africa
 post-harvest coffee manual; Cocoa Research Centre CCPs; trade.gov and shipping
 solutions on documentary collections and letters of credit (UCP 600, URC 522).
 
+## Closed since the architecture review (2026-07)
+
+An external architecture review found real drift from the founding rule. Fixed:
+
+- **The document resolver is data, not a branch per type.** Each field is a
+  document_field_bindings row; adding a document type is data. Every issued
+  document records provenance (document_bindings). A false place-of-origin binding
+  on the phyto certificate (it read the destination) is fixed and guarded.
+- **The server decides the plot (PostGIS).** A real geography column, server
+  computed area/centroid/validity, client area demoted to advisory, and spatial
+  fraud checks (overlap, self-intersection, protected-area, point-over-cap) as
+  auto_checks. The point-area cap is a registry figure.
+- **external_references** replaced the column-per-authority pattern (DDS, BESC,
+  insurance, and forward CITES/CAMCIS/ONCC).
+- **The CITES quota can never go negative** (quota_ledger), enforced under a lock;
+  the rail is now enforceable.
+- **Mass balance** (transformation_inputs/outputs): a step cannot output more mass
+  than it took in, the anti-laundering control.
+- **organization_groups** (tenant-of-tenants) skeleton landed before it could break
+  a live schema.
+- **Guardrails**: the regulatory-literal gate is a real hard failure, an every-table
+  RLS-coverage gate runs each build, and board thresholds are registry figures.
+
 ## Honest gaps (the next tracks)
 
-1. **Polygon capture.** The field app records a GPS point; walking the plot
-   boundary to a GeoJSON polygon is the EUDR standard for most systems.
-2. **Legality and deforestation-free evidence.** Land titles/permits as origin
-   evidence, and a satellite / land-use check, are not yet modeled.
+1. **Polygon capture in the field.** The server now computes area from a polygon,
+   but the field app still records a GPS point; walking the boundary to a polygon
+   is the remaining field-side EUDR step.
+2. **Legality and deforestation-free evidence.** The protected-area intersection
+   mechanism exists; land titles/permits as origin evidence and a real satellite /
+   land-use dataset are not yet imported.
 3. **Formal EUDR risk assessment record** (Article 10) and the DDS submission
    itself (we capture the reference, not the TRACES filing).
 4. **The rest of the GUCE set**: SGS declaration, NCCB pre-liquidation, export
-   declaration + licence, ANOR/PECAE CoC, insurance and packing certificates as
-   first-class documents (we capture insurance as a reference for now).
+   declaration + licence, ANOR/PECAE CoC, packing certificate as first-class
+   documents (each is now a few binding rows, not a code change).
 5. **Single-window integration** (e-GUCE, CAMCIS, TRACES NT) so references flow
    both ways rather than being recorded by hand.
 6. **EORI** and full supplier/buyer contact records for the DDS.
+7. **Real CITES quota and protected-area data.** The mechanisms are enforced; the
+   figures and boundaries are a sourced import.
 
 None of these block the operator today; they are the roadmap to end-to-end
 compliance, and each is data or a capability, not a rebuild.
