@@ -42,6 +42,7 @@ export default async function Home() {
         <div style={{ fontSize: '.8rem', color: 'var(--ink-3)' }}>{tt('your_org')}</div>
         <div style={{ fontSize: '1.2rem', fontWeight: 650 }}>{org.legal_name ?? org.slug}</div>
         <div style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{org.slug} &middot; {org.status}</div>
+        <p style={{ marginTop: 10, marginBottom: 0 }}><a href="/board">{tt('board_link')}</a></p>
       </div>
       <div className="card">
         <h2 style={{ margin: '0 0 2px', fontSize: '1.05rem' }}>{tt('capabilities')}</h2>

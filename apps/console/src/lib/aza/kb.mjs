@@ -238,6 +238,11 @@ export const APP = {
     what_en: 'Regulatory and quality data is effective-dated: an update is a new row and old documents stay reproducible. Every change is logged. Fast-moving facts carry a review-by date; FX and market rates are real-time.',
     what_fr: 'Les donnees reglementaires et qualite sont datees: une mise a jour est une nouvelle ligne et les anciens documents restent reproductibles. Chaque changement est journalise. Les faits mouvants ont une date de revision; les taux de change et de marche sont en temps reel.',
   },
+  readiness: {
+    label_en: 'Readiness board', label_fr: 'Tableau de preparation',
+    what_en: 'The operator morning surface: what is blocking each consignment right now, most urgent first. It ranks a repatriation past the BEAC window (critical), a window closing soon, an open settlement discrepancy, and overdue tasks. It is a rebuildable projection over the spine, scoped to the tenant.',
+    what_fr: 'La surface du matin de l operateur: ce qui bloque chaque expedition maintenant, le plus urgent d abord. Elle classe un rapatriement hors delai BEAC (critique), une fenetre bientot close, un ecart de reglement ouvert et les taches en retard. C est une projection reconstructible sur la colonne vertebrale, limitee au locataire.',
+  },
   dual_rail: {
     label_en: 'The dual-rail moat', label_fr: 'Le double rail, l avantage',
     what_en: 'The dual-rail consignment, EUDR and CITES on one lot, is the category no competitor serves. A CITES-listed lot is identity-preserved and can never be mass-balanced.',
