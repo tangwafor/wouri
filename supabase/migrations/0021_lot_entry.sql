@@ -106,7 +106,7 @@ create or replace view readiness_board with (security_invoker = true) as
   join lateral (select repatriation_days from settlement_rules where region = si.region and valid_at @> now() order by lower(valid_at) desc limit 1) sr on true
   where si.status <> 'repatriated' and si.export_date is not null
     and (si.export_date + (sr.repatriation_days || ' days')::interval)::date >= current_date
-    and ((si.export_date + (sr.repatriation_days || ' days')::interval)::date - current_date) <= 15
+    and ((si.export_date + (sr.repatriation_days || ' days')::interval)::date - current_date) <= 15   -- canon:allow-literal superseded by 0030 registry_config
   union all
   select d.organization_id, si.consignment_id, c.code, 'discrepancy', 'high',
     greatest(0, current_date - d.raised_at::date), null::date, coalesce(d.description, d.code)

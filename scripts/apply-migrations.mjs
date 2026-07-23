@@ -19,6 +19,9 @@ const client = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized:
 await client.connect();
 await client.query(`create table if not exists _wouri_migrations (
   name text primary key, applied_at timestamptz not null default now())`);
+// The migrations ledger is operational, not app data. No app role reaches it
+// (rls-coverage gate: a reachable table with no RLS is a leak class).
+await client.query('revoke all on _wouri_migrations from anon, authenticated');
 
 const applied = new Set((await client.query('select name from _wouri_migrations')).rows.map(r => r.name));
 const files = readdirSync(dir).filter(f => f.endsWith('.sql')).sort();

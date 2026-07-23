@@ -5,11 +5,15 @@
 //
 //   node scripts/check-canonicals.mjs
 //
-// Hard failures (block the build): em-dashes anywhere.
-// Warnings (surface, do not block yet): regulatory literal near a regulatory word
-//   in code; a hardcoded vertical/commodity branch instead of a capability lookup.
-// The RLS-on-every-table and anon-surface checks run against the database in the
-// self-test, not here (this script is source-only).
+// Hard failures (block the build): em-dashes anywhere; a regulatory literal in
+//   logic (a rule that belongs in the registry as a row, not a literal in a view,
+//   function, or branch). Seed `insert` statements in migrations are exempt: that
+//   is the registry data itself. A single line may opt out with a trailing
+//   `-- canon:allow-literal <reason>` when the number is genuinely structural.
+// Warnings (surface, do not block): a hardcoded vertical/commodity branch instead
+//   of a capability lookup.
+// The RLS-on-every-table and anon-surface coverage gate is a separate script,
+// rls-coverage.mjs, run against the database in the self-test.
 
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -46,24 +50,35 @@ for (const f of files) {
   });
 }
 
-// Warning: a regulatory literal in code. A numeric literal on a line that also
-// names a regulatory concept is probably a rule that belongs in the registry.
-const REG_WORD = /\b(duty|tariff|levy|rate_bps|threshold|deadline|quota|repatriat|min_diameter|minimum.?diameter|aflatoxin|moisture|ppm|ppb|percent|surrender|valid_for|expiry_days|days_to)\b/i;
-const NUM = /\b\d{2,}\b/; // 2+ digit literal; single digits are usually structural
+// Hard failure: a regulatory literal in logic. A numeric literal on a line that
+// also names a regulatory concept is a rule that belongs in the registry as a row.
+// Stems, no trailing boundary, so "repatriation_days" and "thresholds" match.
+const REG_WORD = /(dut(y|ies)|tariff|levy|levies|rate_bps|threshold|deadline|quota|repatriat|diameter|aflatoxin|moisture|ppm|ppb|percent|surrender|valid_for|expiry|days_to|tolerance|_days\b|window)/i;
+const NUM = /(\b\d{2,}\b|\b\d+\.\d+\b)/; // a 2+ digit integer or any decimal
 for (const f of files) {
   if (!CODE_EXT.test(f)) continue;
-  // Gates and tests may carry expected values. The registry data layer IS where
-  // regulatory literals belong: SQL migrations (the seed registry) and the bundled
-  // KB data module are the registry, not branching application logic (ADR-0002).
+  // Gates and tests may carry expected values.
   if (f.startsWith('scripts/') || f.includes('test')) continue;
-  if (f.includes('supabase/migrations/') || f.endsWith('kb.mjs')) continue;
+  // The bundled KB data module is registry data, like the seed rows below.
+  if (f.endsWith('kb.mjs')) continue;
+  const isMigration = f.includes('supabase/migrations/');
   let text;
   try { text = readFileSync(f, 'utf8'); } catch { continue; }
+  let inInsert = false;
   text.split('\n').forEach((line, i) => {
-    const l = line.replace(/\/\/.*/, ''); // ignore comments
+    // In a migration, a seed `insert into ... values (...)` IS the registry data,
+    // so exempt those lines; view and function bodies are still scanned.
+    if (isMigration) {
+      if (/insert\s+into/i.test(line)) inInsert = true;
+      const wasInsert = inInsert;
+      if (/;\s*$/.test(line)) inInsert = false;
+      if (wasInsert) return;
+    }
+    const l = line.replace(/--.*/, '').replace(/\/\/.*/, ''); // ignore comments
+    if (/canon:allow-literal/.test(line)) return;             // explicit, justified opt-out
     if (REG_WORD.test(l) && NUM.test(l)) {
-      warnings++;
-      console.warn(`WARN regulatory-literal  ${f}:${i + 1}  ${line.trim().slice(0, 100)}`);
+      hardFailures++;
+      console.error(`FAIL regulatory-literal (registry-back it, or mark canon:allow-literal)  ${f}:${i + 1}  ${line.trim().slice(0, 100)}`);
     }
   });
 }
@@ -85,7 +100,7 @@ for (const f of files) {
 
 console.log(`\ncheck-canonicals: ${files.length} files, ${hardFailures} hard failure(s), ${warnings} warning(s).`);
 if (hardFailures > 0) {
-  console.error('BLOCKED: fix the hard failures above (no em-dashes).');
+  console.error('BLOCKED: fix the hard failures above (no em-dashes; no regulatory literals in logic).');
   process.exit(1);
 }
 process.exit(0);
