@@ -23,6 +23,53 @@ The founder overrode ADR-0027 (freestyle, no real consignment file yet); recorde
 - **Interactive branded training (published Artifact):** https://claude.ai/code/artifact/9d23d389-143a-4453-b45a-788060dc24ed - end-to-end journey (10 steps) + knowledge check (80% gate) + printable branded certificate; localStorage progress. Source committed at `docs/training/interactive-training.html` (redeploy: republish that path).
 - **Expo field app scaffold** `apps/field/` (NOT built on Windows; EAS/device only): expo-router login + harvest capture (commodity, lot, plot, area, GPS via expo-location, photo via expo-image-picker), offline queue (`lib/queue.ts`, AsyncStorage, client-minted ids) that syncs to `create_lot_at_origin`. Follow-ons in its README: photo upload to storage, boundary-walk polygon, background sync. Set the anon key in app.json extra at build.
 
+## 2026-07-23 - Reactive layer, agentic auto-checks, and the architecture-review hardening
+Two waves in one session.
+
+**Wave 1 (reactive + agentic), HEAD ~39f02b4:** 0027 event triggers + notifications
+(a document issued, discrepancy, settlement repatriated, shipment moved -> a
+tenant-scoped notification; /inbox + real-time bell; events-selftest 7/7). 0028
+SQL agentic auto-checks (stored SELECTs the board misses; run_auto_checks opens,
+re-affirms, auto-resolves; hourly pg_cron; platform-admin gated SQL;
+autochecks-selftest 9/9). Post-harvest processing events on the lot detail
+(fermentation/drying/sorting/... via record_lot_event). Tavily e2e coverage sweep
+(plot to paid) in docs/research/08.
+
+**Wave 2 (architecture-review hardening, HEAD 2ebfb86), all 4 tracks done + a
+phyto correctness fix first:**
+- **0029 phyto place-of-origin fix:** it had read the DESTINATION country (a false
+  declaration). Now derives from the exporter location; required + guarded by a
+  positive-control test in document-selftest.
+- **Track 1 (guardrails + structural):** 0030 registry_config + cfg_num (board
+  windows + weight tolerance are rows now). check-canonicals: regulatory-literal is
+  a HARD failure, stems fixed, scans view/function bodies (seed inserts exempt),
+  `-- canon:allow-literal` opt-out, and it now scans untracked files too.
+  scripts/rls-coverage.mjs (every anon/authenticated-reachable table has RLS;
+  exempts extension-owned tables). 0031/0032 organization_groups tenant-of-tenants
+  with consented membership (org-groups-selftest 9/9; 0032 fixed recursive RLS).
+  0033 external_references (killed the dds/besc/insurance column-per-authority;
+  board + auto-check repointed; columns dropped).
+- **Track 2 (keystone) 0034:** resolve_document is data-driven over
+  document_field_bindings (closed source-kind vocabulary), not a branch per type;
+  document_bindings records per-field provenance; issue_document stores it.
+  Adding a doc type = inserting rows (proven). document-selftest 21/21,
+  bindings-selftest 8/8.
+- **Track 3 0035 (PostGIS):** geography column, server-computed area/centroid/
+  validity, client area advisory, point-cap in registry; spatial fraud signals
+  (overlap, self-intersect, protected-area, point-over-cap) as auto_checks;
+  protected_areas table. spatial-selftest 8/8.
+- **Track 4 (moat):** 0036 quota_ledger (CITES quota never negative, row-locked;
+  cites_quota_status aggregate; quota-selftest 8/8). 0037 transformation_inputs/
+  outputs + record_transformation (mass cannot be created; backstop auto_check;
+  transformation-selftest 7/7).
+
+Migrations now 0001-0037. New gates: `node scripts/rls-coverage.mjs`. New KB APP
+entries: provenance, geometry, quota, mass_balance, groups, processing, events,
+auto_checks. Everything applied to wouri-dev; check-canonicals + rls-coverage +
+tsc + next build all green. NEXT candidates (roadmap, not blocking): field-app
+boundary polygon, real CITES/protected-area data import, EUDR risk-assessment
+record + TRACES filing, GUCE single-window, Merkle checkpoints, human signatures.
+
 ## 2026-07-23 - The whole operator chain is in the UI (source to settlement), proven live
 The console is now a full operator app, walked end-to-end on staging:
 - **Owner dashboard (/home):** KPI cards (consignments, lots, documents, blockers), a "needs attention" panel (ranked readiness blockers, critical first), the repatriation clock (nearest due / overdue), recent consignments, quick actions. "Owner sees all he needs." Capabilities moved to a secondary "Your activities" card.
