@@ -213,6 +213,11 @@ export const APP = {
     what_en: 'Every issued document is a W3C Verifiable Credential signed with Ed25519. Anyone verifies it offline at wouri.co/v/{code} with the public key alone, no account, without contacting Wouri. A tampered or revoked document reads as such.',
     what_fr: 'Chaque document emis est une preuve verifiable W3C signee en Ed25519. N importe qui la verifie hors ligne sur wouri.co/v/{code} avec la seule cle publique, sans compte, sans contacter Wouri. Un document altere ou revoque apparait comme tel.',
   },
+  compliance: {
+    label_en: 'Compliance and references', label_fr: 'Conformite et references',
+    what_en: 'A Cameroon export needs more than the certificates Wouri issues. Two references matter most: the EUDR DDS number that clears the EU border, and the BESC/ECTN cargo tracking note that must exist before loading. Wouri captures these on the consignment, shows a destination-aware checklist of what is present or missing (EU-bound EUDR shipments show the DDS), and flags a loaded shipment with no BESC on the readiness board, the classic thing that holds a container.',
+    what_fr: 'Un export camerounais exige plus que les certificats emis par Wouri. Deux references comptent le plus: le numero DDS EUDR qui debloque la frontiere UE, et la note de suivi cargaison BESC/ECTN exigee avant chargement. Wouri les enregistre sur l expedition, montre une liste selon la destination (les envois UE soumis a l EUDR affichent le DDS), et signale au tableau de preparation une expedition chargee sans BESC, ce qui bloque classiquement un conteneur.',
+  },
   shipments: {
     label_en: 'Shipment tracking', label_fr: 'Suivi d expedition',
     what_en: 'A consignment travels: booked, loaded, sailed, arrived, cleared. Wouri records the carrier, vessel, ports, and the ETD and ETA, advances the milestones in order (and mirrors the consignment status), and feeds the readiness board so a departure closing in or an arrival past its ETA surfaces as a blocker.',

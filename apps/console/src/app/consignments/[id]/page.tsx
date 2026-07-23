@@ -8,6 +8,7 @@ import { Allocator } from './Allocator';
 import { SettlementPanel } from './SettlementPanel';
 import { DocumentsPanel } from './DocumentsPanel';
 import { ShipmentPanel } from './ShipmentPanel';
+import { CompliancePanel } from './CompliancePanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +23,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
 
   const { locale, tt } = await getT();
   const { data: con } = await supabase
-    .from('consignments').select('id, code, destination_country, status, parties:buyer_party_id(name)').eq('id', id).maybeSingle();
+    .from('consignments').select('id, code, destination_country, status, dds_reference, besc_reference, insurance_ref, parties:buyer_party_id(name)').eq('id', id).maybeSingle();
   if (!con) redirect('/consignments');
 
   const { data: allocatedRows } = await supabase.from('consignment_lots').select('lot_id, lots(id, code)').eq('consignment_id', id);
@@ -40,6 +41,9 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
   }
   const { data: documents } = await supabase.from('documents').select('template_key, verification_code, status').eq('consignment_id', id);
   const { data: shipment } = await supabase.from('shipments').select('id, carrier, vessel, port_loading, port_discharge, etd, eta, status').eq('consignment_id', id).maybeSingle();
+  const { data: eudrRows } = await supabase.from('consignment_lots').select('lots(commodities(eudr))').eq('consignment_id', id);
+  const eudr = (eudrRows ?? []).some((r) => (r.lots as unknown as { commodities: { eudr: boolean } | null } | null)?.commodities?.eudr === true);
+  const docKeys = (documents ?? []).map((d) => d.template_key);
 
   const buyer = (con.parties as unknown as { name: string } | null)?.name;
   return (
@@ -50,6 +54,9 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
       <p className="tag">{buyer ?? '-'}{con.destination_country ? ` · ${con.destination_country}` : ''} · {con.status}</p>
 
       <Allocator orgId={org.id} consignmentId={id} allocated={allocated} available={available} locale={locale} />
+      <CompliancePanel orgId={org.id} consignmentId={id} destination={con.destination_country}
+        refs={{ dds_reference: con.dds_reference, besc_reference: con.besc_reference, insurance_ref: con.insurance_ref }}
+        docKeys={docKeys} eudr={eudr} locale={locale} />
       <ShipmentPanel orgId={org.id} consignmentId={id} shipment={shipment ?? null} locale={locale} />
       <DocumentsPanel consignmentId={id} documents={documents ?? []} locale={locale} />
       <SettlementPanel orgId={org.id} consignmentId={id} instrument={instrument ?? null} clock={clock} locale={locale} />

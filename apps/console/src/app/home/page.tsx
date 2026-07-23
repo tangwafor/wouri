@@ -22,7 +22,7 @@ const SEV_COLOR: Record<string, string> = { critical: 'var(--alert)', high: '#b4
 const KIND_KEY: Record<string, Key> = {
   repatriation_overdue: 'board_repatriation_overdue', repatriation_due_soon: 'board_repatriation_due_soon',
   discrepancy: 'board_discrepancy', task_overdue: 'board_task_overdue', origin_gap: 'origin_gap_flag',
-  shipment_overdue: 'board_shipment_overdue', shipment_etd_soon: 'board_shipment_etd_soon',
+  shipment_overdue: 'board_shipment_overdue', shipment_etd_soon: 'board_shipment_etd_soon', compliance_gap: 'board_compliance_gap',
 };
 
 export default async function Home() {
