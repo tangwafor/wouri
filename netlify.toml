@@ -6,5 +6,10 @@
   base = "apps/console"
   command = "npm run build"
 
+# The Next build OOMs on the default heap (exit code 2). Raise it.
+[build.environment]
+  NODE_OPTIONS = "--max-old-space-size=4096"
+  NODE_VERSION = "20"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
