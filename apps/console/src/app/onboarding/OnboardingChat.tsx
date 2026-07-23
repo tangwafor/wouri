@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { inferCapabilities } from '@/lib/onboarding/infer.mjs';
+import { documentsFor } from '@/lib/aza/kb.mjs';
 import { provisionWorkspace } from './actions';
 import { t, type Locale } from '@/lib/i18n';
 
@@ -24,11 +25,27 @@ export function OnboardingChat({ catalog, locale }: { catalog: Cap[]; locale: Lo
     return (k: string) => m.get(k) ?? k;
   }, [catalog, locale]);
 
-  const detected = useMemo(() => inferCapabilities(desc).keys, [desc]);
+  // Aza is a convenience, not a gate: if inference throws, the preview just shows
+  // nothing and the tenant still creates the workspace by name (ADR-0031).
+  const detected = useMemo(() => {
+    try { return inferCapabilities(desc).keys as string[]; } catch { return []; }
+  }, [desc]);
 
-  async function submit() {
+  // From the bundled KB (no API): the documents the detected commodities need.
+  const docs = useMemo(() => {
+    const seen = new Set<string>(); const out: { key: string; label: string }[] = [];
+    for (const k of detected) {
+      if (!k.startsWith('commodity.')) continue;
+      try {
+        for (const d of documentsFor(k)) { if (!seen.has(d.key)) { seen.add(d.key); out.push(d); } }
+      } catch { /* KB miss is non-fatal */ }
+    }
+    return out;
+  }, [detected]);
+
+  async function provision(useDescription: boolean) {
     setBusy(true); setErr(null);
-    const res = await provisionWorkspace(name, desc);
+    const res = await provisionWorkspace(name, useDescription ? desc : '');
     if (res.ok) { router.push('/home'); router.refresh(); return; }
     setErr(res.error); setBusy(false);
   }
@@ -61,12 +78,26 @@ export function OnboardingChat({ catalog, locale }: { catalog: Cap[]; locale: Lo
         )}
       </div>
 
-      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-        <button type="button" onClick={submit} disabled={!ready}>
+      {docs.length ? (
+        <div>
+          <div style={{ fontSize: '.82rem', color: 'var(--ink-3)', marginBottom: 6 }}>{t('aza_documents', locale)}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {docs.map((d) => (
+              <span key={d.key} style={{ fontSize: '.74rem', color: 'var(--ink-2)', border: '1px solid var(--rule)', borderRadius: 100, padding: '2px 9px' }}>{d.label}</span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+        <button type="button" onClick={() => provision(true)} disabled={!ready}>
           {busy ? t('setting_up', locale) : t('setup_workspace', locale)}
         </button>
-        <span className="muted" style={{ marginTop: 0 }}>{t('or_click', locale)}</span>
+        <button type="button" className="ghost" onClick={() => provision(false)} disabled={!ready}>
+          {t('setup_manual', locale)}
+        </button>
       </div>
+      <span className="muted" style={{ marginTop: 0 }}>{t('or_click', locale)}</span>
       {err ? <p className="err">{err}</p> : null}
     </div>
   );

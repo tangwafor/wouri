@@ -35,7 +35,11 @@ export async function provisionWorkspace(
   const orgId = orgs?.[0]?.id;
   if (!orgId) return { ok: false, error: 'org-not-found' };
 
-  const { keys } = inferCapabilities(description);
+  // Aza's inference is a convenience, never a gate: if it throws or is empty, the
+  // org is still created and the tenant sets capabilities by hand on /home. Aza
+  // being down must never block a tenant from getting a workspace (ADR-0031).
+  let keys: string[] = [];
+  try { keys = inferCapabilities(description).keys; } catch { keys = []; }
   if (keys.length) {
     const rows = keys.map((capability_key: string) => ({ organization_id: orgId, capability_key }));
     const { error: capErr } = await supabase
