@@ -1,4 +1,5 @@
 import { t, type Locale, type Key } from '@/lib/i18n';
+import { NotificationBell } from './NotificationBell';
 
 // The app shell nav, shared across the authed operator surfaces so the console
 // reads as one product. The current page is marked. No em-dashes.
@@ -26,6 +27,7 @@ export function AppNav({ current, locale }: { current: string; locale: Locale })
           }}>{t(it.key, locale)}</a>
         );
       })}
+      <NotificationBell locale={locale} />
     </nav>
   );
 }

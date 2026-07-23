@@ -6,6 +6,7 @@ import { supabaseServer } from '@/lib/supabase/server';
 import { getT } from '@/lib/locale';
 import { AppNav } from '../../AppNav';
 import { QualityCapture } from './QualityCapture';
+import { AddCustodyEvent } from './AddCustodyEvent';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +27,7 @@ export default async function LotPage({ params }: { params: Promise<{ id: string
   const [{ data: attrs }, { data: values }, { data: events }, { data: chain }] = await Promise.all([
     supabase.from('quality_attributes').select('key, label_en, label_fr, datatype, unit, min_value, max_value, pack_version').eq('commodity_id', lot.commodity_id).order('key'),
     supabase.from('quality_values').select('attribute_key, numeric_value, recorded_at').eq('lot_id', id).order('recorded_at', { ascending: false }),
-    supabase.from('lot_events').select('event_type, occurred_at, seq').eq('lot_id', id).order('seq'),
+    supabase.from('lot_events').select('event_type, occurred_at, seq, payload').eq('lot_id', id).order('seq'),
     supabase.rpc('verify_lot_chain', { p_lot: id }),
   ]);
   // Latest value per attribute.
@@ -55,12 +56,17 @@ export default async function LotPage({ params }: { params: Promise<{ id: string
 
       <div className="card">
         <div className="eyebrow">{tt('custody_h')}</div>
-        {(events ?? []).map((e, i) => (
-          <div className="cap" key={i}>
-            <span style={{ fontWeight: 600 }}>{e.event_type}</span>
-            <span style={{ color: 'var(--ink-3)', fontSize: '.82rem' }}>#{e.seq} · {new Date(e.occurred_at).toISOString().slice(0, 10)}</span>
-          </div>
-        ))}
+        {(events ?? []).map((e, i) => {
+          const note = (e.payload as { note?: string } | null)?.note;
+          return (
+            <div className="cap" key={i}>
+              <span style={{ fontWeight: 600 }}>{e.event_type}{note ? <span style={{ color: 'var(--ink-3)', fontWeight: 400 }}> · {note}</span> : null}</span>
+              <span style={{ color: 'var(--ink-3)', fontSize: '.82rem' }}>#{e.seq} · {new Date(e.occurred_at).toISOString().slice(0, 10)}</span>
+            </div>
+          );
+        })}
+        <p className="cap" style={{ fontSize: '.8rem', color: 'var(--ink-3)', marginTop: 6 }}>{tt('processing_hint')}</p>
+        <AddCustodyEvent lotId={id} locale={locale} />
       </div>
     </main>
   );

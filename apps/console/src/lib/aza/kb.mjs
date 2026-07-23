@@ -278,6 +278,21 @@ export const APP = {
     what_en: 'The operator morning surface: what is blocking each consignment right now, most urgent first. It ranks a repatriation past the BEAC window (critical), a window closing soon, an open settlement discrepancy, and overdue tasks. It is a rebuildable projection over the spine, scoped to the tenant.',
     what_fr: 'La surface du matin de l operateur: ce qui bloque chaque expedition maintenant, le plus urgent d abord. Elle classe un rapatriement hors delai BEAC (critique), une fenetre bientot close, un ecart de reglement ouvert et les taches en retard. C est une projection reconstructible sur la colonne vertebrale, limitee au locataire.',
   },
+  processing: {
+    label_en: 'Post-harvest processing', label_fr: 'Traitement apres recolte',
+    what_en: 'Between harvest and export a lot is processed: fermentation, drying, sorting and grading, bagging, storage, transport. Each of these is a critical control point for quality (Cameroon exports only Grade I and II). Wouri records each step as a custody event on the lot, sealed into the tamper-evident chain, so the file shows the whole journey from the plot, not just harvest and shipment.',
+    what_fr: 'Entre la recolte et l export, un lot est traite: fermentation, sechage, tri et classement, ensachage, stockage, transport. Chacune est un point de controle critique pour la qualite (le Cameroun n exporte que les grades I et II). Wouri enregistre chaque etape comme un evenement de custody sur le lot, scelle dans la chaine inviolable, pour que le dossier montre tout le parcours depuis la parcelle, pas seulement la recolte et l expedition.',
+  },
+  events: {
+    label_en: 'Alerts and the reactive layer', label_fr: 'Alertes et couche reactive',
+    what_en: 'The registry reacts, it does not just record. When a document is issued, a discrepancy is raised, a settlement is repatriated, or a shipment moves, a database trigger drops a notification for the organization, delivered live to the alerts inbox and the bell on the nav. It is in-app and free, no external service, and scoped to the tenant so only that org sees its own alerts.',
+    what_fr: 'Le registre reagit, il ne fait pas qu enregistrer. Quand un document est emis, un ecart souleve, un reglement rapatrie ou une expedition avance, un declencheur de base de donnees depose une alerte pour l organisation, livree en direct a la boite d alertes et a la cloche du menu. C est integre et gratuit, sans service externe, et limite au locataire pour que chaque organisation ne voie que ses alertes.',
+  },
+  auto_checks: {
+    label_en: 'Agentic auto-checks', label_fr: 'Verifications automatiques agentiques',
+    what_en: 'Wouri watches itself with SQL-based auto-checks: each check is a stored query that looks for a problem the readiness board does not (a shipment sailed with no settlement instrument so the repatriation clock never starts, an EU consignment with a document issued but no DDS, an open lot with no quality). A scheduled runner opens a finding for anything new, re-affirms what is still true, and auto-resolves what is fixed, dropping an alert on each new finding. The check SQL is platform-curated and only a platform admin can change it.',
+    what_fr: 'Wouri se surveille avec des verifications automatiques en SQL: chaque verification est une requete stockee qui cherche un probleme que le tableau de preparation ne voit pas (une expedition appareillee sans instrument de reglement, donc l horloge de rapatriement ne demarre pas; une expedition UE avec un document emis mais sans DDS; un lot ouvert sans qualite). Un executeur planifie ouvre un constat pour toute nouveaute, reconfirme ce qui reste vrai et resout automatiquement ce qui est corrige, en deposant une alerte a chaque nouveau constat. Le SQL des verifications est cure par la plateforme et seul un administrateur plateforme peut le modifier.',
+  },
   dual_rail: {
     label_en: 'The dual-rail moat', label_fr: 'Le double rail, l avantage',
     what_en: 'The dual-rail consignment, EUDR and CITES on one lot, is the category no competitor serves. A CITES-listed lot is identity-preserved and can never be mass-balanced.',

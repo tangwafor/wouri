@@ -62,6 +62,40 @@ EUDR guides 2026.
 - The registry stays current as effective-dated data; a real consignment file
   reconciles the bindings (ADR-0030).
 
+## The full chain, plot to paid (checked end to end)
+
+Not just tracking. The real journey and where Wouri sits:
+
+1. **Farm / plot** (origin). Modeled: origin unit + effective-dated versions +
+   evidence + the harvest event.
+2. **Post-harvest processing.** Pod opening, **fermentation, drying, sorting and
+   grading, bagging, storage**. Each is a critical control point that determines
+   quality (Cameroon exports only Grade I and II; NCCB takes a pre-shipment
+   sample). Wouri has the data model (transformations, lineage, custody events)
+   but, until now, no UI to record these steps. Closing that here.
+3. **Aggregation.** GICs pool smallholder produce. Covered by the received-after
+   -harvest entry and the supplier party; GIC pooling is an aggregation event.
+4. **Quality grading.** Modeled (quality values, ranges). The NCCB grade and
+   sample certificate flow is a gap.
+5. **Export documents** (EUR.1, phyto, VGM, quality) and **compliance references**
+   (BESC/ECTN, EUDR DDS). Modeled and issued/verifiable; checklist per destination.
+6. **Customs / GUCE single window.** Referenced; not yet integrated.
+7. **Shipping and logistics.** booked, loaded, sailed, arrived, cleared, with
+   ETD/ETA and board deadlines. Modeled.
+8. **Container arrives.** The arrived and cleared milestones. Import clearance
+   itself is the buyer's side.
+9. **Payment.** LC (UCP 600), documentary collection D/P and D/A (URC 522), open
+   account, advance. Wouri's settlement instrument kinds and the state machine
+   (presented, accepted, paid) mirror the documentary flow through the banks.
+10. **Repatriation.** The BEAC 150-day clock. Settled means repatriated, not paid.
+
+So the chain is covered plot to paid; the one modeled-but-not-recordable step was
+post-harvest processing, now added.
+
+Sources: scirp.org and ICCO Cameroon cocoa value chain; ITC West Africa
+post-harvest coffee manual; Cocoa Research Centre CCPs; trade.gov and shipping
+solutions on documentary collections and letters of credit (UCP 600, URC 522).
+
 ## Honest gaps (the next tracks)
 
 1. **Polygon capture.** The field app records a GPS point; walking the plot
