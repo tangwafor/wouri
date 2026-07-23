@@ -1,0 +1,10 @@
+# Wouri console on Netlify (monorepo). Netlify reads this from the repo root; base
+# sends the build into apps/console where the Next app and its build script live.
+# The Next adapter plugin bundles the SSR functions and sets the publish dir.
+# No em-dashes.
+[build]
+  base = "apps/console"
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
