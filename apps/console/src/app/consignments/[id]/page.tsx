@@ -27,7 +27,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
   const { data: allocatedRows } = await supabase.from('consignment_lots').select('lot_id, lots(id, code)').eq('consignment_id', id);
   const allocated = (allocatedRows ?? []).map((r) => (r.lots as unknown as { id: string; code: string })).filter(Boolean);
   const allocatedIds = new Set(allocated.map((l) => l.id));
-  const { data: allLots } = await supabase.from('lots').select('id, code').order('created_at', { ascending: false });
+  const { data: allLots } = await supabase.from('lots').select('id, code, quantity_kg').order('created_at', { ascending: false });
   const available = (allLots ?? []).filter((l) => !allocatedIds.has(l.id));
 
   const { data: instrument } = await supabase

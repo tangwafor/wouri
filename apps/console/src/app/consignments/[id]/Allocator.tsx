@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase/client';
 import { t, type Locale } from '@/lib/i18n';
 
-type Lot = { id: string; code: string };
+type Lot = { id: string; code: string; quantity_kg?: number };
 
 // Allocate a tenant lot to this consignment. No em-dashes.
 export function Allocator({ orgId, consignmentId, allocated, available, locale }: {
@@ -18,7 +18,10 @@ export function Allocator({ orgId, consignmentId, allocated, available, locale }
   async function allocate() {
     if (!sel) return;
     setBusy(true);
-    await supabase.from('consignment_lots').insert({ consignment_id: consignmentId, lot_id: sel, organization_id: orgId });
+    // Carry the lot quantity so the consignment weight (and every document that
+    // depends on it) is correct.
+    const qty = available.find((l) => l.id === sel)?.quantity_kg ?? null;
+    await supabase.from('consignment_lots').insert({ consignment_id: consignmentId, lot_id: sel, organization_id: orgId, quantity_kg: qty });
     setBusy(false);
     router.refresh();
   }
