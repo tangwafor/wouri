@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import { getT } from '@/lib/locale';
 import { loadKb } from '@/lib/aza/kb-source';
+import { AppNav } from '../AppNav';
 import { CapabilityPicker } from './CapabilityPicker';
 
 async function signout() {
@@ -34,9 +35,11 @@ export default async function Home() {
 
   return (
     <main className="wrap-wide">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <h1 className="brand">{tt('app_name')}</h1>
-        <form action={signout}><button className="ghost" type="submit">{tt('signout')}</button></form>
+      <div style={{ position: 'relative' }}>
+        <AppNav current="/home" locale={locale} />
+        <form action={signout} style={{ position: 'absolute', top: 2, right: 0 }}>
+          <button className="ghost" type="submit" style={{ marginTop: 0, padding: '5px 11px', fontSize: '.85rem' }}>{tt('signout')}</button>
+        </form>
       </div>
       <div className="card">
         <div style={{ fontSize: '.8rem', color: 'var(--ink-3)' }}>{tt('your_org')}</div>

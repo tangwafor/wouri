@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import { getT } from '@/lib/locale';
 import { type Key } from '@/lib/i18n';
+import { AppNav } from '../AppNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +27,7 @@ export default async function BoardPage() {
   const { data: orgs } = await supabase.from('organizations').select('id').limit(1);
   if (!orgs?.length) redirect('/onboarding');
 
-  const { tt } = await getT();
+  const { tt, locale } = await getT();
   const { data } = await supabase
     .from('readiness_board')
     .select('kind, severity, age_days, consignment_code, detail, due_date');
@@ -35,10 +36,8 @@ export default async function BoardPage() {
 
   return (
     <main className="wrap-wide">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <h1 className="brand">{tt('board')}</h1>
-        <a className="muted" href="/home">{tt('home')}</a>
-      </div>
+      <AppNav current="/board" locale={locale} />
+      <h1 className="brand" style={{ marginBottom: 16 }}>{tt('board')}</h1>
 
       {blockers.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', color: 'var(--ink-3)' }}>{tt('board_clear')}</div>

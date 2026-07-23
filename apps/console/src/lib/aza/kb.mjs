@@ -183,6 +183,11 @@ export const APP = {
     what_en: 'Each tenant picks capabilities: what they export, compliance rails (EUDR, CITES), field capture, settlement, financing, groups. Capabilities are data, so the menu grows with no code change. Dependencies auto-enable (CITES needs timber; financing needs settlement).',
     what_fr: 'Chaque locataire choisit ses capacites: ce qu il exporte, les filieres de conformite (EUDR, CITES), la capture terrain, le reglement, le financement, les groupes. Les capacites sont des donnees; le menu grandit sans code. Les dependances s activent seules (CITES exige le bois; le financement exige le reglement).',
   },
+  origin: {
+    label_en: 'Where the chain starts', label_fr: 'Ou commence la chaine',
+    what_en: 'A tenant enters custody at one of two points, a choice not a code branch: at harvest (they own the plot, so they capture the origin unit with its geolocation and the harvest event) or after harvest (they received the lot from a supplier, so the chain starts at the receipt). For an EUDR commodity a missing plot geolocation is never blocked; it surfaces on the readiness board as an origin gap to fill before the border. This applies to every commodity, not just timber.',
+    what_fr: 'Un locataire entre dans la custody a l un des deux points, un choix et non un branchement de code: a la recolte (il possede la parcelle et capture l unite d origine avec sa geolocalisation et l evenement de recolte) ou apres la recolte (il a recu le lot d un fournisseur et la chaine commence a la reception). Pour un produit EUDR, une geolocalisation manquante n est jamais bloquante; elle apparait au tableau de preparation comme un ecart d origine a combler avant la frontiere. Vrai pour tout produit, pas seulement le bois.',
+  },
   custody: {
     label_en: 'Custody spine (tamper-evident)', label_fr: 'Chaine de custody (inviolable)',
     what_en: 'Physical custody is an append-only event stream. Each event is client-minted for offline capture, then sealed server-side into a per-lot hash chain and counter-signed onto a per-tenant chain, so history is tamper-evident and cannot be rewritten. Corrections are compensating events, never deletes.',
