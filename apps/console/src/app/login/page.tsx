@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseServer } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
+import { PasswordInput } from '../PasswordInput';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3400';
 
@@ -35,7 +36,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <label htmlFor="email">{t('email')}</label>
         <input id="email" name="email" type="email" required autoComplete="email" />
         <label htmlFor="password">{t('password')}</label>
-        <input id="password" name="password" type="password" required autoComplete="current-password" />
+        <PasswordInput id="password" name="password" required autoComplete="current-password" />
         <button type="submit">{t('login')}</button>
         <button type="submit" className="ghost" formAction={magicLink} style={{ marginLeft: 10 }}>{t('magic_link')}</button>
         {sp.e ? <p className="err">{sp.e}</p> : null}

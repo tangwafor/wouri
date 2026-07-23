@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
+import { PasswordInput } from '../PasswordInput';
 
 async function setPassword(formData: FormData) {
   'use server';
@@ -24,7 +25,7 @@ export default async function ResetPage({ searchParams }: { searchParams: Promis
       <p className="tag">{t('reset_title')}</p>
       <form action={setPassword}>
         <label htmlFor="password">{t('new_password')}</label>
-        <input id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />
+        <PasswordInput id="password" name="password" required minLength={8} autoComplete="new-password" />
         <button type="submit">{t('reset_save')}</button>
         {sp.e ? <p className="err">{sp.e}</p> : null}
       </form>

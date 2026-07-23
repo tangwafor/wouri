@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseServer } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
+import { PasswordInput } from '../PasswordInput';
 
 // Account only. The workspace (org + capabilities) is created next, on
 // /onboarding: describe the business and Aza sets it up (ADR-0028), or type a
@@ -30,7 +31,7 @@ export default async function SignupPage({ searchParams }: { searchParams: Promi
         <label htmlFor="email">{t('email')}</label>
         <input id="email" name="email" type="email" required autoComplete="email" />
         <label htmlFor="password">{t('password')}</label>
-        <input id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />
+        <PasswordInput id="password" name="password" required minLength={8} autoComplete="new-password" />
         <button type="submit">{t('signup')}</button>
         {sp.e ? <p className="err">{sp.e}</p> : null}
       </form>
