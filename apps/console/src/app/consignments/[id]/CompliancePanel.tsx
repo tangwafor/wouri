@@ -7,7 +7,7 @@ import { t, type Locale } from '@/lib/i18n';
 // EU member country codes (destination is where EUDR and EUR.1 apply).
 const EU = new Set(['DE', 'FR', 'NL', 'BE', 'IT', 'ES', 'PT', 'PL', 'SE', 'DK', 'FI', 'IE', 'AT', 'GR', 'CZ', 'RO', 'HU', 'BG', 'SK', 'HR', 'SI', 'LT', 'LV', 'EE', 'LU', 'CY', 'MT']);
 
-type Refs = { dds_reference: string | null; besc_reference: string | null; insurance_ref: string | null };
+type Refs = { dds: string | null; besc: string | null; insurance: string | null };
 
 // The export checklist and the references the operator must record: the EUDR DDS
 // number and the BESC/ECTN cargo tracking note. Destination-aware, so an
@@ -17,16 +17,19 @@ export function CompliancePanel({ orgId, consignmentId, destination, refs, docKe
 }) {
   const supabase = supabaseBrowser();
   const router = useRouter();
-  const [f, setF] = useState({ dds: refs.dds_reference ?? '', besc: refs.besc_reference ?? '', ins: refs.insurance_ref ?? '' });
+  const [f, setF] = useState({ dds: refs.dds ?? '', besc: refs.besc ?? '', ins: refs.insurance ?? '' });
   const [state, setState] = useState<'idle' | 'saving' | 'saved'>('idle');
   const isEU = EU.has((destination ?? '').toUpperCase());
   const docs = new Set(docKeys);
 
   async function save() {
     setState('saving');
-    await supabase.from('consignments').update({
-      dds_reference: f.dds || null, besc_reference: f.besc || null, insurance_ref: f.ins || null,
-    }).eq('id', consignmentId);
+    // Each reference is a row in external_references, set through the registry RPC.
+    await Promise.all([
+      supabase.rpc('set_external_reference', { p_org: orgId, p_entity_type: 'consignment', p_entity_id: consignmentId, p_kind: 'dds', p_value: f.dds }),
+      supabase.rpc('set_external_reference', { p_org: orgId, p_entity_type: 'consignment', p_entity_id: consignmentId, p_kind: 'besc', p_value: f.besc }),
+      supabase.rpc('set_external_reference', { p_org: orgId, p_entity_type: 'consignment', p_entity_id: consignmentId, p_kind: 'insurance', p_value: f.ins }),
+    ]);
     setState('saved'); setTimeout(() => setState('idle'), 1400);
     router.refresh();
   }

@@ -23,8 +23,13 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
 
   const { locale, tt } = await getT();
   const { data: con } = await supabase
-    .from('consignments').select('id, code, destination_country, status, dds_reference, besc_reference, insurance_ref, parties:buyer_party_id(name)').eq('id', id).maybeSingle();
+    .from('consignments').select('id, code, destination_country, status, parties:buyer_party_id(name)').eq('id', id).maybeSingle();
   if (!con) redirect('/consignments');
+
+  // References now live in external_references, keyed on a registry of reference kinds.
+  const { data: refRows } = await supabase.from('external_references').select('kind, value').eq('entity_type', 'consignment').eq('entity_id', id);
+  const refMap = new Map((refRows ?? []).map((r) => [r.kind, r.value]));
+  const refs = { dds: refMap.get('dds') ?? null, besc: refMap.get('besc') ?? null, insurance: refMap.get('insurance') ?? null };
 
   const { data: allocatedRows } = await supabase.from('consignment_lots').select('lot_id, lots(id, code)').eq('consignment_id', id);
   const allocated = (allocatedRows ?? []).map((r) => (r.lots as unknown as { id: string; code: string })).filter(Boolean);
@@ -55,8 +60,7 @@ export default async function ConsignmentPage({ params }: { params: Promise<{ id
 
       <Allocator orgId={org.id} consignmentId={id} allocated={allocated} available={available} locale={locale} />
       <CompliancePanel orgId={org.id} consignmentId={id} destination={con.destination_country}
-        refs={{ dds_reference: con.dds_reference, besc_reference: con.besc_reference, insurance_ref: con.insurance_ref }}
-        docKeys={docKeys} eudr={eudr} locale={locale} />
+        refs={refs} docKeys={docKeys} eudr={eudr} locale={locale} />
       <ShipmentPanel orgId={org.id} consignmentId={id} shipment={shipment ?? null} locale={locale} />
       <DocumentsPanel consignmentId={id} documents={documents ?? []} locale={locale} />
       <SettlementPanel orgId={org.id} consignmentId={id} instrument={instrument ?? null} clock={clock} locale={locale} />

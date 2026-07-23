@@ -39,14 +39,20 @@ try {
   let gaps = (await a.from('readiness_board').select('kind, consignment_code').eq('kind', 'compliance_gap')).data ?? [];
   ok('a loaded shipment with no BESC is flagged on the board', gaps.some((g) => g.consignment_code === 'CN-C1'));
 
-  // Record the cargo tracking note.
-  await a.from('consignments').update({ besc_reference: 'ECTN-CM-2026-0001' }).eq('id', con.id);
+  // Record the cargo tracking note as an external reference (registry-keyed).
+  await a.rpc('set_external_reference', { p_org: orgA, p_entity_type: 'consignment', p_entity_id: con.id, p_kind: 'besc', p_value: 'ECTN-CM-2026-0001' });
   gaps = (await a.from('readiness_board').select('kind, consignment_code').eq('kind', 'compliance_gap')).data ?? [];
   ok('recording the BESC clears the compliance gap', !gaps.some((g) => g.consignment_code === 'CN-C1'));
 
-  // The reference is stored on the consignment.
-  const c = (await a.from('consignments').select('besc_reference, dds_reference').eq('id', con.id).single()).data;
-  ok('the BESC reference is stored', c.besc_reference === 'ECTN-CM-2026-0001');
+  // The reference is stored in external_references, keyed on the reference kind.
+  const c = (await a.from('external_references').select('kind, value').eq('entity_type', 'consignment').eq('entity_id', con.id).eq('kind', 'besc').single()).data;
+  ok('the BESC reference is stored in external_references', c.value === 'ECTN-CM-2026-0001');
+
+  // Clearing it (empty value) removes the row and reopens the gap.
+  await a.rpc('set_external_reference', { p_org: orgA, p_entity_type: 'consignment', p_entity_id: con.id, p_kind: 'besc', p_value: '' });
+  const cleared = (await a.from('external_references').select('id').eq('entity_type', 'consignment').eq('entity_id', con.id).eq('kind', 'besc')).data ?? [];
+  ok('clearing the reference removes the row', cleared.length === 0);
+  await a.rpc('set_external_reference', { p_org: orgA, p_entity_type: 'consignment', p_entity_id: con.id, p_kind: 'besc', p_value: 'ECTN-CM-2026-0001' });
 
   await cleanup();
   console.log(`\ncompliance-selftest: ${pass} passed, ${fail} failed.`);
