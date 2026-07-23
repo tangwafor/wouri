@@ -41,6 +41,9 @@
     "gate:security": "node scripts/security-check.mjs",
     "gate:stress": "node scripts/stress-test.mjs",
     "gate:ui": "node scripts/ui-qa-sweep.mjs",
+    "gate:e2e": "node scripts/run-e2e.mjs",
+    "e2e:clean": "node scripts/e2e-cleanup.mjs --check",
+    "selftest:staleness": "node scripts/staleness-selftest.mjs",
     "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress"
   },
   "devDependencies": {
