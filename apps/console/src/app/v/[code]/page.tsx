@@ -5,7 +5,8 @@
 // design. node:crypto runs server-side, so this is a server component. No em-dashes.
 import { supabaseServer } from '@/lib/supabase/server';
 import { verifyCredential } from '@/lib/proof/vc.mjs';
-import { t, type Key } from '@/lib/i18n';
+import { type Key } from '@/lib/i18n';
+import { getT } from '@/lib/locale';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,12 +41,13 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
   const titleKey: Record<Verdict, Key> = { valid: 'verify_valid', revoked: 'verify_revoked', invalid: 'verify_invalid', notfound: 'verify_notfound' };
   const subKey: Record<Verdict, Key> = { valid: 'verify_valid_sub', revoked: 'verify_revoked_sub', invalid: 'verify_invalid_sub', notfound: 'verify_notfound_sub' };
   const docTypeKey = (data?.template ? ('doc_' + data.template) : null) as Key | null;
+  const { tt } = await getT();
 
   return (
     <main style={{ maxWidth: 560, margin: '0 auto', padding: '40px 20px', fontFamily: 'var(--serif)' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 28 }}>
         <span style={{ fontFamily: 'var(--serif)', color: 'var(--anchor)', fontSize: '1.5rem', fontWeight: 700 }}>Wouri</span>
-        <span style={{ fontFamily: 'var(--sans)', color: 'var(--ink-3)', fontSize: '.8rem' }}>{t('verify_title')}</span>
+        <span style={{ fontFamily: 'var(--sans)', color: 'var(--ink-3)', fontSize: '.8rem' }}>{tt('verify_title')}</span>
       </div>
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--rule)', borderRadius: 16, overflow: 'hidden' }}>
@@ -54,8 +56,8 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
             {MARK[verdict]}
           </span>
           <div>
-            <div style={{ fontSize: '1.35rem', fontWeight: 700, lineHeight: 1.15 }}>{t(titleKey[verdict])}</div>
-            <div style={{ fontFamily: 'var(--sans)', fontSize: '.85rem', opacity: .9, marginTop: 4 }}>{t(subKey[verdict])}</div>
+            <div style={{ fontSize: '1.35rem', fontWeight: 700, lineHeight: 1.15 }}>{tt(titleKey[verdict])}</div>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: '.85rem', opacity: .9, marginTop: 4 }}>{tt(subKey[verdict])}</div>
           </div>
         </div>
 
@@ -64,8 +66,8 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
             <dl style={{ margin: 0, display: 'grid', gridTemplateColumns: 'minmax(120px, 40%) 1fr', rowGap: 10, columnGap: 16 }}>
               {docTypeKey ? (
                 <>
-                  <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{t('verify_type')}</dt>
-                  <dd style={{ margin: 0, fontWeight: 600 }}>{t(docTypeKey)}</dd>
+                  <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{tt('verify_type')}</dt>
+                  <dd style={{ margin: 0, fontWeight: 600 }}>{tt(docTypeKey)}</dd>
                 </>
               ) : null}
               {Object.entries(subject).map(([k, val]) => (
@@ -74,17 +76,17 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
                   <dd style={{ margin: 0, fontVariantNumeric: 'tabular-nums' }}>{val === null || val === undefined ? '-' : String(val)}</dd>
                 </div>
               ))}
-              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{t('verify_issuer')}</dt>
+              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{tt('verify_issuer')}</dt>
               <dd style={{ margin: 0 }}>{String(data.vc?.issuer ?? '-')}</dd>
-              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{t('verify_issued')}</dt>
+              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{tt('verify_issued')}</dt>
               <dd style={{ margin: 0 }}>{data.issued_at ? new Date(data.issued_at).toISOString().slice(0, 10) : '-'}</dd>
               {data.revoked_at ? (
                 <>
-                  <dt style={{ color: 'var(--alert)', fontSize: '.85rem' }}>{t('verify_revoked_on')}</dt>
+                  <dt style={{ color: 'var(--alert)', fontSize: '.85rem' }}>{tt('verify_revoked_on')}</dt>
                   <dd style={{ margin: 0, color: 'var(--alert)' }}>{new Date(data.revoked_at).toISOString().slice(0, 10)} ({data.revoked_reason})</dd>
                 </>
               ) : null}
-              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{t('verify_code')}</dt>
+              <dt style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{tt('verify_code')}</dt>
               <dd style={{ margin: 0, fontFamily: 'var(--mono, monospace)' }}>{code}</dd>
             </dl>
           </div>
@@ -92,7 +94,7 @@ export default async function VerifyPage({ params }: { params: Promise<{ code: s
       </div>
 
       <p style={{ fontFamily: 'var(--sans)', color: 'var(--ink-3)', fontSize: '.8rem', marginTop: 18, textAlign: 'center' }}>
-        {t('verify_offline')}
+        {tt('verify_offline')}
       </p>
     </main>
   );

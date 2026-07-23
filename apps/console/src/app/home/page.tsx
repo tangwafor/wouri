@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/server';
-import { t } from '@/lib/i18n';
+import { getT } from '@/lib/locale';
 import { CapabilityPicker } from './CapabilityPicker';
 
 async function signout() {
@@ -27,25 +27,27 @@ export default async function Home() {
     .from('organization_capabilities')
     .select('capability_key');
   const enabled = new Set((enabledRows ?? []).map((r) => r.capability_key));
+  const { locale, tt } = await getT();
 
   return (
     <main className="wrap-wide">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <h1 className="brand">{t('app_name')}</h1>
-        <form action={signout}><button className="ghost" type="submit">{t('signout')}</button></form>
+        <h1 className="brand">{tt('app_name')}</h1>
+        <form action={signout}><button className="ghost" type="submit">{tt('signout')}</button></form>
       </div>
       <div className="card">
-        <div style={{ fontSize: '.8rem', color: 'var(--ink-3)' }}>{t('your_org')}</div>
+        <div style={{ fontSize: '.8rem', color: 'var(--ink-3)' }}>{tt('your_org')}</div>
         <div style={{ fontSize: '1.2rem', fontWeight: 650 }}>{org.legal_name ?? org.slug}</div>
         <div style={{ color: 'var(--ink-3)', fontSize: '.85rem' }}>{org.slug} &middot; {org.status}</div>
       </div>
       <div className="card">
-        <h2 style={{ margin: '0 0 2px', fontSize: '1.05rem' }}>{t('capabilities')}</h2>
-        <p style={{ margin: 0, color: 'var(--ink-3)', fontSize: '.9rem' }}>{t('cap_hint')}</p>
+        <h2 style={{ margin: '0 0 2px', fontSize: '1.05rem' }}>{tt('capabilities')}</h2>
+        <p style={{ margin: 0, color: 'var(--ink-3)', fontSize: '.9rem' }}>{tt('cap_hint')}</p>
         <CapabilityPicker
           orgId={org.id}
           catalog={catalog ?? []}
           initiallyEnabled={Array.from(enabled)}
+          locale={locale}
         />
       </div>
     </main>

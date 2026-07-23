@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseServer } from '@/lib/supabase/server';
-import { t } from '@/lib/i18n';
+import { getT } from '@/lib/locale';
 import { PasswordInput } from '../PasswordInput';
 
 // Account only. The workspace (org + capabilities) is created next, on
@@ -23,19 +23,20 @@ async function signup(formData: FormData) {
 
 export default async function SignupPage({ searchParams }: { searchParams: Promise<{ e?: string }> }) {
   const sp = await searchParams;
+  const { tt } = await getT();
   return (
     <main className="wrap">
-      <h1 className="brand">{t('app_name')}</h1>
-      <p className="tag">{t('tagline')}</p>
+      <h1 className="brand">{tt('app_name')}</h1>
+      <p className="tag">{tt('tagline')}</p>
       <form action={signup}>
-        <label htmlFor="email">{t('email')}</label>
+        <label htmlFor="email">{tt('email')}</label>
         <input id="email" name="email" type="email" required autoComplete="email" />
-        <label htmlFor="password">{t('password')}</label>
+        <label htmlFor="password">{tt('password')}</label>
         <PasswordInput id="password" name="password" required minLength={8} autoComplete="new-password" />
-        <button type="submit">{t('signup')}</button>
+        <button type="submit">{tt('signup')}</button>
         {sp.e ? <p className="err">{sp.e}</p> : null}
       </form>
-      <p className="muted">{t('have_account')} ? <Link href="/login">{t('login')}</Link></p>
+      <p className="muted">{tt('have_account')} ? <Link href="/login">{tt('login')}</Link></p>
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseServer } from '@/lib/supabase/server';
-import { t } from '@/lib/i18n';
+import { getT } from '@/lib/locale';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3400';
 
@@ -16,20 +16,21 @@ async function requestReset(formData: FormData) {
 
 export default async function ForgotPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {
   const sp = await searchParams;
+  const { tt } = await getT();
   return (
     <main className="wrap">
-      <h1 className="brand">{t('app_name')}</h1>
-      <p className="tag">{t('forgot_title')}</p>
+      <h1 className="brand">{tt('app_name')}</h1>
+      <p className="tag">{tt('forgot_title')}</p>
       {sp.sent ? (
-        <p className="muted">{t('forgot_sent')}</p>
+        <p className="muted">{tt('forgot_sent')}</p>
       ) : (
         <form action={requestReset}>
-          <label htmlFor="email">{t('email')}</label>
+          <label htmlFor="email">{tt('email')}</label>
           <input id="email" name="email" type="email" required autoComplete="email" />
-          <button type="submit">{t('forgot_send')}</button>
+          <button type="submit">{tt('forgot_send')}</button>
         </form>
       )}
-      <p className="muted"><Link href="/login">{t('login')}</Link></p>
+      <p className="muted"><Link href="/login">{tt('login')}</Link></p>
     </main>
   );
 }

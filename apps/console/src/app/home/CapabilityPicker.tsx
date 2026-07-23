@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { supabaseBrowser } from '@/lib/supabase/client';
-import { t } from '@/lib/i18n';
+import { t, type Locale } from '@/lib/i18n';
 
 type Cap = {
   capability_key: string;
@@ -15,8 +15,8 @@ type Cap = {
 // organization_capabilities under the user session; RLS gates it. A prerequisite
 // is auto-enabled so the chat and click paths enforce the same dependency graph.
 export function CapabilityPicker({
-  orgId, catalog, initiallyEnabled,
-}: { orgId: string; catalog: Cap[]; initiallyEnabled: string[] }) {
+  orgId, catalog, initiallyEnabled, locale,
+}: { orgId: string; catalog: Cap[]; initiallyEnabled: string[]; locale: Locale }) {
   const [enabled, setEnabled] = useState<Set<string>>(new Set(initiallyEnabled));
   const [busy, setBusy] = useState<string | null>(null);
   const supabase = supabaseBrowser();
@@ -48,11 +48,11 @@ export function CapabilityPicker({
         const on = enabled.has(cap.capability_key);
         return (
           <div className="cap" key={cap.capability_key}>
-            <span>{cap.label_fr}</span>
+            <span>{locale === 'en' ? cap.label_en : cap.label_fr}</span>
             <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {on ? <span className="pill on">{t('enabled')}</span> : null}
+              {on ? <span className="pill on">{t('enabled', locale)}</span> : null}
               <button className="ghost" disabled={busy === cap.capability_key} onClick={() => toggle(cap)}>
-                {on ? t('disable') : t('enable')}
+                {on ? t('disable', locale) : t('enable', locale)}
               </button>
             </span>
           </div>
