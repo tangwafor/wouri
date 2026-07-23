@@ -55,7 +55,16 @@ a machine cannot see, that a person can walk it and it feels right.
 | 16 | Click **View** | A branded certificate: your name, colour, and tagline at the top; verdict **Authentic**; the fields; an **e-signature** block (Ed25519, issued date, place of issue Cameroon); a **QR**; a **Print** button. | |
 | 17 | Open the same code in a private window (no login) | It still verifies as Authentic. Verification needs no account. | |
 
-## Part 5: Settlement and the BEAC clock (guide: settlement-money)
+## Part 5: Shipment tracking (guide: shipments)
+
+| # | Do | Expected | P/F |
+|---|---|---|---|
+| S1 | On the consignment, open a Shipment: carrier, vessel, ports, ETD, ETA | The shipment appears with a milestone timeline (booked, loaded, sailed, arrived, cleared) and a Load button. | |
+| S2 | Advance the shipment: Load, then Sail | The timeline fills. The consignment status becomes ready, then shipped. | |
+| S3 | Set an ETD within 7 days on a still-booked shipment, then open the board | A "Departure closing in" warning appears for that consignment. | |
+| S4 | A shipment past its ETA and not yet arrived (you can leave one sailed) | The board and dashboard flag "Arrival overdue". | |
+
+## Part 6: Settlement and the BEAC clock (guide: settlement-money)
 
 | # | Do | Expected | P/F |
 |---|---|---|---|
@@ -63,7 +72,7 @@ a machine cannot see, that a person can walk it and it feels right.
 | 19 | Try the steps out of order (there should be only one next button) | You can only advance in order: present, then accept, then pay, then repatriate. | |
 | 20 | Advance to **repatriated** | Status reads repatriated; the clock is no longer overdue. | |
 
-## Part 6: Cockpit, dashboard, board (guide: cockpit-dashboard-board)
+## Part 7: Cockpit, dashboard, board (guide: cockpit-dashboard-board)
 
 | # | Do | Expected | P/F |
 |---|---|---|---|

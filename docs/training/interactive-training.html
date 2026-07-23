@@ -116,7 +116,7 @@
 
   <section class="block">
     <h2><span class="num">Knowledge check</span></h2>
-    <p>Answer all six. You need <b>five correct (80%)</b> to pass. You can retry.</p>
+    <p>Answer them all. You need <b>80%</b> to pass. You can retry.</p>
     <div class="quiz" id="quiz"></div>
     <div style="margin-top:16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
       <button class="btn" id="grade">Check my answers</button>
@@ -173,6 +173,10 @@
       do:"Open Consignments, create one (code, buyer, destination), open it, and allocate your lot.",
       exp:"The lot is allocated and carries its weight to the consignment.",
       why:"A consignment is the shipment: the lots you send to one buyer." },
+    { t:"Track the shipment", role:"Export manager, logistics",
+      do:"On the consignment, open a Shipment: carrier, vessel, ports, ETD and ETA. Advance it in order: booked, loaded, sailed, arrived, cleared.",
+      exp:"The milestone timeline fills. Loading marks the consignment ready; sailing marks it shipped. The board flags a departure closing in or an overdue arrival.",
+      why:"The board tracks the goods at sea, so you never miss a sailing or lose a container." },
     { t:"Issue the documents", role:"Documentation officer",
       do:"In the Documents panel, press Issue on EUR.1 and the quality certificate.",
       exp:"Issued, each with a verification code. An unbound field or a weight mismatch is refused with a reason.",
@@ -200,7 +204,8 @@
     { q:"Who can verify a Wouri document?", a:["Only the exporter","Only Wouri staff","Anyone, offline, with the public key"], c:2 },
     { q:"What blocks issuing a document?", a:["An unbound required field or a weight mismatch","A slow connection","A missing logo"], c:0 },
     { q:"Whose identity leads on the certificate?", a:["Wouri's","The exporter's, with Wouri as verifier","The buyer's"], c:1 },
-    { q:"If a market API is briefly down, the cockpit shows...", a:["A blank","The last known values, marked cached","An error page"], c:1 }
+    { q:"If a market API is briefly down, the cockpit shows...", a:["A blank","The last known values, marked cached","An error page"], c:1 },
+    { q:"When does a shipment blocker appear on the board?", a:["Never","When departure is closing in and it is still booked, or the ETA has passed unarrived","Only after it is cleared"], c:1 }
   ];
   var KEY = "wouri_training_v1";
   var state = { done:{}, passed:false, name:"" };
@@ -257,9 +262,9 @@
       if(sel){ var v = parseInt(sel.value,10); if(v===item.c){ score++; } else {
         var wrongEl = document.querySelector('.opt[data-q="'+qi+'"][data-o="'+v+'"]'); if(wrongEl) wrongEl.classList.add("wrong"); } }
     });
-    var pass = score >= 5;
+    var pass = score >= Math.ceil(QUIZ.length * 0.8);
     var r = document.getElementById("result");
-    r.textContent = score + " / 6 correct. " + (pass ? "Passed. Issue your certificate below." : "Not yet, review and retry.");
+    r.textContent = score + " / " + QUIZ.length + " correct. " + (pass ? "Passed. Issue your certificate below." : "Not yet, review and retry.");
     r.style.color = pass ? "var(--good)" : "var(--alert)";
     state.passed = pass; save();
     document.getElementById("issue").disabled = !pass;
