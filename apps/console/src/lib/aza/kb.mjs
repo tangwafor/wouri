@@ -318,6 +318,26 @@ export const APP = {
     what_en: 'Several organizations can join a group (a holding, a cooperative union, or a group-certification scheme) under one coordinator, toward a shared group certificate. Membership is opt-in and consented: a coordinator invites, and the member org own admin accepts. No organization is added by force, and each sees only the group it belongs to.',
     what_fr: 'Plusieurs organisations peuvent rejoindre un groupe (une holding, une union de cooperatives ou un schema de certification de groupe) sous un coordinateur, vers un certificat de groupe partage. L adhesion est volontaire et consentie: un coordinateur invite, et l administrateur de l organisation membre accepte. Aucune organisation n est ajoutee de force, et chacune ne voit que le groupe auquel elle appartient.',
   },
+  anchoring: {
+    label_en: 'Merkle anchoring', label_fr: 'Ancrage Merkle',
+    what_en: 'The server periodically folds the issued document hashes into a single Merkle root and publishes a signed checkpoint (the Certificate Transparency model). A third party can then prove, offline, that a specific document was included in a published root, and the document cannot be back-dated or quietly removed without changing that root. The root is Ed25519-signed with the same server key that signs documents, and the inclusion proof is rebuilt from the append-only document set.',
+    what_fr: 'Le serveur replie periodiquement les empreintes des documents emis en une seule racine Merkle et publie un point de controle signe (le modele de la transparence des certificats). Un tiers peut alors prouver, hors ligne, qu un document precis figurait dans une racine publiee, et le document ne peut etre antidate ni retire discretement sans changer cette racine. La racine est signee en Ed25519 avec la meme cle serveur que les documents, et la preuve d inclusion est reconstruite depuis l ensemble append-only.',
+  },
+  human_signatures: {
+    label_en: 'Human signatures', label_fr: 'Signatures humaines',
+    what_en: 'Beyond the machine signature on a document, the field needs human attestations: a producer thumbprint on a purchase receipt, a driver accepting a load, a supervisor sealing a container. Each is recorded with who signed, in what role, by what method, when, and where, and a hash of the captured signature (never raw biometrics). A signature on a lot is sealed into the tamper-evident lot chain. Note: this is a consent mark with strong context, not biometric identity matching.',
+    what_fr: 'Au-dela de la signature machine sur un document, le terrain a besoin d attestations humaines: l empreinte d un producteur sur un recu d achat, un chauffeur acceptant un chargement, un superviseur scellant un conteneur. Chacune est enregistree avec qui a signe, dans quel role, par quelle methode, quand et ou, et une empreinte de la signature captee (jamais la biometrie brute). Une signature sur un lot est scellee dans la chaine inviolable du lot. A noter: c est une marque de consentement richement contextualisee, pas une correspondance biometrique d identite.',
+  },
+  eudr_risk: {
+    label_en: 'EUDR risk assessment', label_fr: 'Evaluation du risque EUDR',
+    what_en: 'EUDR (Article 10) requires a risk assessment per plot: whether it is deforestation-free against a named dataset and its version, whether production was after the cutoff, the legality basis, and a resulting risk level (Cameroon is Standard). Wouri records that assessment against the origin, with the dataset version so a stale assessment is visible, and flags an EUDR lot whose origin has no assessment or a high-risk one.',
+    what_fr: 'L EUDR (article 10) exige une evaluation du risque par parcelle: son caractere sans deforestation face a un jeu de donnees nomme et sa version, une production apres la date butoir, la base de legalite et un niveau de risque (le Cameroun est Standard). Wouri enregistre cette evaluation sur l origine, avec la version du jeu de donnees pour rendre visible une evaluation perimee, et signale un lot EUDR dont l origine n a pas d evaluation ou en a une a haut risque.',
+  },
+  media: {
+    label_en: 'Media (hash the original first)', label_fr: 'Medias (empreinte de l original d abord)',
+    what_en: 'Photos and scans are captured against a named profile from the registry (dimensions, format, quality, purpose), and the ORIGINAL is hashed before any processing. So a resized or recompressed image still commits to the untouched original, and a media record cannot be created without that original hash. Media never blocks a record; it syncs on its own queue.',
+    what_fr: 'Les photos et scans sont captes selon un profil nomme du registre (dimensions, format, qualite, usage), et l ORIGINAL est hache avant tout traitement. Ainsi une image redimensionnee ou recompressee engage toujours l original intact, et un enregistrement media ne peut etre cree sans cette empreinte de l original. Les medias ne bloquent jamais un enregistrement; ils se synchronisent sur leur propre file.',
+  },
   dual_rail: {
     label_en: 'The dual-rail moat', label_fr: 'Le double rail, l avantage',
     what_en: 'The dual-rail consignment, EUDR and CITES on one lot, is the category no competitor serves. A CITES-listed lot is identity-preserved and can never be mass-balanced.',

@@ -119,24 +119,37 @@ An external architecture review found real drift from the founding rule. Fixed:
 - **Guardrails**: the regulatory-literal gate is a real hard failure, an every-table
   RLS-coverage gate runs each build, and board thresholds are registry figures.
 
+## Closed in the second review pass (2026-07)
+
+- **Merkle anchoring** (0038): a document proves inclusion in a published, signed
+  checkpoint, verified offline; it cannot be back-dated or removed silently.
+- **Human signatures** (0039): producer thumbprint, driver, supervisor, with time
+  and location, sealed into the lot chain.
+- **EUDR Article 10 risk record** (0040): per-plot assessment with dataset version;
+  auto-checks for a missing or high-risk assessment.
+- **image_profiles + hash-before-processing** (0041): the original is committed
+  before any resize.
+- **The standards gate**: TATECH_STANDARDS.md conformance table, `security-check`,
+  `stress-test` (quota lock + chain integrity under concurrency), and the Playwright
+  `ui-qa-sweep`.
+
 ## Honest gaps (the next tracks)
 
-1. **Polygon capture in the field.** The server now computes area from a polygon,
-   but the field app still records a GPS point; walking the boundary to a polygon
-   is the remaining field-side EUDR step.
-2. **Legality and deforestation-free evidence.** The protected-area intersection
-   mechanism exists; land titles/permits as origin evidence and a real satellite /
-   land-use dataset are not yet imported.
-3. **Formal EUDR risk assessment record** (Article 10) and the DDS submission
-   itself (we capture the reference, not the TRACES filing).
-4. **The rest of the GUCE set**: SGS declaration, NCCB pre-liquidation, export
-   declaration + licence, ANOR/PECAE CoC, packing certificate as first-class
-   documents (each is now a few binding rows, not a code change).
-5. **Single-window integration** (e-GUCE, CAMCIS, TRACES NT) so references flow
-   both ways rather than being recorded by hand.
-6. **EORI** and full supplier/buyer contact records for the DDS.
-7. **Real CITES quota and protected-area data.** The mechanisms are enforced; the
-   figures and boundaries are a sourced import.
+1. **Polygon capture in the field.** The server computes area from a polygon, but
+   the field app still records a GPS point; walking the boundary to a polygon is the
+   remaining field-side EUDR step.
+2. **Real datasets, not mechanisms.** The EUDR risk record, protected-area
+   intersection, and CITES quota are all enforced, but the actual land-use dataset,
+   protected-area boundaries, and national quota figures are a sourced import.
+3. **The DDS submission itself** (we capture the reference and the risk record, not
+   the TRACES filing) and the rest of the GUCE set as first-class documents (each is
+   now a few binding rows, not a code change).
+4. **Single-window integration** (e-GUCE, CAMCIS, TRACES NT), **EORI**, and full
+   supplier/buyer contact records for the DDS.
+5. **Biometric identity matching** for thumbprints (today it is a strong consent
+   mark, not a 1:1 fingerprint match; that is a separate hardware + privacy project).
+6. **A real consignment file** to reconcile the document bindings against (ADR-0030),
+   a production Supabase project, and the full per-role RBAC matrix.
 
-None of these block the operator today; they are the roadmap to end-to-end
-compliance, and each is data or a capability, not a rebuild.
+None of these block the operator today; they are the roadmap, and each is data,
+a dataset import, or a capability, not a rebuild.
