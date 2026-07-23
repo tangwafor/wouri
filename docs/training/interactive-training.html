@@ -1,0 +1,287 @@
+<title>Wouri Interactive Training</title>
+<style>
+  :root{
+    --paper:#f4f1ea; --surface:#fffefb; --surface-2:#faf7f0;
+    --ink:#14120d; --ink-2:#443f34; --ink-3:#857d6c;
+    --rule:#e4e0d3; --anchor:#0d4f47; --anchor-2:#0a635a; --on-anchor:#f6f4ee;
+    --gold:#a9762a; --alert:#a11f1c; --good:#0d4f47;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --shadow:0 1px 2px rgba(20,18,13,.03),0 8px 26px rgba(20,18,13,.05);
+  }
+  @media (prefers-color-scheme:dark){ :root{
+    --paper:#0d1211; --surface:#141c1a; --surface-2:#101715; --ink:#eae6db; --ink-2:#aeb4a9; --ink-3:#7c8479;
+    --rule:#25302b; --anchor:#5fb3a6; --anchor-2:#7cc7ba; --on-anchor:#0d1211; --gold:#d0a45a; --alert:#e88a80; --good:#5fb3a6;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.3); } }
+  :root[data-theme="dark"]{ --paper:#0d1211; --surface:#141c1a; --surface-2:#101715; --ink:#eae6db; --ink-2:#aeb4a9;
+    --ink-3:#7c8479; --rule:#25302b; --anchor:#5fb3a6; --anchor-2:#7cc7ba; --on-anchor:#0d1211; --gold:#d0a45a; --alert:#e88a80; --good:#5fb3a6; }
+  :root[data-theme="light"]{ --paper:#f4f1ea; --surface:#fffefb; --ink:#14120d; --anchor:#0d4f47; --gold:#a9762a; --good:#0d4f47; }
+
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 20px 90px; }
+  h1,h2,h3{ font-family:var(--serif); font-weight:700; letter-spacing:-.01em; line-height:1.15; }
+  code{ font-family:var(--mono); font-size:.88em; background:var(--surface-2); padding:1px 5px; border-radius:5px; }
+  button{ font-family:var(--sans); cursor:pointer; }
+
+  /* progress bar */
+  .topbar{ position:sticky; top:0; z-index:10; background:color-mix(in srgb,var(--paper) 88%,transparent); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule); padding:10px 20px; }
+  .topbar .inner{ max-width:720px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+  .topbar .name{ font-family:var(--serif); font-weight:700; color:var(--anchor); font-size:1.1rem; }
+  .bar{ flex:1; height:8px; background:var(--surface-2); border:1px solid var(--rule); border-radius:100px; overflow:hidden; }
+  .bar > i{ display:block; height:100%; width:0; background:var(--anchor); transition:width .35s ease; }
+  .pct{ font-variant-numeric:tabular-nums; font-size:.8rem; color:var(--ink-3); min-width:34px; text-align:right; }
+
+  .cover{ text-align:center; padding:44px 0 20px; border-bottom:1px solid var(--rule); }
+  .cover .mark{ font-family:var(--serif); font-size:3.2rem; color:var(--anchor); margin:12px 0 0; line-height:1; }
+  .cover .sub{ color:var(--ink-2); max-width:34ch; margin:6px auto 0; }
+  .kicker{ text-transform:uppercase; letter-spacing:.3em; font-size:.68rem; color:var(--gold); font-weight:700; }
+
+  .lead{ font-size:1.06rem; color:var(--ink-2); }
+  .stepwrap{ margin-top:26px; }
+  .step{ background:var(--surface); border:1px solid var(--rule); border-radius:14px; margin:12px 0; box-shadow:var(--shadow); overflow:hidden; }
+  .step > .head{ display:flex; gap:14px; align-items:center; padding:16px 18px; cursor:pointer; user-select:none; }
+  .step .dot{ width:30px; height:30px; border-radius:50%; border:2px solid var(--rule); flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-weight:700; color:var(--ink-3); font-size:.9rem; transition:.2s; }
+  .step.done .dot{ background:var(--anchor); border-color:var(--anchor); color:var(--on-anchor); }
+  .step .t{ flex:1; }
+  .step .t b{ font-size:1.05rem; }
+  .step .t .role{ font-size:.76rem; color:var(--ink-3); }
+  .step .chev{ color:var(--ink-3); transition:transform .2s; }
+  .step.open .chev{ transform:rotate(90deg); }
+  .step .body{ display:none; padding:2px 18px 18px 62px; }
+  .step.open .body{ display:block; }
+  .step .body p{ margin:8px 0; } .step .body .lbl{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:700; margin-top:12px; }
+  .step .mark-btn{ margin-top:14px; padding:8px 16px; border:1px solid var(--anchor); border-radius:9px; background:transparent; color:var(--anchor-2); font-weight:600; }
+  .step.done .mark-btn{ background:var(--anchor); color:var(--on-anchor); border-color:var(--anchor); }
+  .note{ border-left:3px solid var(--gold); background:var(--surface-2); padding:10px 14px; border-radius:0 10px 10px 0; margin:12px 0; font-size:.93rem; }
+  .note b{ color:var(--anchor-2); }
+
+  section.block{ padding-top:40px; }
+  .num{ color:var(--gold); font-weight:700; font-family:var(--serif); }
+
+  /* quiz */
+  .quiz{ background:var(--surface); border:1px solid var(--rule); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); }
+  .q{ margin:16px 0; padding-bottom:14px; border-bottom:1px solid var(--rule); }
+  .q:last-of-type{ border-bottom:0; }
+  .q p{ font-weight:600; margin:0 0 8px; }
+  .opt{ display:block; padding:8px 12px; border:1px solid var(--rule); border-radius:9px; margin:6px 0; cursor:pointer; transition:.12s; }
+  .opt:hover{ background:var(--surface-2); }
+  .opt input{ margin-right:9px; }
+  .opt.correct{ border-color:var(--good); background:color-mix(in srgb,var(--good) 12%,transparent); }
+  .opt.wrong{ border-color:var(--alert); background:color-mix(in srgb,var(--alert) 12%,transparent); }
+  .btn{ padding:11px 20px; border:0; border-radius:10px; background:var(--anchor); color:var(--on-anchor); font-weight:650; font-size:1rem; }
+  .btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .result{ margin-top:14px; font-weight:600; }
+
+  /* certificate */
+  .cert{ display:none; margin-top:26px; border:2px solid var(--anchor); border-radius:16px; padding:34px 30px; text-align:center; background:var(--surface); box-shadow:var(--shadow); }
+  .cert.show{ display:block; }
+  .cert .who{ font-family:var(--serif); font-size:1.8rem; color:var(--ink); margin:14px 0 2px; }
+  .cert .line{ color:var(--ink-2); }
+  .cert .meta{ margin-top:16px; color:var(--ink-3); font-size:.85rem; font-variant-numeric:tabular-nums; }
+  .nameform{ display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  .nameform input{ padding:10px 12px; border:1px solid var(--rule); border-radius:9px; background:var(--surface); color:var(--ink); font-size:1rem; }
+
+  footer{ border-top:1px solid var(--rule); margin-top:56px; padding-top:18px; color:var(--ink-3); font-size:.82rem; text-align:center; }
+  @media print{ body{ background:#fff; } .topbar,.step .mark-btn,.quiz,.step.open .chev{ display:none; } .step .body{ display:block; } .cert{ display:block; } }
+</style>
+
+<div class="topbar"><div class="inner">
+  <span class="name">Wouri</span>
+  <div class="bar"><i id="fill"></i></div>
+  <span class="pct" id="pct">0%</span>
+</div></div>
+
+<div class="wrap">
+  <div class="cover">
+    <svg width="84" height="84" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="47" fill="none" stroke="var(--anchor)" stroke-width="2"/>
+      <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gold)" stroke-width="1"/>
+      <path d="M50 28 C40 42,40 56,50 72 C60 56,60 42,50 28 Z" fill="var(--anchor)"/>
+      <path d="M50 40 L50 72" stroke="var(--on-anchor)" stroke-width="1.6"/>
+      <text x="50" y="90" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="2" fill="var(--anchor)" font-family="system-ui,sans-serif">WOURI</text>
+    </svg>
+    <p class="kicker">Interactive training</p>
+    <h1 class="mark">From the plot to the payment</h1>
+    <p class="sub">Walk the whole export chain, step by step. Mark each step as you go, then pass the knowledge check to earn your certificate.</p>
+  </div>
+
+  <section class="block">
+    <p class="lead">Wouri is a registry of record: its value is that a buyer, a bank, or a customs officer can rely on what it says. Below is the end-to-end journey. Click a step to open it, do it in the app, then mark it complete. Your progress is saved on this device.</p>
+    <div class="stepwrap" id="steps"></div>
+  </section>
+
+  <section class="block">
+    <h2><span class="num">Knowledge check</span></h2>
+    <p>Answer all six. You need <b>five correct (80%)</b> to pass. You can retry.</p>
+    <div class="quiz" id="quiz"></div>
+    <div style="margin-top:16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <button class="btn" id="grade">Check my answers</button>
+      <span class="result" id="result"></span>
+    </div>
+  </section>
+
+  <section class="block" id="certblock">
+    <h2><span class="num">Your certificate</span></h2>
+    <p>Pass the knowledge check, enter your name, and issue your completion certificate. Print it for your records.</p>
+    <div class="nameform">
+      <input id="learner" placeholder="Your full name" aria-label="Your full name"/>
+      <button class="btn" id="issue" disabled>Issue my certificate</button>
+      <button class="btn" id="printcert" style="background:transparent;color:var(--anchor-2);border:1px solid var(--rule);display:none;">Print</button>
+    </div>
+    <div class="cert" id="cert">
+      <svg width="64" height="64" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="47" fill="none" stroke="var(--anchor)" stroke-width="2"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="var(--gold)" stroke-width="1"/>
+        <path d="M50 28 C40 42,40 56,50 72 C60 56,60 42,50 28 Z" fill="var(--anchor)"/>
+        <text x="50" y="90" text-anchor="middle" font-size="8.5" font-weight="700" letter-spacing="2" fill="var(--anchor)" font-family="system-ui,sans-serif">WOURI</text>
+      </svg>
+      <p class="kicker" style="margin-top:12px;">Certificate of completion</p>
+      <p class="who" id="certName">Your name</p>
+      <p class="line">has completed the Wouri export training, from the plot to the payment.</p>
+      <p class="meta" id="certMeta"></p>
+    </div>
+  </section>
+
+  <footer>Wouri Verified · wouri.co · The registry of record for African commodity export</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STEPS = [
+    { t:"Sign in and set up your workspace", role:"Everyone",
+      do:"Create an account, then either describe your business so Aza sets it up, or choose Set up by hand.",
+      exp:"You land on your dashboard with your company name.",
+      why:"Aza is a helper, never a gate. If you prefer to click, click; the by-hand path always works." },
+    { t:"Set your document brand", role:"Owner / admin",
+      do:"On Home, in Document branding, pick a colour and a tagline, and save.",
+      exp:"Shows Saved. Your certificates will now lead with your identity.",
+      why:"The exporter owns the document; Wouri signs and verifies it." },
+    { t:"Record a lot, at harvest or received", role:"Field agent",
+      do:"Open Lots. Choose At harvest (capture the plot) or Received after harvest (record the supplier). Create the lot.",
+      exp:"The lot appears. An EUDR lot with no plot geolocation is flagged, not blocked.",
+      why:"Where your chain starts is a choice, because most exporters buy after harvest." },
+    { t:"Capture quality on the lot", role:"Field agent",
+      do:"Open the lot. In Quality, record each measured value (moisture, bean count).",
+      exp:"Each value shows green in range or red out of range. The custody timeline and Chain intact badge are visible.",
+      why:"The quality certificate can only be issued once its values exist." },
+    { t:"Create a consignment and allocate lots", role:"Export manager",
+      do:"Open Consignments, create one (code, buyer, destination), open it, and allocate your lot.",
+      exp:"The lot is allocated and carries its weight to the consignment.",
+      why:"A consignment is the shipment: the lots you send to one buyer." },
+    { t:"Issue the documents", role:"Documentation officer",
+      do:"In the Documents panel, press Issue on EUR.1 and the quality certificate.",
+      exp:"Issued, each with a verification code. An unbound field or a weight mismatch is refused with a reason.",
+      why:"Unbound blocks issuance; issuance is reproducible by content." },
+    { t:"Verify a certificate", role:"Everyone",
+      do:"Press View, or open wouri.co/v/{code}, or scan the QR. Try it in a private window with no login.",
+      exp:"Verdict Authentic. Branded with your identity, e-signed, with the issued date and place of issue.",
+      why:"Proof, not trust: anyone verifies offline with the public key alone." },
+    { t:"Open settlement and start the BEAC clock", role:"Finance",
+      do:"On the consignment, open a settlement: instrument, amount, and the export date.",
+      exp:"The instrument appears with a repatriation clock (green, amber under 15 days, red overdue).",
+      why:"The export date starts the CEMAC repatriation window." },
+    { t:"Advance settlement to repatriated", role:"Finance",
+      do:"Advance in order: present, accept, pay, repatriate. An open discrepancy blocks acceptance and payment.",
+      exp:"You cannot skip. At repatriated, the consignment is settled.",
+      why:"Settled means repatriated, not merely paid." },
+    { t:"Read the dashboard, board, and cockpit", role:"Owner",
+      do:"Return Home for the numbers and blockers. Open the board for the full ranked list, and the cockpit for live rates and weather.",
+      exp:"The dashboard reflects what you created; the cockpit shows live or cached figures.",
+      why:"See everything you need at a glance, every morning." }
+  ];
+  var QUIZ = [
+    { q:"When is a consignment settled in Wouri?", a:["When the buyer pays","When the proceeds are repatriated within the BEAC window","When the documents are issued"], c:1 },
+    { q:"An EUDR lot has no plot geolocation yet. What happens?", a:["Issuance is blocked entirely","It is flagged on the readiness board as an origin gap","It is deleted"], c:1 },
+    { q:"Who can verify a Wouri document?", a:["Only the exporter","Only Wouri staff","Anyone, offline, with the public key"], c:2 },
+    { q:"What blocks issuing a document?", a:["An unbound required field or a weight mismatch","A slow connection","A missing logo"], c:0 },
+    { q:"Whose identity leads on the certificate?", a:["Wouri's","The exporter's, with Wouri as verifier","The buyer's"], c:1 },
+    { q:"If a market API is briefly down, the cockpit shows...", a:["A blank","The last known values, marked cached","An error page"], c:1 }
+  ];
+  var KEY = "wouri_training_v1";
+  var state = { done:{}, passed:false, name:"" };
+  try { var s = JSON.parse(localStorage.getItem(KEY)||"{}"); if(s&&typeof s==="object") state = Object.assign(state, s); } catch(e){}
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  var stepsEl = document.getElementById("steps");
+  STEPS.forEach(function(st, i){
+    var el = document.createElement("div"); el.className = "step" + (state.done[i]?" done":"");
+    el.innerHTML =
+      '<div class="head"><div class="dot">'+(state.done[i]?"&#10003;":(i+1))+'</div>'+
+      '<div class="t"><b>'+st.t+'</b><div class="role">'+st.role+'</div></div>'+
+      '<div class="chev">&#9656;</div></div>'+
+      '<div class="body">'+
+        '<div class="lbl">Do</div><p>'+st.do+'</p>'+
+        '<div class="lbl">Expected</div><p>'+st.exp+'</p>'+
+        '<div class="note"><b>Why it matters.</b> '+st.why+'</div>'+
+        '<button class="mark-btn" data-i="'+i+'">'+(state.done[i]?"Completed":"Mark complete")+'</button>'+
+      '</div>';
+    el.querySelector(".head").addEventListener("click", function(){ el.classList.toggle("open"); });
+    el.querySelector(".mark-btn").addEventListener("click", function(ev){
+      ev.stopPropagation();
+      state.done[i] = !state.done[i]; save();
+      el.classList.toggle("done", !!state.done[i]);
+      el.querySelector(".dot").innerHTML = state.done[i]?"&#10003;":(i+1);
+      this.textContent = state.done[i]?"Completed":"Mark complete";
+      progress();
+    });
+    stepsEl.appendChild(el);
+  });
+  function progress(){
+    var n = STEPS.filter(function(_,i){return state.done[i];}).length;
+    var p = Math.round(n/STEPS.length*100);
+    document.getElementById("fill").style.width = p+"%";
+    document.getElementById("pct").textContent = p+"%";
+  }
+
+  var quizEl = document.getElementById("quiz");
+  QUIZ.forEach(function(item, qi){
+    var q = document.createElement("div"); q.className = "q";
+    var opts = item.a.map(function(txt, oi){
+      return '<label class="opt" data-q="'+qi+'" data-o="'+oi+'"><input type="radio" name="q'+qi+'" value="'+oi+'">'+txt+'</label>';
+    }).join("");
+    q.innerHTML = '<p>'+(qi+1)+'. '+item.q+'</p>'+opts;
+    quizEl.appendChild(q);
+  });
+  document.getElementById("grade").addEventListener("click", function(){
+    var score = 0;
+    document.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("correct","wrong"); });
+    QUIZ.forEach(function(item, qi){
+      var sel = document.querySelector('input[name="q'+qi+'"]:checked');
+      var correctEl = document.querySelector('.opt[data-q="'+qi+'"][data-o="'+item.c+'"]');
+      if(correctEl) correctEl.classList.add("correct");
+      if(sel){ var v = parseInt(sel.value,10); if(v===item.c){ score++; } else {
+        var wrongEl = document.querySelector('.opt[data-q="'+qi+'"][data-o="'+v+'"]'); if(wrongEl) wrongEl.classList.add("wrong"); } }
+    });
+    var pass = score >= 5;
+    var r = document.getElementById("result");
+    r.textContent = score + " / 6 correct. " + (pass ? "Passed. Issue your certificate below." : "Not yet, review and retry.");
+    r.style.color = pass ? "var(--good)" : "var(--alert)";
+    state.passed = pass; save();
+    document.getElementById("issue").disabled = !pass;
+    if(pass){ document.getElementById("certblock").scrollIntoView({behavior:"smooth"}); }
+  });
+
+  var learner = document.getElementById("learner");
+  learner.value = state.name || "";
+  learner.addEventListener("input", function(){ state.name = this.value; save(); });
+  document.getElementById("issue").addEventListener("click", function(){
+    if(document.getElementById("issue").disabled) return;
+    var name = (learner.value||"").trim() || "Wouri trainee";
+    document.getElementById("certName").textContent = name;
+    var d = new Date();
+    var code = "WOURI-TRN-" + Math.random().toString(36).slice(2,8).toUpperCase();
+    document.getElementById("certMeta").innerHTML = "Issued " + d.toISOString().slice(0,10) + " &middot; " + code + " &middot; Wouri Verified";
+    document.getElementById("cert").classList.add("show");
+    document.getElementById("printcert").style.display = "inline-block";
+  });
+  document.getElementById("printcert").addEventListener("click", function(){ window.print(); });
+
+  if(state.passed) document.getElementById("issue").disabled = false;
+  progress();
+})();
+</script>

@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Wouri Field",
+    "slug": "wouri-field",
+    "scheme": "wourifield",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": { "backgroundColor": "#0d4f47" },
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "co.wouri.field" },
+    "android": { "package": "co.wouri.field" },
+    "plugins": [
+      "expo-router",
+      ["expo-location", { "locationWhenInUsePermission": "Wouri Field records the plot location at harvest." }],
+      ["expo-image-picker", { "photosPermission": "Wouri Field attaches a photo of the plot or lot." }]
+    ],
+    "extra": {
+      "supabaseUrl": "https://iledioojfggozfzebafs.supabase.co",
+      "supabaseAnonKey": "SET_AT_BUILD"
+    }
+  }
+}
