@@ -12,7 +12,9 @@ config({ path: '.env.local' });
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dir = resolve(root, 'supabase/migrations');
 
-const url = process.env.SUPABASE_DB_URL;
+// WOURI_APPLY_URL lets a guarded wrapper (sync-prod) target another project; default
+// is the dev SUPABASE_DB_URL.
+const url = process.env.WOURI_APPLY_URL || process.env.SUPABASE_DB_URL;
 if (!url) { console.error('SUPABASE_DB_URL not set'); process.exit(1); }
 
 const client = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized: false } });

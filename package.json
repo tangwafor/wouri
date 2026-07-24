@@ -48,6 +48,8 @@
     "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress",
     "preflight": "node scripts/preflight.mjs",
     "reconcile": "node scripts/reconcile-consignment.mjs",
+    "prod:readiness": "node scripts/prod-readiness.mjs",
+    "prod:sync": "node scripts/sync-prod.mjs",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
