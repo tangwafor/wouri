@@ -44,7 +44,9 @@
     "gate:e2e": "node scripts/run-e2e.mjs",
     "e2e:clean": "node scripts/e2e-cleanup.mjs --check",
     "selftest:staleness": "node scripts/staleness-selftest.mjs",
-    "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress"
+    "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress",
+    "preflight": "node scripts/preflight.mjs",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.110.1",

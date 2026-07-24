@@ -1,0 +1,4 @@
+#!/bin/sh
+# Wouri: block a push when the preflight gate fails (canonicals, RLS, security,
+# stress, critical-path e2e). Emergency bypass: git push --no-verify. No em-dashes.
+exec node scripts/preflight.mjs
