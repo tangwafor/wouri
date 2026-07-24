@@ -47,6 +47,7 @@
     "selftest:polygon": "node scripts/polygon-selftest.mjs",
     "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress",
     "preflight": "node scripts/preflight.mjs",
+    "reconcile": "node scripts/reconcile-consignment.mjs",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "devDependencies": {

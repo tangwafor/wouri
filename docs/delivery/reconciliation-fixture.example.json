@@ -1,0 +1,37 @@
+{
+  "_readme": "ADR-0030 reconciliation fixture. Fill this from a REAL consignment file (a genuine EUR.1, phytosanitary certificate, VGM, ONCC quality cert). Put the ACTUAL values as they appear on the paper into each document's 'expected'. Then run: node scripts/reconcile-consignment.mjs docs/delivery/<your-file>.json . It builds the equivalent consignment in Wouri, resolves each document, and reports every field where Wouri's output drifts from the real paper. The values below are a realistic placeholder (Cameroon cocoa to Germany) and are expected to surface drift, which is the point: it shows where Wouri's bindings need to match reality (commodity description, HS subheading, place-of-origin format). No em-dashes.",
+  "tag": "SAMPLE-CCE-0042",
+  "org": {
+    "name": "Cameroon Cocoa Exporters SA",
+    "niu": "M081512345678P",
+    "location": { "name": "Kumba buying station", "region": "Sud-Ouest", "country": "CM" }
+  },
+  "buyer": { "name": "Hamburg Kakao GmbH", "country": "DE" },
+  "commodity": "cocoa",
+  "lot": { "code": "CCE-LOT-0042", "quantity_kg": 24000, "quality": { "moisture": 7.2, "bean_count": 95 } },
+  "contract": { "quantity_kg": 24000 },
+  "consignment": { "code": "CCE-2026-0042", "destination_country": "DE" },
+  "documents": [
+    {
+      "template": "eur1_cmr",
+      "expected": {
+        "exporter": "Cameroon Cocoa Exporters SA",
+        "exporter_niu": "M081512345678P",
+        "consignment_code": "CCE-2026-0042",
+        "destination_country": "DE",
+        "buyer_name": "Hamburg Kakao GmbH",
+        "commodity": "Cocoa beans, whole, raw",
+        "net_weight_kg": 24000,
+        "origin_country": "CM",
+        "hs_code": "1801.00.00"
+      }
+    },
+    {
+      "template": "phyto",
+      "expected": {
+        "place_of_origin": "South West Region, Cameroon",
+        "treatment": "none-declared"
+      }
+    }
+  ]
+}
