@@ -70,6 +70,31 @@ tsc + next build all green. NEXT candidates (roadmap, not blocking): field-app
 boundary polygon, real CITES/protected-area data import, EUDR risk-assessment
 record + TRACES filing, GUCE single-window, Merkle checkpoints, human signatures.
 
+## 2026-07-24 - "What next": blocking gate, field polygon, reconciliation harness, go-live prep
+Four tracks (user said "all"); prod steps stopped at the spend decision.
+- **Blocking preflight gate**: `scripts/preflight.mjs` (canonicals + rls + security +
+  stress + critical-path e2e), wired via `.githooks/pre-push` (core.hooksPath, set by
+  `prepare`). Every push now BLOCKS on the full gate incl the browser critical path.
+  Emergency bypass: `git push --no-verify`. Closes canonical requirement #4.
+- **Field boundary-walk polygon** (`apps/field/lib/polygon.mjs` + capture.tsx): walk
+  the perimeter, build a closed GeoJSON ring, server computes the real area.
+  polygon-selftest 11/11 (builder + round-trip: field estimate within 5% of server
+  area; server authoritative). Completes the field-side EUDR origin.
+- **ADR-0030 reconciliation harness** (`scripts/reconcile-consignment.mjs` + example
+  fixture): ingest a REAL consignment file's field values, resolve in Wouri, report
+  DRIFT/MISSING. `npm run reconcile`. Sample already surfaces 3 real candidate drifts
+  (commodity label "Cocoa" vs "Cocoa beans, whole, raw"; hs_code "1801" vs "1801.00.00";
+  place_of_origin "Sud-Ouest, CM" vs "South West Region, Cameroon"). NOT fixed against
+  the sample (would repeat the invented-data mistake); waits for a REAL file. **This is
+  the single most valuable next step - hand over one real consignment folder.**
+- **Go-live prep** (`docs/delivery/GO_LIVE.md` + `scripts/prod-readiness.mjs` +
+  `scripts/sync-prod.mjs`): runbook with APPROVAL gates at the paid-project and DNS
+  steps; readiness check GREEN on dev; guarded prod-sync (refuses unless PROD_DB_URL
+  set, != dev, --confirm). **STOPPED before creating the paid Supabase project or
+  touching DNS - needs founder go-ahead (cost).** apply-migrations honors WOURI_APPLY_URL.
+- Migrations 0001-0044. New npm: preflight, gate:e2e, reconcile, prod:readiness,
+  prod:sync, selftest:polygon/staleness. All gates green; critical path green vs live.
+
 ## 2026-07-23 - Third review pass: staleness feature, critical-path e2e, conformance fix (0043-0044)
 A reviewer read the code (not filenames) and made two fair pushes; both actioned.
 - **Document staleness (0043)** was a genuinely MISSING feature (provenance existed,
