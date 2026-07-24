@@ -21,7 +21,7 @@
     "kb:seed": "node scripts/seed-aza-kb.mjs",
     "proof:init": "node scripts/init-proof-keys.mjs",
     "test": "npm run canonicals && npm run selftest:infer",
-    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine && npm run selftest:documents && npm run selftest:kb && npm run selftest:kbadmin && npm run selftest:settlement && npm run selftest:readiness && npm run selftest:lotentry && npm run selftest:brand && npm run selftest:shipment && npm run selftest:compliance && npm run selftest:bindings && npm run selftest:autochecks && npm run selftest:events && npm run selftest:orggroups && npm run selftest:spatial && npm run selftest:quota && npm run selftest:transformation && npm run selftest:anchor && npm run selftest:signatures && npm run selftest:risk && npm run selftest:media",
+    "test:db": "npm run db:selftest && npm run verify:apppath && npm run verify:chat && npm run selftest:spine && npm run selftest:documents && npm run selftest:kb && npm run selftest:kbadmin && npm run selftest:settlement && npm run selftest:readiness && npm run selftest:lotentry && npm run selftest:brand && npm run selftest:shipment && npm run selftest:compliance && npm run selftest:bindings && npm run selftest:autochecks && npm run selftest:events && npm run selftest:orggroups && npm run selftest:spatial && npm run selftest:quota && npm run selftest:transformation && npm run selftest:anchor && npm run selftest:signatures && npm run selftest:risk && npm run selftest:media && npm run selftest:staleness && npm run selftest:polygon",
     "check": "npm run canonicals",
     "selftest:brand": "node scripts/brand-selftest.mjs",
     "selftest:shipment": "node scripts/shipment-selftest.mjs",
@@ -44,6 +44,7 @@
     "gate:e2e": "node scripts/run-e2e.mjs",
     "e2e:clean": "node scripts/e2e-cleanup.mjs --check",
     "selftest:staleness": "node scripts/staleness-selftest.mjs",
+    "selftest:polygon": "node scripts/polygon-selftest.mjs",
     "gates": "npm run canonicals && npm run gate:rls && npm run gate:security && npm run gate:stress",
     "preflight": "node scripts/preflight.mjs",
     "prepare": "git config core.hooksPath .githooks || true"

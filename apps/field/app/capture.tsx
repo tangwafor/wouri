@@ -4,6 +4,7 @@ import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../lib/supabase';
 import { enqueue, sync, all, type Capture } from '../lib/queue';
+import { ringAreaHa, isClosable } from '../lib/polygon.mjs';
 
 const COMMODITIES = ['cocoa', 'coffee', 'palm_oil', 'rubber', 'cotton', 'banana', 'timber'];
 
@@ -26,6 +27,7 @@ export default function CaptureScreen() {
   const [plotCode, setPlotCode] = useState('');
   const [area, setArea] = useState('');
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
+  const [boundary, setBoundary] = useState<{ lat: number; lng: number }[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [list, setList] = useState<Capture[]>([]);
   const [msg, setMsg] = useState('');
@@ -42,6 +44,14 @@ export default function CaptureScreen() {
     const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
     setCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude });
   }
+  async function addBoundaryPoint() {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') { setMsg('Location permission denied'); return; }
+    const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+    setBoundary((b) => [...b, { lat: pos.coords.latitude, lng: pos.coords.longitude }]);
+  }
+  function undoBoundaryPoint() { setBoundary((b) => b.slice(0, -1)); }
+  function clearBoundary() { setBoundary([]); }
   async function takePhoto() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') { setMsg('Camera permission denied'); return; }
@@ -51,15 +61,19 @@ export default function CaptureScreen() {
 
   async function save() {
     if (!orgId || !lotCode) { setMsg('Sign in and enter a lot code'); return; }
+    const hasBoundary = isClosable(boundary);
     const c: Capture = {
       id: uuid(), event_id: uuid(), org_id: orgId, commodity_key: commodity,
       lot_code: lotCode, quantity_kg: quantity ? Number(quantity) : 0,
-      plot_code: plotCode || lotCode + '-plot', area_ha: area ? Number(area) : null,
-      lat: coords?.lat ?? null, lon: coords?.lon ?? null, photo_uri: photo,
+      plot_code: plotCode || lotCode + '-plot',
+      // A walked boundary gives the server the real area; the typed value is advisory.
+      area_ha: area ? Number(area) : (hasBoundary ? Number(ringAreaHa(boundary).toFixed(3)) : null),
+      lat: coords?.lat ?? null, lon: coords?.lon ?? null,
+      boundary: hasBoundary ? boundary : null, photo_uri: photo,
       created_at: new Date().toISOString(), synced: false,
     };
     await enqueue(c);
-    setLotCode(''); setQuantity(''); setPlotCode(''); setArea(''); setCoords(null); setPhoto(null);
+    setLotCode(''); setQuantity(''); setPlotCode(''); setArea(''); setCoords(null); setBoundary([]); setPhoto(null);
     setMsg('Saved on device. Sync when online.');
     refresh();
   }
@@ -101,6 +115,21 @@ export default function CaptureScreen() {
       {coords ? <Text style={s.meta}>{coords.lat.toFixed(5)}, {coords.lon.toFixed(5)}</Text> : null}
       {photo ? <Image source={{ uri: photo }} style={s.preview} /> : null}
 
+      <View style={s.boundaryBox}>
+        <Text style={s.label}>Walk the plot boundary (EUDR)</Text>
+        <Text style={s.meta}>Stand at each corner and add a point. The server computes the real area.</Text>
+        <View style={s.row}>
+          <Pressable style={s.ghost} onPress={addBoundaryPoint}><Text style={s.ghostText}>Add corner ({boundary.length})</Text></Pressable>
+          <Pressable style={[s.ghost, boundary.length === 0 && s.disabled]} disabled={boundary.length === 0} onPress={undoBoundaryPoint}><Text style={s.ghostText}>Undo</Text></Pressable>
+        </View>
+        {isClosable(boundary) ? (
+          <Text style={s.meta}>{boundary.length} corners, about {ringAreaHa(boundary).toFixed(2)} ha (estimate)</Text>
+        ) : boundary.length > 0 ? (
+          <Text style={s.meta}>{boundary.length} corner{boundary.length === 1 ? '' : 's'}, need at least 3</Text>
+        ) : null}
+        {boundary.length > 0 ? <Pressable onPress={clearBoundary}><Text style={[s.meta, { color: '#a9762a' }]}>Clear boundary</Text></Pressable> : null}
+      </View>
+
       <Pressable style={s.btn} onPress={save}><Text style={s.btnText}>Save harvest</Text></Pressable>
 
       <View style={s.syncbar}>
@@ -133,6 +162,8 @@ const s = StyleSheet.create({
   ghostText: { color: '#0a635a', fontWeight: '600' },
   meta: { color: '#857d6c', fontSize: 13, marginTop: 8 },
   preview: { width: '100%', height: 160, borderRadius: 10, marginTop: 10 },
+  boundaryBox: { borderWidth: 1, borderColor: '#e2ded1', borderRadius: 10, padding: 12, marginTop: 16, backgroundColor: '#fffefb' },
+  disabled: { opacity: 0.4 },
   btn: { backgroundColor: '#0d4f47', borderRadius: 9, padding: 14, alignItems: 'center', marginTop: 18 },
   btnText: { color: '#f6f4ee', fontWeight: '700', fontSize: 16 },
   syncbar: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, paddingTop: 14, borderTopWidth: 1, borderTopColor: '#e2ded1' },

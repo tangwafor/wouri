@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from './supabase';
+import { buildRing, isClosable } from './polygon.mjs';
 
 // The offline harvest queue. A field agent captures under a tree with no signal;
 // the capture is stored on the device and synced to the custody chain later, via
@@ -20,6 +21,7 @@ export type Capture = {
   area_ha: number | null;
   lat: number | null;
   lon: number | null;
+  boundary: { lat: number; lng: number }[] | null;  // walked plot perimeter (EUDR polygon)
   photo_uri: string | null;
   created_at: string;
   synced: boolean;
@@ -45,8 +47,11 @@ export async function pendingCount() {
   return (await read()).filter((c) => !c.synced).length;
 }
 
-function pointGeoJSON(lat: number | null, lon: number | null) {
-  return lat != null && lon != null ? { type: 'Point', coordinates: [lon, lat] } : null;
+// A walked boundary polygon wins over a single point: it is the EUDR standard and it
+// lets the server compute the real area. Falls back to the point.
+function captureGeometry(c: Capture) {
+  if (isClosable(c.boundary)) return buildRing(c.boundary as { lat: number; lng: number }[]);
+  return c.lat != null && c.lon != null ? { type: 'Point', coordinates: [c.lon, c.lat] } : null;
 }
 
 // Push every pending capture to the custody chain. Returns how many synced and
@@ -60,7 +65,7 @@ export async function sync(): Promise<{ ok: number; failed: number }> {
       p_org: c.org_id, p_lot_id: c.id, p_commodity_key: c.commodity_key, p_lot_code: c.lot_code,
       p_quantity_kg: c.quantity_kg, p_claim: 'segregated', p_is_cites: false,
       p_plot_code: c.plot_code, p_plot_kind: 'plot', p_area_ha: c.area_ha,
-      p_geometry: pointGeoJSON(c.lat, c.lon), p_event_id: c.event_id,
+      p_geometry: captureGeometry(c), p_event_id: c.event_id,
     });
     if (error) { failed += 1; } else { c.synced = true; ok += 1; }
   }
